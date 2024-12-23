@@ -7,5 +7,6 @@ To run the frontend, first cd to the frontend folder and install NPM dependencie
 
 ```
 cd frontend
+npm install
 npm run dev
 ```
