@@ -36,6 +36,12 @@ public class AccountController {
       return ResponseEntity.status(409).body("Invalid username");
     }
 
+    // Check valid password
+    var password = account.getPasswordHash();
+    if (password == null || password.length() == 0) {
+      return ResponseEntity.status(409).body("Invalid password");
+    }
+
     // Make sure username is not in use
     var existingAccount = accountService.FindByUsername(account.getUsername());
     if (existingAccount != null) {
@@ -43,7 +49,7 @@ public class AccountController {
     }
 
     // Encode password
-    var encodedPassword = AccountService.GetEncodedPassword(account.getPasswordHash());
+    var encodedPassword = AccountService.GetEncodedPassword(password);
     account.setPasswordHash(encodedPassword);
 
     accountService.Register(account);
