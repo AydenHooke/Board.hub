@@ -15,10 +15,10 @@ DROP TABLE IF EXISTS account;
 
 -- Accounts
 CREATE TABLE account (
-	account_id SERIAL NOT NULL PRIMARY KEY,
+  account_id SERIAL NOT NULL PRIMARY KEY,
 
-	username TEXT NOT NULL,
-	password_hash TEXT NOT NULL,
+  username TEXT NOT NULL,
+  password_hash TEXT NOT NULL,
 
   email TEXT,
   address TEXT,
@@ -30,9 +30,9 @@ CREATE TABLE account (
 
 -- Games
 CREATE TABLE game (
-	game_id SERIAL NOT NULL PRIMARY KEY,
+  game_id SERIAL NOT NULL PRIMARY KEY,
 
-	title TEXT NOT NULL,
+  title TEXT NOT NULL,
   description TEXT NOT NULL,
   price decimal NOT NULL
 );
@@ -45,24 +45,24 @@ CREATE TABLE game_collection (
 
 -- Forums
 CREATE TABLE forum (
-	forum_id SERIAL NOT NULL PRIMARY KEY,
+  forum_id SERIAL NOT NULL PRIMARY KEY,
 
-	title TEXT NOT NULL,
+  title TEXT NOT NULL,
   description TEXT NOT NULL,
 
   type TEXT NOT NULL
 );
 CREATE TABLE thread (
-	thread_id SERIAL NOT NULL PRIMARY KEY,
+  thread_id SERIAL NOT NULL PRIMARY KEY,
 
-	title TEXT NOT NULL,
+  title TEXT NOT NULL,
   content TEXT NOT NULL,
 
   account_id INT REFERENCES account(account_id) NOT NULL,
   forum_id INT REFERENCES forum(forum_id) NOT NULL
 );
 CREATE TABLE reply (
-	reply_id SERIAL NOT NULL PRIMARY KEY,
+  reply_id SERIAL NOT NULL PRIMARY KEY,
 
   content TEXT NOT NULL,
 
