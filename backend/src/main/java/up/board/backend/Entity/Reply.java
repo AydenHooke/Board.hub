@@ -5,8 +5,7 @@ import lombok.*;
 
 @Entity
 @Table
-@Getter
-@Setter
+@Data
 public class Reply {
 
   // Field values

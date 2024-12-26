@@ -7,8 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table
-@Getter
-@Setter
+@Data
 public class Event {
 
   // Field values
