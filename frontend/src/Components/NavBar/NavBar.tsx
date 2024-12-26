@@ -33,6 +33,11 @@ function NavBar() {
                   Sign In
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/Forums">
+                  Forums
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
