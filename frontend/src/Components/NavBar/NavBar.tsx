@@ -33,6 +33,11 @@ function NavBar() {
                   Sign In
                 </Link>
               </li>
+              <li>
+                <Link className="nav-link" to="/games">
+                  My Games
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
