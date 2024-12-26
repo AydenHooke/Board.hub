@@ -1,5 +1,6 @@
 import { FormEvent, useState } from "react";
 import SignInInput from "./SignInInput";
+import axios from "axios";
 
 function SignInLogic() {
     const [username, setUsername] = useState("");
@@ -8,8 +9,13 @@ function SignInLogic() {
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
 
-        console.log(username);
-        console.log(password);
+        axios
+            .post('localhost:8080/account/login', {
+                username: username,
+                password: password
+            })
+            .then((Response) => console.log(Response.data))
+            .catch((error) => console.error('Error posting data, ', error));
     }
 
     return (
