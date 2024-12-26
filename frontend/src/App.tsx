@@ -1,5 +1,3 @@
-import './App.css'
-
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import NavBar from './Components/NavBar/NavBar';
 import SignInLogic from './Components/SignIn/SignInLogic'
