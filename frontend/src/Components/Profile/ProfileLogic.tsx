@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import ProfileInput from './ProfileInput'
 import axios from 'axios'
 
@@ -13,13 +13,25 @@ function ProfileLogic() {
         }
     }, [])
 
-    function handleProfileEdit() {
-        console.log('Profile edit button clicked')
-    }
+    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [reenterPassword, setReenterPassword] = useState("");
+
+function handleProfileEdit(e: FormEvent){
+  e.preventDefault();
+
+};
+
 
   return (
     <div>
-       <ProfileInput handleProfileEdit={handleProfileEdit}/>
+       <ProfileInput 
+        email={email} setEmail={setEmail}
+        username={username} setUsername={setUsername}
+        password={password} setPassword={setPassword}
+        reenterPassword={reenterPassword} setReenterPassword={setReenterPassword}
+        handleProfileEdit={handleProfileEdit}/>
     </div>
   )
 }
