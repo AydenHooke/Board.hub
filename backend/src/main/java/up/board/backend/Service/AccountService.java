@@ -16,17 +16,22 @@ public class AccountService {
   }
 
   //
-  public Account Register(Account account) {
+  public Account register(Account account) {
     return accountRepository.save(account);
   }
 
   //
-  public Account FindByUsername(String username) {
+  public Account findByUsername(String username) {
     return accountRepository.findByUsername(username);
   }
 
+  public Account findByUsernameAndPassword(String username, String passwordHash) {
+    return accountRepository.findByUsernameAndPasswordHash(username, passwordHash);
+  }
+
   //
-  public static String GetEncodedPassword(String plaintextPassword) {
+  public static String GetPasswordHash(String plaintextPassword) {
+
     var encoder = new BCryptPasswordEncoder();
     return encoder.encode(plaintextPassword);
   }
