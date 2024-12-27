@@ -5,6 +5,9 @@ import SignInLogic from './Components/SignIn/SignInLogic'
 import SignUpLogic from './Components/SignUp/SignUpLogic'
 import Forums from './Components/Forums/Forums';
 import GameLogic from './Components/Games/GameLogic'
+import './App.css';
+import ProfileLogic from './Components/Profile/ProfileLogic';
+import EventLogic from './Components/Events/EventLogic';
 
 function App() {
   return (
@@ -17,6 +20,8 @@ function App() {
           <Route path='/SignIn' element={<SignInLogic/>}></Route>
           <Route path='/Forums' element={<Forums/>}></Route>
           <Route path='/games' element={<GameLogic/>}></Route>
+          <Route path='/events' element={<EventLogic/>}></Route>
+          <Route path='/profile' element={<ProfileLogic/>}></Route>
         </Routes>
       </BrowserRouter>
     </div>
