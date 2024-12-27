@@ -1,5 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { BrowserRouter, Link, Routes, Route } from "react-router-dom";
+import ForumPage from "./ForumPage";
 
 export type Forum = {
     id: number,
@@ -13,25 +15,34 @@ function Forums() {
 
     useEffect(() => {
         axios
-            .get('http://localhost:8080/Forms')
+            .get('http://localhost:8080/Forums')
             .then((Response) => setData(Response.data))
             .catch((error) => console.error('Error getting data, ', error));
     }, [])
 
-    function goToForum(forum: Forum) {
-        
-    }
-
     return (
         <>
             <h2>Main Forums</h2>
+
             {data.map((forum) => {
                 return (
-                    <button onClick={
-                        () => goToForum(forum)
-                    }>
-                        {forum.title}
-                    </button>
+                    <>
+                        <BrowserRouter>
+                            <Routes>
+                                <Route path={'/Forums/' + forum.title} element={
+                                    <ForumPage
+                                        id={forum.id}
+                                        title={forum.title}
+                                        description={forum.description}
+                                        type={forum.type}
+                                    />
+                                }></Route>
+                            </Routes>
+                        </BrowserRouter>
+                        <div id={(forum.id).toString()}>
+                            <Link to={"/Forums/" + forum.title}>{forum.title}</Link>
+                        </div>
+                    </>
                 )
             })}
         </>
