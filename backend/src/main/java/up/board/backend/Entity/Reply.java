@@ -17,11 +17,11 @@ public class Reply {
   @Column
   String content;
 
-  @JoinColumn(name = "reply_to_thread_id")
-  int replyToThreadId;
+  @JoinColumn(name = "thread_id")
+  int threadId;
 
-  @JoinColumn(name = "reply_to_reply_id")
-  int replyToReplyId;
+  @JoinColumn(name = "reply_to_id")
+  int replyToId;
 
   @JoinColumn(name = "account_id")
   int accountId;
