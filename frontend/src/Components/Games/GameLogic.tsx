@@ -6,25 +6,22 @@ function GameLogic() {
     collection: {} as any
   });
 
-  let xml2js = require('xml2js');
-
   useEffect(()=>{
-    let jString;
-    let parser = new xml2js.Parser();
-    parser.parseStringPromise(state.collection).then(function (result: any) {
-      console.dir(result)
-      console.log('Done')
-      JSON.stringify(result);
-    })
+    let parser, xmlDoc;
+    
+    parser = new DOMParser();
+    xmlDoc = parser.parseFromString(state.collection as string, "text/html")
 
-    // let games = state.collection.getElementsByTagName('item');
-    // let numberOfGames = state.collection.getElementsByTagName('item').length;
-    // let ids:number[] = [];
+    let games = xmlDoc.getElementsByTagName('item');
+    let numberOfGames = xmlDoc.getElementsByTagName('item').length;
 
-    // for(let i=0;i<numberOfGames;i++)
-    //   ids[i] = games[i].getElementsByTagName('id')[0].innerHTML;
-
-      console.log(jString);
+    let ids = [];
+    //console.log(games);
+    for(let i=0;i<numberOfGames;i++)
+      ids[i] = games[i].attributes[1].nodeValue;
+    //  ids[i] = games[i].getElementsByTagName('name')[0].innerHTML;
+    //console.log(games[0].innerHTML)
+    console.log(ids);
   }, [state])
   
 
