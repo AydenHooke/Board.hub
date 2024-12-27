@@ -15,6 +15,9 @@ public class Game {
   int gameId;
 
   @Column
+  int bggId;
+
+  @Column
   String title;
 
   @Column
