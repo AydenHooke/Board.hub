@@ -22,7 +22,7 @@ function NavBar() {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav">
+            <ul className="navbar-nav right-links">
               <li className="nav-item">
                 <Link className="nav-link" to="/SignUp">
                   Sign Up
@@ -39,8 +39,18 @@ function NavBar() {
                 </Link>
               </li>
               <li className="nav-item">
+                <Link className="nav-link" to="/events">
+                  Events
+                </Link>
+              </li>
+              <li className="nav-item">
                 <Link className="nav-link" to="/Forums">
                   Forums
+                </Link>
+              </li>
+              <li>
+                <Link className="nav-link" to="/profile">
+                  Profile
                 </Link>
               </li>
             </ul>
