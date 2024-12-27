@@ -18,10 +18,13 @@ function GameLogic() {
     let ids = [];
     //console.log(games);
     for(let i=0;i<numberOfGames;i++)
-      ids[i] = games[i].attributes[1].nodeValue;
-    //  ids[i] = games[i].getElementsByTagName('name')[0].innerHTML;
-    //console.log(games[0].innerHTML)
+      ids[i] = games[i].attributes[1].nodeValue; //attribute[1] specifically refers to the node that contains the game id
+
     console.log(ids);
+
+    let importIdsFromBgg = rectifyGameCollection(ids); //this is a JSON object full of Ids that are not in board.up's database yet
+    console.log(importIdsFromBgg);
+
   }, [state])
   
 
@@ -29,11 +32,21 @@ function GameLogic() {
 
 
     async function handleGetGameCollection() {
-        let myCollection = await axios.get(`https://www.boardgamegeek.com/xmlapi2/collection?username=${username}&subtype=boardgame&own=1`)
+        let myCollection;
+        myCollection = await axios.get(`https://www.boardgamegeek.com/xmlapi2/collection?username=${username}&subtype=boardgame&own=1`)
+
+          while(myCollection.status == 202){
+            setTimeout(async()=>{
+              myCollection = await axios.get(`https://www.boardgamegeek.com/xmlapi2/collection?username=${username}&subtype=boardgame&own=1`)},5500);
+            }
+
         const collectionData = myCollection.data;
         //console.log(myCollection.headers); it automatically parses it as xml
         setState(()=>({collection:collectionData}));
-        
+    }
+
+    async function rectifyGameCollection(ids: any) {
+      let collectionResults = await axios.post(`https://localhost:8080/`,{ids})
     }
 
   return (

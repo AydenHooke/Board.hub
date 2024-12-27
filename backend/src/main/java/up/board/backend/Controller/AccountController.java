@@ -1,7 +1,10 @@
 package up.board.backend.Controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import up.board.backend.Entity.Account;
 import up.board.backend.Service.AccountService;
+import up.board.backend.Service.GameService;
 
 @RestController
 @RequestMapping("/account")
@@ -20,6 +24,7 @@ public class AccountController {
   private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
 
   AccountService accountService;
+  GameService gameService;
 
   //
   public AccountController(AccountService accountService) {
@@ -58,4 +63,15 @@ public class AccountController {
     return ResponseEntity.ok().body("Yup");
   }
 
+  @PostMapping("path")
+  public ResponseEntity<?> validateGamePersistence(@RequestBody List<String> gameIds) {
+      List<String> gameIdsNotPersisted = gameService.returnIfNotPersisted(gameIds); // this returns a list of every ID we don't have a game for
+      if(gameIdsNotPersisted != null) // i.e. if there wasn't an error, return the gameIds as requested
+        return ResponseEntity.status(HttpStatus.OK)
+          .body(gameIdsNotPersisted);
+      else
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+          .build(); // if there was an error, report a conflict 
+  }
+  
 }
