@@ -46,7 +46,11 @@ function GameLogic() {
     }
 
     async function rectifyGameCollection(ids: any) {
-      let collectionResults = await axios.post(`https://localhost:8080/`,{ids})
+      let collectionResults = await axios.post(`https://localhost:8080/validateGamePersistence`,{ids})
+      let collectionData = collectionResults.data;
+        if(collectionResults.status == 200)
+          return collectionData;
+        
     }
 
   return (

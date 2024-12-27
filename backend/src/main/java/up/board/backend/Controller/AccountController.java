@@ -63,7 +63,7 @@ public class AccountController {
     return ResponseEntity.ok().body("Yup");
   }
 
-  @PostMapping("path")
+  @PostMapping("/validateGamePersistence")
   public ResponseEntity<?> validateGamePersistence(@RequestBody List<String> gameIds) {
       List<String> gameIdsNotPersisted = gameService.returnIfNotPersisted(gameIds); // this returns a list of every ID we don't have a game for
       if(gameIdsNotPersisted != null) // i.e. if there wasn't an error, return the gameIds as requested

@@ -28,7 +28,7 @@ public class GameService {
     List<String> idNotFound = new ArrayList<>();
     Game testGame;
     for(int i = 0; i<gameIds.size(); i++){
-        testGame = gameRepository.findGameByBggId();
+        testGame = gameRepository.findGameByBggId(Integer.parseInt(gameIds.get(i)));
         if(testGame == null) // if you did NOT find the id, then add it to the list of games you did not find the id for
             idNotFound.add(gameIds.get(i));
     }
