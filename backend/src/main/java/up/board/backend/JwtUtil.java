@@ -38,8 +38,8 @@ public class JwtUtil {
   public String validateTokenAndGetUsername(String bearerToken) {
     try {
 
-      // Trim "bearer: " from beginning
-      var token = bearerToken.substring(8);
+      // Trim "Bearer " from beginning
+      var token = bearerToken.substring(7);
 
       // Build claims
       var claims = Jwts.parserBuilder()

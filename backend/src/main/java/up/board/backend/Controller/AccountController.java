@@ -68,7 +68,7 @@ public class AccountController {
     // Return JWT + stripped account
     var token = jwtUtil.generateToken(account);
     accountNew.setPasswordHash(null);
-    return ResponseEntity.ok().header("Authorization", "Bearer: " + token).body(accountNew);
+    return ResponseEntity.ok().header("Authorization", "Bearer " + token).body(accountNew);
   }
 
   @PostMapping("/login")
@@ -97,7 +97,7 @@ public class AccountController {
     // Return token + stripped account
     var token = jwtUtil.generateToken(existingAccount);
     existingAccount.setPasswordHash(null);
-    return ResponseEntity.ok().header("Authorization", "Bearer: " + token).body(existingAccount);
+    return ResponseEntity.ok().header("Authorization", "Bearer " + token).body(existingAccount);
   }
 
   @PostMapping("/authTest")
