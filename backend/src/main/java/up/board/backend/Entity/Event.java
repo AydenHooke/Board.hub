@@ -35,10 +35,10 @@ public class Event {
   String type;
 
   @JoinColumn(name = "account_id")
-  int accountId;
+  Integer accountId;
 
   @JoinColumn(name = "game_id")
-  int gameId;
+  Integer gameId;
 
   // Constructor
   public Event() {

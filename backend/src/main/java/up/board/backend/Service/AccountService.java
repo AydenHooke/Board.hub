@@ -25,8 +25,8 @@ public class AccountService {
     return accountRepository.findByUsername(username);
   }
 
-  public Account findByUsernameAndPassword(String username, String passwordHash) {
-    return accountRepository.findByUsernameAndPasswordHash(username, passwordHash);
+  public String findPasswordHash(Account account) {
+    return accountRepository.findPasswordHashByUsername(account.getUsername()).getPasswordHash();
   }
 
   //
@@ -34,6 +34,11 @@ public class AccountService {
 
     var encoder = new BCryptPasswordEncoder();
     return encoder.encode(plaintextPassword);
+  }
+
+  public static boolean PasswordMatches(String plaintextPassword, String hashPassword) {
+    var encoder = new BCryptPasswordEncoder();
+    return encoder.matches(plaintextPassword, hashPassword);
   }
 
 }
