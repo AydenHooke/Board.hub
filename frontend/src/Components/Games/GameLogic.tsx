@@ -8,6 +8,8 @@ function GameLogic() {
   });
 
   useEffect(()=>{
+    console.log("") // blank space to keep logs together
+
     let parser, xmlDoc;
     
     parser = new DOMParser();
@@ -20,21 +22,48 @@ function GameLogic() {
     //console.log(games);
     for(let i=0;i<numberOfGames;i++)
       ids[i] = games[i].attributes[1].nodeValue; //attribute[1] specifically refers to the node that contains the game id
-
+    console.log("Collection comprised of:")
     console.log(ids);
-    console.log("this is happening");
+    console.log("rectifying collection...");
+
     const getUnpersisted = async () =>{
       let importIdsFromBgg = await rectifyGameCollection(ids); //this is a JSON object full of Ids that are not in board.up's database yet
-      setState(()=>({
-        ...state,
-        unpersistedIds:importIdsFromBgg}));
+      if(importIdsFromBgg.length!=0){ // this just sees if there is any changes
+        setState(()=>({
+          ...state,
+          unpersistedIds:importIdsFromBgg}));
+        }
+        else(
+          console.log("No rectification needed!")
+        )
     }
     
     getUnpersisted();
   }, [state.collection])
 
   useEffect(()=>{
-    console.log(state.unpersistedIds);
+    let gamesToAdd = state.unpersistedIds;
+    let gameQueryString = "";
+    console.log("Collection is missing the following games:")
+    console.log(gamesToAdd);
+    let timeoutPeriod = 0;
+    while(gamesToAdd.length > 0){
+      //console.log("while loop ran!")
+      for(let i = 1; i<=20 && gamesToAdd.length > 0; i++){
+       // console.log("for loop ran!")
+        gameQueryString = gameQueryString.concat(gamesToAdd[0] + ",");
+        //console.log(gameQueryString);
+        gamesToAdd.splice(0,1);
+       // this manuevers the list of ids and splits by 20 to not be limited by BGG api
+      }
+      gameQueryString = gameQueryString.slice(0, -1); // this cuts off the last comma, because otherwise it will count as 21 items, which bgg cannot return
+      //console.log(gameQueryString);
+      setTimeout(grabBggInfo, timeoutPeriod, gameQueryString)
+      timeoutPeriod += 5001; // waits 5 extra seconds every time this is run
+      //console.log("while loop finished!")
+      gameQueryString = "";
+    }
+
   }, [state.unpersistedIds])
   
 
@@ -45,18 +74,18 @@ function GameLogic() {
         let myCollection;
         myCollection = await axios.get(`https://www.boardgamegeek.com/xmlapi2/collection?username=${username}&subtype=boardgame&own=1`)
 
-          while(myCollection.status == 202){
-            setTimeout(async()=>{
-              myCollection = await axios.get(`https://www.boardgamegeek.com/xmlapi2/collection?username=${username}&subtype=boardgame&own=1`)},5500);
+          if(myCollection.status == 202){
+            handleGetGameCollection();
             }
+            else{
         //when you query BGG, it gives you a 202 while your log file is being created
-        //this while loop waits 5.5 seconds and tries again until it sees the 200
+        //this while loop waits 5 seconds and tries again until it sees the 200
         const collectionData = myCollection.data;
         //console.log(myCollection.headers); it automatically parses it as xml
         setState(()=>({
           ...state,
           collection:collectionData}));
-
+        }
           
     }
 
@@ -67,6 +96,36 @@ function GameLogic() {
           return collectionData;
         
     }
+
+    async function grabBggInfo(gamesToAdd: string) {
+      let newGameEntries = await axios.get(`https://www.boardgamegeek.com/xmlapi2/thing?id=${gamesToAdd}`);
+
+      let parser, xmlDoc;
+    
+      parser = new DOMParser();
+      xmlDoc = parser.parseFromString(newGameEntries.data as string, "text/html")
+  
+      let games = xmlDoc.getElementsByTagName('item');
+      let numberOfGames = xmlDoc.getElementsByTagName('item').length;
+  
+      let allGames: any[] | undefined = [];
+      //console.log(games);
+      for(let i=0;i<numberOfGames;i++){
+        allGames[i] ={bggId: games[i].attributes[1].nodeValue, // gathers the bggId
+                      gameImageUrl: games[i].getElementsByTagName("thumbnail")[0].childNodes[0].nodeValue,
+                      title: games[i].getElementsByTagName("name")[0].attributes[2].nodeValue,
+                      description: games[i].getElementsByTagName("description")[0].childNodes[0].nodeValue           
+      } 
+    }
+    console.log("Serving these games to the server:")
+    console.log(allGames);
+    //console.log(allGames)
+      async function makeTheGames() {
+        await axios.post(`http://localhost:8080/game/persistManyGames`,allGames)
+      }
+      makeTheGames();
+    console.log("All games have been created (hopefully)")
+  }
 
   return (
     <>

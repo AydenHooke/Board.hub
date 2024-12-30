@@ -35,4 +35,11 @@ public class GameService {
     return idNotFound;
   }
 
+  public Game findOneGame(Game game){
+    if(gameRepository.findGameByBggId(game.getBggId())!=null)
+      return gameRepository.findGameByBggId((game.getBggId()));
+    else
+      return null;
+  }
+
 }
