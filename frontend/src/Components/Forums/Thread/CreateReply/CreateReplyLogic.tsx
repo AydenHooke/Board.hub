@@ -22,7 +22,7 @@ function CreateReplyLogic(
             .post('http://localhost:8080/Reply', {
                 thread_id: id,
                 reply_id: reply_id,
-                user_id: 0,
+                user_id: context?.id,
                 content: replyContent
             }, {
                 headers: {"authorization" : `Bearer ${context?.jwt}`}

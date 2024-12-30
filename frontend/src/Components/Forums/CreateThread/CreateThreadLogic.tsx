@@ -21,7 +21,7 @@ function CreateThreadLogic({
             .post('http://localhost:8080/Thread', {
                 title: threadTitle,
                 content: threadContent,
-                user_id: 0,
+                user_id: context?.id,
                 forum_id: id
             }, {
                 headers: {"authorization" : `Bearer ${context?.jwt}`}
