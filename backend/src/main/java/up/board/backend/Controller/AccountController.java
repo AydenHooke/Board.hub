@@ -101,19 +101,19 @@ public class AccountController {
   }
 
   @PostMapping("/authTest")
-  public ResponseEntity<String> authTest(@RequestHeader("jwt") String token, @RequestBody Account account) {
+  public ResponseEntity<String> authTest(@RequestHeader("Authorization") String bearerToken, @RequestBody Account account) {
 
     // Input sanitize
     var username = account.getUsername();
     if (username == null) {
       return ResponseEntity.status(409).body("Missing username");
     }
-    if (token == null) {
+    if (bearerToken == null) {
       return ResponseEntity.status(409).body("Missing JWT");
     }
 
     // Validate JWT
-    var tokenUsername = jwtUtil.validateTokenAndGetUsername(token);
+    var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
     if (!tokenUsername.equals(username)) {
       return ResponseEntity.status(401).body("Invalid JWT");
     }
