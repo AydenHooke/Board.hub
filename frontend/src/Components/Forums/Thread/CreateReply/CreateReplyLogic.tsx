@@ -1,7 +1,8 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import { Thread } from "../../ForumPage"
 import axios from "axios";
 import CreateReplyInput from "./CreateReplyInput";
+import { AccountContext } from "../../../../Context/AccountContext";
 
 function CreateReplyLogic(
     reply_id: any,
@@ -11,6 +12,8 @@ function CreateReplyLogic(
     user_id,
     forum_id}: Thread
 ) {
+    const context = useContext(AccountContext);
+
     const [replyContent, setReplyContent] = useState("");
 
     function handleSubmit(event: FormEvent) {
@@ -21,6 +24,8 @@ function CreateReplyLogic(
                 reply_id: reply_id,
                 user_id: 0,
                 content: replyContent
+            }, {
+                headers: {"authorization" : `Bearer ${context?.jwt}`}
             })
             .then((Response) => console.log(Response.data))
             .catch((Response) => console.error(Response.data));

@@ -1,7 +1,8 @@
-import { FormEvent, useState } from "react"
+import { FormEvent, useContext, useState } from "react"
 import { Forum } from "../Forums";
 import CreateThreadInput from "./CreateThreadInput";
 import axios from "axios";
+import { AccountContext } from "../../../Context/AccountContext";
 
 function CreateThreadLogic({
     id,
@@ -9,6 +10,8 @@ function CreateThreadLogic({
     description,
     type}: Forum
 ) {
+    const context = useContext(AccountContext);
+
     const [threadTitle, setThreadTitle] = useState("");
     const [threadContent, setThreadContent] = useState("");
 
@@ -20,6 +23,8 @@ function CreateThreadLogic({
                 content: threadContent,
                 user_id: 0,
                 forum_id: id
+            }, {
+                headers: {"authorization" : `Bearer ${context?.jwt}`}
             })
             .then((Response) => console.log(Response.data))
             .catch((Response) => console.error(Response.data));
