@@ -8,23 +8,26 @@ import GameLogic from './Components/Games/GameLogic'
 import './App.css';
 import ProfileLogic from './Components/Profile/ProfileLogic';
 import EventLogic from './Components/Events/EventLogic';
+import { AccountProvider } from './Context/AccountContext';
 
 function App() {
   return (
-    <div>
-      <BrowserRouter>
-        <NavBar/>
-        <Routes>
-          <Route path='/' element={<Home/>}></Route>
-          <Route path='/SignUp' element={<SignUpLogic/>}></Route>
-          <Route path='/SignIn' element={<SignInLogic/>}></Route>
-          <Route path='/Forums' element={<Forums/>}></Route>
-          <Route path='/games' element={<GameLogic/>}></Route>
-          <Route path='/events' element={<EventLogic/>}></Route>
-          <Route path='/profile' element={<ProfileLogic/>}></Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <>
+      <AccountProvider>
+        <BrowserRouter>
+          <NavBar/>
+          <Routes>
+            <Route path='/' element={<Home/>}></Route>
+            <Route path='/SignUp' element={<SignUpLogic/>}></Route>
+            <Route path='/SignIn' element={<SignInLogic/>}></Route>
+            <Route path='/Forums' element={<Forums/>}></Route>
+            <Route path='/games' element={<GameLogic/>}></Route>
+            <Route path='/events' element={<EventLogic/>}></Route>
+            <Route path='/profile' element={<ProfileLogic/>}></Route>
+          </Routes>
+        </BrowserRouter>
+      </AccountProvider>
+    </>
   )
 }
 
