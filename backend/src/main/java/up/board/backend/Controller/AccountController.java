@@ -113,7 +113,7 @@ public class AccountController {
     }
 
     // Validate JWT
-    var tokenUsername = jwtUtil.validateTokenAndGetUsername(token).substring(8);
+    var tokenUsername = jwtUtil.validateTokenAndGetUsername(token);
     if (!tokenUsername.equals(username)) {
       return ResponseEntity.status(401).body("Invalid JWT");
     }
