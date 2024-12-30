@@ -16,7 +16,7 @@ function ProfileLogic() {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [reenterPassword, setReenterPassword] = useState("");
+   
 
 function handleProfileEdit(e: FormEvent){
   e.preventDefault();
@@ -30,7 +30,6 @@ function handleProfileEdit(e: FormEvent){
         email={email} setEmail={setEmail}
         username={username} setUsername={setUsername}
         password={password} setPassword={setPassword}
-        reenterPassword={reenterPassword} setReenterPassword={setReenterPassword}
         handleProfileEdit={handleProfileEdit}/>
     </div>
   )

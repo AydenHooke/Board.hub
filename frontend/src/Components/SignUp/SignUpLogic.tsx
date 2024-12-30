@@ -9,7 +9,7 @@ function SignUpLogic() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    const {setEmail: setContextEmail, setUsername: setContextUsername, setJwt } = useAccount();
+    const {setEmail: setContextEmail, setUsername: setContextUsername} = useAccount();
 
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
@@ -24,7 +24,6 @@ function SignUpLogic() {
                 console.log(response.data);
                 setContextEmail(email);
                 setContextUsername(username);
-                setJwt(response.data.jwt); // Assuming the JWT is returned in the response data
                 navigate("/games")
             })
             .catch((error) => console.error('Error posting data, ', error));

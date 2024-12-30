@@ -4,7 +4,6 @@ type ProfileInputProps = {
     email: string, setEmail: React.Dispatch<React.SetStateAction<string>>,
     username: string, setUsername: React.Dispatch<React.SetStateAction<string>>,
     password: string, setPassword: React.Dispatch<React.SetStateAction<string>>,
-    reenterPassword: string, setReenterPassword: React.Dispatch<React.SetStateAction<string>>,
     handleProfileEdit: (e: React.FormEvent<HTMLFormElement>) => void
 };
 
@@ -12,7 +11,6 @@ function ProfileInput({
   email, setEmail,
   username, setUsername,
   password, setPassword,
-  reenterPassword, setReenterPassword,
   handleProfileEdit}: ProfileInputProps
 ) {
   return (
@@ -44,13 +42,6 @@ function ProfileInput({
                       }></input>
                   </label>
                   <br />
-                  <label>
-                    Re-enter Password
-                    <input required type="password" placeholder="Re-enter Password" value={reenterPassword} onChange={
-                      (e: React.ChangeEvent<HTMLInputElement>) => setReenterPassword(e.target.value)
-                    } />
-                  </label>
-                  <br/>
                   <button type="submit">Save Changes</button>
           </form>
         </section>

@@ -33,30 +33,30 @@ public class AccountController {
 
   /// Endpoints
   @PostMapping("/register")
-  public ResponseEntity<String> register(@RequestBody Account account) {
+  public ResponseEntity<Account> register(@RequestBody Account account) {
 
     // Check valid username
     var username = account.getUsername();
     if (username == null || username.length() == 0) {
-      return ResponseEntity.status(409).body("Invalid username");
+      return ResponseEntity.status(409).body(null);
     }
 
     // Check valid Email
     var email = account.getEmail();
     if (email == null || email.length() == 0 || !EmailValidator.isValid(email)) {
-      return ResponseEntity.status(409).body("Invalid email");
+      return ResponseEntity.status(409).body(null);
     }
 
     // Check valid password
     var password = account.getPasswordHash();
     if (password == null || password.length() == 0) {
-      return ResponseEntity.status(409).body("Invalid password");
+      return ResponseEntity.status(409).body(null);
     }
 
     // Make sure username is not in use
     var existingAccount = accountService.findByUsername(account.getUsername());
     if (existingAccount != null) {
-      return ResponseEntity.status(409).body("Username taken");
+      return ResponseEntity.status(409).body(null);
     }
 
     // Encode password
@@ -69,35 +69,35 @@ public class AccountController {
 
     // Return JWT
     var token = jwtUtil.generateToken(account);
-    return ResponseEntity.ok().body(token);
+    return ResponseEntity.ok().body(account);
   }
 
   @PostMapping("/login")
-  public ResponseEntity<String> login(@RequestBody Account account) {
+  public ResponseEntity<Account> login(@RequestBody Account account) {
 
     // Input sanitize
     var username = account.getUsername();
     var password = account.getPasswordHash();
     if (username == null || password == null) {
-      return ResponseEntity.status(409).body("Missing credentials");
+      return ResponseEntity.status(409).body(null);
     }
 
     // Check user exists
     var existingAccount = accountService.findByUsername(username);
     if (existingAccount == null) {
-      return ResponseEntity.status(409).body("Account does not exist");
+      return ResponseEntity.status(409).body(null);
     }
 
     // Authenticate
     var passwordPlain = password;
     var passwordHash = accountService.findPasswordHash(existingAccount);
     if (!AccountService.PasswordMatches(passwordPlain, passwordHash)) {
-      return ResponseEntity.status(401).body("Invalid credentials");
+      return ResponseEntity.status(401).body(null);
     }
 
     // Return token
     var token = jwtUtil.generateToken(existingAccount);
-    return ResponseEntity.ok().body(token);
+    return ResponseEntity.ok().body(account);
   }
 
   @PostMapping("/authTest")
