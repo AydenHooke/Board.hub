@@ -34,15 +34,15 @@ public class GameController {
 
     @PostMapping("/validateGamePersistence")
     public ResponseEntity<?> validateGamePersistence(@RequestBody List<String> gameIds) {
-        System.out.println("I have been called");
+        System.out.println("Validating persistance...");
         List<String> gameIdsNotPersisted = gameService.returnIfNotPersisted(gameIds); // this returns a list of every ID we don't have a game for
         if(gameIdsNotPersisted != null){ // i.e. if there wasn't an error, return the gameIds as requested
-        System.out.println("Body out");
+        System.out.println("Returning missing games");
             return ResponseEntity.status(HttpStatus.OK)
                 .body(gameIdsNotPersisted);
     }
         else{
-            System.out.println("Error dammit");
+            System.out.println("Game persistance error!!!");
             return ResponseEntity.status(HttpStatus.CONFLICT)
                 .build(); // if there was an error, report a conflict 
         }}
@@ -57,9 +57,11 @@ public class GameController {
             return ResponseEntity.status(HttpStatus.CREATED)
                 .build();
         }
-        else
+        else{
+            System.out.println("There was an error creating a game");
             return ResponseEntity.status(HttpStatus.CONFLICT)
                 .build();
+        }
 
     }
 
@@ -70,7 +72,8 @@ public class GameController {
             Game testGame = gameService.findOneGame(games.get(i));
             if(testGame == null){
                 gameService.Register(games.get(i));
-                System.out.println("Someone created a game");
+
+                System.out.println("Someone created the " + gameService.findAllGames().size() + "th game");
             }
             else
                 error = true;
@@ -79,7 +82,7 @@ public class GameController {
             return ResponseEntity.status(HttpStatus.CREATED)
                 .build();
         else{
-            System.out.println("There was an erro making a game");
+            System.out.println("There was an error creating lots of games");
             return ResponseEntity.status(HttpStatus.CONFLICT)
                 .build();
         }

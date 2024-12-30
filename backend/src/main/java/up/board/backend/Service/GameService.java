@@ -42,4 +42,8 @@ public class GameService {
       return null;
   }
 
+  public List<Game> findAllGames(){
+    return gameRepository.findGamesByGameIdNotNull();
+  }
+
 }
