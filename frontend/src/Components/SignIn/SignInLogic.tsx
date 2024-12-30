@@ -8,7 +8,11 @@ import { useAccount } from "../../Context/useAccount";
 function SignInLogic() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const { username: contextUsername, setUsername: setContextUsername} = useAccount();
+    const { username: contextUsername, 
+            setUsername: setContextUsername, 
+            setEmail: setContextEmail,
+            setId: setContextId,
+    } = useAccount();
     const navigate = useNavigate();
 
     function handleSubmit(event: FormEvent) {
@@ -21,8 +25,12 @@ function SignInLogic() {
             })
             .then((Response) => {
                 console.log(Response.data)
-                setContextUsername(username);
-                console.log("Context username after setting:", contextUsername); // Print the context email
+
+                setContextUsername(Response.data.username);
+                setContextEmail(Response.data.email);
+                setContextId(Response.data.id);
+
+                console.log("Context username:", contextUsername); // Print the context email
                 navigate("/games")
             })
             .catch((error) => console.error('Error posting data, ', error));

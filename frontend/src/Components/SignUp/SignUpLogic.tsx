@@ -9,7 +9,11 @@ function SignUpLogic() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    const {setEmail: setContextEmail, setUsername: setContextUsername} = useAccount();
+    const {
+        setEmail: setContextEmail, 
+        setUsername: setContextUsername,
+        setId: setContextId,
+    } = useAccount();
 
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
@@ -22,8 +26,11 @@ function SignUpLogic() {
             })
             .then((response) => {
                 console.log(response.data);
-                setContextEmail(email);
-                setContextUsername(username);
+                
+                setContextEmail(response.data.email);
+                setContextUsername(response.data.username);
+                setContextId(response.data.id);
+
                 navigate("/games")
             })
             .catch((error) => console.error('Error posting data, ', error));

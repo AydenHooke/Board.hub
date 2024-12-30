@@ -41,4 +41,13 @@ public class AccountService {
     return encoder.matches(plaintextPassword, hashPassword);
   }
 
+  public Account findByEmail(String newEmail) {
+    return accountRepository.findByEmail(newEmail);
+  }
+
+  public Account findById(Integer id) {
+    return accountRepository.findByAccountId(id);
+  }
+  
+
 }
