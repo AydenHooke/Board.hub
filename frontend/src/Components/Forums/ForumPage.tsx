@@ -33,6 +33,15 @@ function ForumPage({
             <h2>{title}</h2>
             <h3>{description}</h3>
 
+            <CreateThreadLogic
+                id={id}
+                title={title}
+                description={description}
+                type={type}
+            />
+            <br/>
+            <br/>
+
             {data.map((thread) => {
                 return (
                     <>
@@ -55,16 +64,6 @@ function ForumPage({
                     </>
                 )
             })}
-
-
-            <br/>
-            <br/>
-            <CreateThreadLogic
-                id={id}
-                title={title}
-                description={description}
-                type={type}
-            />
         </>
     )
 }
