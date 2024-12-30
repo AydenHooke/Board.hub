@@ -32,7 +32,7 @@ function GameLogic() {
   }, [state.collection])
   
 
-  let username = "Drsen57";
+  let username = "Drsen57"; // this later will be the user's username of course
 
 
     async function handleGetGameCollection() {
@@ -43,12 +43,15 @@ function GameLogic() {
             setTimeout(async()=>{
               myCollection = await axios.get(`https://www.boardgamegeek.com/xmlapi2/collection?username=${username}&subtype=boardgame&own=1`)},5500);
             }
-
+        //when you query BGG, it gives you a 202 while your log file is being created
+        //this while loop waits 5.5 seconds and tries again until it sees the 200
         const collectionData = myCollection.data;
         //console.log(myCollection.headers); it automatically parses it as xml
         setState(()=>({
           ...state,
           collection:collectionData}));
+
+          
     }
 
     async function rectifyGameCollection(ids: any) {
