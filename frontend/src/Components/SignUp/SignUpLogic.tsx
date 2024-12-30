@@ -1,13 +1,15 @@
 import { FormEvent, useState } from "react";
 import SignUpInput from "./SignUpInput";
 import axios from "axios";
-import { useAccount } from "../../Context/AccountContext";
+import { useAccount } from "../../Context/useAccount";
+import {useNavigate} from "react-router-dom"
 
 function SignUpLogic() {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const { setEmail: setContextEmail, setUsername: setContextUsername, setJwt } = useAccount();
+    const navigate = useNavigate();
+    const {setEmail: setContextEmail, setUsername: setContextUsername, setJwt } = useAccount();
 
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
@@ -23,6 +25,7 @@ function SignUpLogic() {
                 setContextEmail(email);
                 setContextUsername(username);
                 setJwt(response.data.jwt); // Assuming the JWT is returned in the response data
+                navigate("/games")
             })
             .catch((error) => console.error('Error posting data, ', error));
     }

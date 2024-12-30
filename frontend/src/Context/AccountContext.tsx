@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode, useContext } from 'react';
+import { createContext, useState, ReactNode} from 'react';
 
 interface AccountContextType {
   email: string;
@@ -9,7 +9,7 @@ interface AccountContextType {
   setJwt: (jwt: string) => void;
 }
 
-const AccountContext = createContext<AccountContextType | undefined>(undefined);
+export const AccountContext = createContext<AccountContextType | undefined>(undefined);
 
 export const AccountProvider = ({ children }: { children: ReactNode }) => {
   const [email, setEmail] = useState('');
@@ -23,10 +23,3 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useAccount = () => {
-  const context = useContext(AccountContext);
-  if (!context) {
-    throw new Error('useAccount must be used within an AccountProvider');
-  }
-  return context;
-};
