@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 
 function GameLogic() {
   const [state, setState] = useState({
-    collection: {} as any
+    collection: {} as any,
+    unpersistedIds: {} as any,
   });
 
   useEffect(()=>{
@@ -21,11 +22,14 @@ function GameLogic() {
       ids[i] = games[i].attributes[1].nodeValue; //attribute[1] specifically refers to the node that contains the game id
 
     console.log(ids);
-
+    console.log("this is happening");
     let importIdsFromBgg = rectifyGameCollection(ids); //this is a JSON object full of Ids that are not in board.up's database yet
-    console.log(importIdsFromBgg);
+    setState(()=>({
+      ...state,
+      unpersistedIds:importIdsFromBgg}));
+      console.log(state.unpersistedIds);
 
-  }, [state])
+  }, [state.collection])
   
 
   let username = "Drsen57";
@@ -42,11 +46,13 @@ function GameLogic() {
 
         const collectionData = myCollection.data;
         //console.log(myCollection.headers); it automatically parses it as xml
-        setState(()=>({collection:collectionData}));
+        setState(()=>({
+          ...state,
+          collection:collectionData}));
     }
 
     async function rectifyGameCollection(ids: any) {
-      let collectionResults = await axios.post(`https://localhost:8080/validateGamePersistence`,{ids})
+      let collectionResults = await axios.post(`http://localhost:8080/game/validateGamePersistence`,{ids})
       let collectionData = collectionResults.data;
         if(collectionResults.status == 200)
           return collectionData;
