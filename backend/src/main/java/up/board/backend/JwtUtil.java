@@ -5,12 +5,15 @@ import java.util.HashMap;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.stereotype.Component;
+
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import up.board.backend.Entity.Account;
 
+@Component
 public class JwtUtil {
 
   private int expiration = 3600000; // 1 hour
