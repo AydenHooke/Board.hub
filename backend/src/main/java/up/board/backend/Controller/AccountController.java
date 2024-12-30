@@ -38,38 +38,37 @@ public class AccountController {
     // Check valid username
     var username = account.getUsername();
     if (username == null || username.length() == 0) {
-      return ResponseEntity.status(409).body(null);
+      return ResponseEntity.status(409).header("server-error", "Invalid username").body(null);
     }
 
     // Check valid Email
     var email = account.getEmail();
     if (email == null || email.length() == 0 || !EmailValidator.isValid(email)) {
-      return ResponseEntity.status(409).body(null);
+      return ResponseEntity.status(409).header("server-error", "Invalid email").body(null);
     }
 
     // Check valid password
     var password = account.getPasswordHash();
     if (password == null || password.length() == 0) {
-      return ResponseEntity.status(409).body(null);
+      return ResponseEntity.status(409).header("server-error", "Invalid password").body(null);
     }
 
     // Make sure username is not in use
     var existingAccount = accountService.findByUsername(account.getUsername());
     if (existingAccount != null) {
-      return ResponseEntity.status(409).body(null);
+      return ResponseEntity.status(409).header("server-error", "Username taken").body(null);
     }
 
     // Encode password
     var passwordHash = AccountService.GetPasswordHash(password);
     account.setPasswordHash(passwordHash);
 
-    accountService.register(account);
+    var accountNew = accountService.register(account);
 
-    logger.info("Created user with password (" + password + ") and hash: " + passwordHash);
-
-    // Return JWT
+    // Return JWT + stripped account
     var token = jwtUtil.generateToken(account);
-    return ResponseEntity.ok().body(account);
+    accountNew.setPasswordHash(null);
+    return ResponseEntity.ok().header("Authorization", "Bearer: " + token).body(accountNew);
   }
 
   @PostMapping("/login")
@@ -79,25 +78,26 @@ public class AccountController {
     var username = account.getUsername();
     var password = account.getPasswordHash();
     if (username == null || password == null) {
-      return ResponseEntity.status(409).body(null);
+      return ResponseEntity.status(409).header("server-error", "Missing credentials").body(null);
     }
 
     // Check user exists
     var existingAccount = accountService.findByUsername(username);
     if (existingAccount == null) {
-      return ResponseEntity.status(409).body(null);
+      return ResponseEntity.status(409).header("server-error", "Account does not exist").body(null);
     }
 
     // Authenticate
     var passwordPlain = password;
     var passwordHash = accountService.findPasswordHash(existingAccount);
     if (!AccountService.PasswordMatches(passwordPlain, passwordHash)) {
-      return ResponseEntity.status(401).body(null);
+      return ResponseEntity.status(401).header("server-error", "Invalid credentials").body(null);
     }
 
-    // Return token
+    // Return token + stripped account
     var token = jwtUtil.generateToken(existingAccount);
-    return ResponseEntity.ok().body(account);
+    existingAccount.setPasswordHash(null);
+    return ResponseEntity.ok().header("Authorization", "Bearer: " + token).body(existingAccount);
   }
 
   @PostMapping("/authTest")
@@ -113,7 +113,7 @@ public class AccountController {
     }
 
     // Validate JWT
-    var tokenUsername = jwtUtil.validateTokenAndGetUsername(token);
+    var tokenUsername = jwtUtil.validateTokenAndGetUsername(token).substring(8);
     if (!tokenUsername.equals(username)) {
       return ResponseEntity.status(401).body("Invalid JWT");
     }

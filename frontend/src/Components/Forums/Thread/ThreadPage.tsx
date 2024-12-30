@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Thread } from "../ForumPage"
 import axios from "axios";
 import ReplyComment from "./ReplyComment";
+import CreateReplyLogic from "./CreateReply/CreateReplyLogic";
 
 export type Reply = {
     id: number,
@@ -31,6 +32,17 @@ function ThreadPage({
         <>
             <h2>{title}</h2>
             <h3>{content}</h3>
+
+            <div>
+                <CreateReplyLogic
+                    reply_id={null}
+                    id={id}
+                    title={title}
+                    content={content}
+                    user_id={user_id}
+                    forum_id={forum_id}
+                />
+            </div>
 
             {data.map((reply) => {
                 return (
