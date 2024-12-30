@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useAccount } from '../../Context/useAccount';
 
 function NavBar() {
+  const { username } = useAccount();
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -23,16 +26,20 @@ function NavBar() {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav right-links">
-              <li className="nav-item">
-                <Link className="nav-link" to="/SignUp">
-                  Sign Up
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/SignIn">
-                  Sign In
-                </Link>
-              </li>
+              {username == '' && (
+                <>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/SignUp">
+                      Sign Up
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/SignIn">
+                      Sign In
+                    </Link>
+                  </li>
+                </>
+              )}
               <li>
                 <Link className="nav-link" to="/games">
                   My Games

@@ -2,20 +2,29 @@ import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SignInInput from "./SignInInput";
 import axios from "axios";
+import { useAccount } from "../../Context/useAccount";
+
 
 function SignInLogic() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const { username: contextUsername, setUsername: setContextUsername} = useAccount();
+    const navigate = useNavigate();
 
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
 
         axios
-            .post('localhost:8080/account/login', {
+            .post('http://localhost:8080/account/login', {
                 username: username,
-                password: password
+                passwordHash: password
             })
-            .then((Response) => console.log(Response.data))
+            .then((Response) => {
+                console.log(Response.data)
+                setContextUsername(username);
+                console.log("Context username after setting:", contextUsername); // Print the context email
+                navigate("/games")
+            })
             .catch((error) => console.error('Error posting data, ', error));
     }
 
