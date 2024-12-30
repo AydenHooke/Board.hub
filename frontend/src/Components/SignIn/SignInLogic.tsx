@@ -28,7 +28,7 @@ function SignInLogic() {
 
                 setContextUsername(Response.data.username);
                 setContextEmail(Response.data.email);
-                setContextId(Response.data.id);
+                setContextId(Response.data.accountId);
 
                 console.log("Context username:", contextUsername); // Print the context email
                 navigate("/games")

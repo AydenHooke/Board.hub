@@ -37,7 +37,7 @@ function ProfileLogic() {
         console.log(response.data);
         setContextEmail(response.data.email);
         setContextUsername(response.data.username);
-        setContextId(response.data.id);
+        setContextId(response.data.accountId);
       })
       .catch(error => {
         console.error('Error patching data, ', error)

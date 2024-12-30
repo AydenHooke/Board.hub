@@ -29,7 +29,7 @@ function SignUpLogic() {
                 
                 setContextEmail(response.data.email);
                 setContextUsername(response.data.username);
-                setContextId(response.data.id);
+                setContextId(response.data.accountId);
 
                 navigate("/games")
             })
