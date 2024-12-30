@@ -19,9 +19,11 @@ public class JwtUtil {
   //
   public String generateToken(Account account) {
 
+    // Create claims
     var claimsMap = new HashMap<String, Integer>();
     claimsMap.put("id", account.getAccountId());
 
+    // Build Jwt
     return Jwts
         .builder()
         .setClaims(claimsMap)
@@ -33,8 +35,13 @@ public class JwtUtil {
   }
 
   //
-  public String validateTokenAndGetUsername(String token) {
+  public String validateTokenAndGetUsername(String bearerToken) {
     try {
+
+      // Trim "Bearer " from beginning
+      var token = bearerToken.substring(7);
+
+      // Build claims
       var claims = Jwts.parserBuilder()
           .setSigningKey(key)
           .build()

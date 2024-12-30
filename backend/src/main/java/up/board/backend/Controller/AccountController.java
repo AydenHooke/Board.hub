@@ -70,7 +70,36 @@ public class AccountController {
     // Return JWT + stripped account
     var token = jwtUtil.generateToken(account);
     accountNew.setPasswordHash(null);
-    return ResponseEntity.ok().header("Authorization", "Bearer: " + token).body(accountNew);
+    return ResponseEntity.ok().header("Authorization", "Bearer " + token).body(accountNew);
+  }
+
+  @PostMapping("/login")
+  public ResponseEntity<Account> login(@RequestBody Account account) {
+
+    // Input sanitize
+    var username = account.getUsername();
+    var password = account.getPasswordHash();
+    if (username == null || password == null) {
+      return ResponseEntity.status(409).header("server-error", "Missing credentials").body(null);
+    }
+
+    // Check user exists
+    var existingAccount = accountService.findByUsername(username);
+    if (existingAccount == null) {
+      return ResponseEntity.status(409).header("server-error", "Account does not exist").body(null);
+    }
+
+    // Authenticate
+    var passwordPlain = password;
+    var passwordHash = accountService.findPasswordHash(existingAccount);
+    if (!AccountService.PasswordMatches(passwordPlain, passwordHash)) {
+      return ResponseEntity.status(401).header("server-error", "Invalid credentials").body(null);
+    }
+
+    // Return token + stripped account
+    var token = jwtUtil.generateToken(existingAccount);
+    existingAccount.setPasswordHash(null);
+    return ResponseEntity.ok().header("Authorization", "Bearer " + token).body(existingAccount);
   }
 
   @PatchMapping("/{id}")
@@ -120,19 +149,19 @@ public class AccountController {
   }
 
   @PostMapping("/authTest")
-  public ResponseEntity<String> authTest(@RequestHeader("jwt") String token, @RequestBody Account account) {
+  public ResponseEntity<String> authTest(@RequestHeader("Authorization") String bearerToken, @RequestBody Account account) {
 
     // Input sanitize
     var username = account.getUsername();
     if (username == null) {
       return ResponseEntity.status(409).body("Missing username");
     }
-    if (token == null) {
+    if (bearerToken == null) {
       return ResponseEntity.status(409).body("Missing JWT");
     }
 
     // Validate JWT
-    var tokenUsername = jwtUtil.validateTokenAndGetUsername(token).substring(8);
+    var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
     if (!tokenUsername.equals(username)) {
       return ResponseEntity.status(401).body("Invalid JWT");
     }
