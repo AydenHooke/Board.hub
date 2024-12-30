@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -98,6 +100,52 @@ public class AccountController {
     var token = jwtUtil.generateToken(existingAccount);
     existingAccount.setPasswordHash(null);
     return ResponseEntity.ok().header("Authorization", "Bearer " + token).body(existingAccount);
+  }
+
+  @PatchMapping("/{id}")
+  public ResponseEntity<Account> updateAccount(@PathVariable Integer id, @RequestBody Account account) {
+        var newUsername = account.getUsername();
+        var newPassword = account.getPasswordHash();
+        var newEmail = account.getEmail();
+
+        if (newUsername == null || newPassword == null || newEmail == null) {
+            return ResponseEntity.status(409).body(null);
+        }
+
+        // Check if account exists
+        var existingAccount = accountService.findById(id);
+        if (existingAccount == null) {
+            return ResponseEntity.status(404).body(null);
+        }
+
+        // Check if email is valid
+        if (!EmailValidator.isValid(newEmail)) {
+            return ResponseEntity.status(409).body(null);
+        }
+
+        // Check if username is already in use by another account
+        var accountWithSameUsername = accountService.findByUsername(newUsername);
+        if (accountWithSameUsername != null && !(accountWithSameUsername.getAccountId() == id)) {
+            return ResponseEntity.status(409).body(null);
+        }
+
+         // Check if email is already in use by another account
+         var accountWithSameEmail = accountService.findByEmail(newEmail);
+         if (accountWithSameEmail != null && !(accountWithSameEmail.getAccountId() == id)) {
+             return ResponseEntity.status(409).body(null);
+         }
+
+         // Encode password
+        var passwordHash = AccountService.GetPasswordHash(newPassword);
+        existingAccount.setPasswordHash(passwordHash);
+        existingAccount.setUsername(newUsername);
+        existingAccount.setEmail(newEmail);
+
+        // Save updated account
+        accountService.register(existingAccount);
+
+        // Return updated account
+        return ResponseEntity.ok().body(existingAccount);
   }
 
   @PostMapping("/authTest")

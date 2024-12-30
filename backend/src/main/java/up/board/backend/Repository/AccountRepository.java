@@ -13,8 +13,12 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
   // Get account from username / password
   public Account findByUsername(String username);
 
+  public Account findByEmail(String email);
+
   public interface PasswordHashOnly {
     String getPasswordHash();
   }
   public PasswordHashOnly findPasswordHashByUsername(String username);
+
+  
 }

@@ -1,6 +1,8 @@
 import { createContext, useState, ReactNode} from 'react';
 
 interface AccountContextType {
+  id: string;
+  setId: (id: string) => void;
   email: string;
   username: string;
   setEmail: (email: string) => void;
@@ -12,12 +14,13 @@ interface AccountContextType {
 export const AccountContext = createContext<AccountContextType | undefined>(undefined);
 
 export const AccountProvider = ({ children }: { children: ReactNode }) => {
+  const [id, setId] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [jwt, setJwt] = useState('');
 
   return (
-    <AccountContext.Provider value={{ email, username, setEmail, setUsername, jwt, setJwt }}>
+    <AccountContext.Provider value={{ id, setId, email, username, setEmail, setUsername, jwt, setJwt }}>
       {children}
     </AccountContext.Provider>
   );
