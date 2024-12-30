@@ -17,7 +17,7 @@ import up.board.backend.Entity.Reply;
 import up.board.backend.Service.ReplyService;
 
 @RestController
-@RequestMapping("/thread")
+@RequestMapping("/reply")
 @CrossOrigin(origins = "http://localhost:5174")
 public class ReplyController {
 
