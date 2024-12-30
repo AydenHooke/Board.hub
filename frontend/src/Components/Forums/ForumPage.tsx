@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import { Forum } from "./Forums";
 import ThreadPage from "./Thread/ThreadPage";
+import CreateThreadLogic from "./CreateThread/CreateThreadLogic";
 
 export type Thread = {
     id: number,
@@ -54,6 +55,16 @@ function ForumPage({
                     </>
                 )
             })}
+
+
+            <br/>
+            <br/>
+            <CreateThreadLogic
+                id={id}
+                title={title}
+                description={description}
+                type={type}
+            />
         </>
     )
 }
