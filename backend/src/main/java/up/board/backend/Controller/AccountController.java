@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import up.board.backend.JwtUtil;
 import up.board.backend.Entity.Account;
 import up.board.backend.Service.AccountService;
+import up.board.backend.Utils.EmailValidator;
 
 @RestController
 @RequestMapping("/account")
@@ -39,6 +40,12 @@ public class AccountController {
     if (username == null || username.length() == 0) {
       return ResponseEntity.status(409).body("Invalid username");
     }
+    
+    // Check valid Email
+    var email = account.getEmail();
+    if (!EmailValidator.isValid(email) || username == null || username.length() == 0) {
+        return ResponseEntity.status(409).body("Invalid email or username");
+    } 
 
     // Check valid password
     var password = account.getPasswordHash();
