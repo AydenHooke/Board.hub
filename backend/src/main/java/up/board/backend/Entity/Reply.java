@@ -21,7 +21,7 @@ public class Reply {
   int threadId;
 
   @JoinColumn(name = "reply_to_id")
-  int replyToId;
+  Integer replyToId;
 
   @JoinColumn(name = "account_id")
   int accountId;

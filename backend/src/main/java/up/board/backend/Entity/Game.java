@@ -15,7 +15,7 @@ public class Game {
   int gameId;
 
   @Column
-  int bggId;
+  Integer bggId;
 
   @Column
   String title;
@@ -24,7 +24,7 @@ public class Game {
   String description;
 
   @Column
-  float price;
+  Float price;
 
   // Constructor
   public Game() {

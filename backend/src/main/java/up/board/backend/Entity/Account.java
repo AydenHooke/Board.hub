@@ -20,7 +20,6 @@ public class Account {
   @Column(name = "password_hash")
   String passwordHash;
 
-  
   @Column
   String email;
 

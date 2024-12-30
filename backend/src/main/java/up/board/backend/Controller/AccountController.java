@@ -40,12 +40,12 @@ public class AccountController {
     if (username == null || username.length() == 0) {
       return ResponseEntity.status(409).body("Invalid username");
     }
-    
+
     // Check valid Email
     var email = account.getEmail();
-    if (!EmailValidator.isValid(email) || username == null || username.length() == 0) {
-        return ResponseEntity.status(409).body("Invalid email or username");
-    } 
+    if (email == null || email.length() == 0 || !EmailValidator.isValid(email)) {
+      return ResponseEntity.status(409).body("Invalid email");
+    }
 
     // Check valid password
     var password = account.getPasswordHash();
@@ -65,6 +65,8 @@ public class AccountController {
 
     accountService.register(account);
 
+    logger.info("Created user with password (" + password + ") and hash: " + passwordHash);
+
     // Return JWT
     var token = jwtUtil.generateToken(account);
     return ResponseEntity.ok().body(token);
@@ -76,20 +78,25 @@ public class AccountController {
     // Input sanitize
     var username = account.getUsername();
     var password = account.getPasswordHash();
-
     if (username == null || password == null) {
       return ResponseEntity.status(409).body("Missing credentials");
     }
 
     // Check user exists
-    var passwordHash = AccountService.GetPasswordHash(password);
-    var existingUser = accountService.findByUsernameAndPassword(username, passwordHash);
-    if (existingUser == null) {
+    var existingAccount = accountService.findByUsername(username);
+    if (existingAccount == null) {
+      return ResponseEntity.status(409).body("Account does not exist");
+    }
+
+    // Authenticate
+    var passwordPlain = password;
+    var passwordHash = accountService.findPasswordHash(existingAccount);
+    if (!AccountService.PasswordMatches(passwordPlain, passwordHash)) {
       return ResponseEntity.status(401).body("Invalid credentials");
     }
 
     // Return token
-    var token = jwtUtil.generateToken(existingUser);
+    var token = jwtUtil.generateToken(existingAccount);
     return ResponseEntity.ok().body(token);
   }
 
