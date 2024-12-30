@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Thread } from "../ForumPage"
 import axios from "axios";
+import ReplyComment from "./ReplyComment";
 
 export type Reply = {
     id: number,
@@ -34,7 +35,13 @@ function ThreadPage({
             {data.map((reply) => {
                 return (
                     <>
-                        
+                        <ReplyComment
+                            id={reply.id}
+                            thread_id={reply.thread_id}
+                            reply_id={reply.reply_id}
+                            user_id={reply.user_id}
+                            content={reply.content}
+                        />
                     </>
                 )
             })}
