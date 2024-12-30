@@ -23,13 +23,19 @@ function GameLogic() {
 
     console.log(ids);
     console.log("this is happening");
-    let importIdsFromBgg = rectifyGameCollection(ids); //this is a JSON object full of Ids that are not in board.up's database yet
-    setState(()=>({
-      ...state,
-      unpersistedIds:importIdsFromBgg}));
-      console.log(state.unpersistedIds);
-
+    const getUnpersisted = async () =>{
+      let importIdsFromBgg = await rectifyGameCollection(ids); //this is a JSON object full of Ids that are not in board.up's database yet
+      setState(()=>({
+        ...state,
+        unpersistedIds:importIdsFromBgg}));
+    }
+    
+    getUnpersisted();
   }, [state.collection])
+
+  useEffect(()=>{
+    console.log(state.unpersistedIds);
+  }, [state.unpersistedIds])
   
 
   let username = "Drsen57"; // this later will be the user's username of course
@@ -55,7 +61,7 @@ function GameLogic() {
     }
 
     async function rectifyGameCollection(ids: any) {
-      let collectionResults = await axios.post(`http://localhost:8080/game/validateGamePersistence`,{ids})
+      let collectionResults = await axios.post(`http://localhost:8080/game/validateGamePersistence`,ids)
       let collectionData = collectionResults.data;
         if(collectionResults.status == 200)
           return collectionData;

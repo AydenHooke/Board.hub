@@ -33,12 +33,16 @@ public class GameController {
 
     @PostMapping("/validateGamePersistence")
     public ResponseEntity<?> validateGamePersistence(@RequestBody List<String> gameIds) {
+        System.out.println("I have been called");
         List<String> gameIdsNotPersisted = gameService.returnIfNotPersisted(gameIds); // this returns a list of every ID we don't have a game for
-        if(gameIdsNotPersisted != null) // i.e. if there wasn't an error, return the gameIds as requested
+        if(gameIdsNotPersisted != null){ // i.e. if there wasn't an error, return the gameIds as requested
+        System.out.println("Body out");
             return ResponseEntity.status(HttpStatus.OK)
             .body(gameIdsNotPersisted);
-        else
+    }
+        else{
+            System.out.println("Error dammit");
             return ResponseEntity.status(HttpStatus.CONFLICT)
             .build(); // if there was an error, report a conflict 
-    }
+        }}
 }
