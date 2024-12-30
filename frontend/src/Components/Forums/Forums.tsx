@@ -15,7 +15,7 @@ function Forums() {
 
     useEffect(() => {
         axios
-            .get('http://localhost:8080/Forums')
+            .get('http://localhost:8080/Forum/get')
             .then((Response) => setData(Response.data))
             .catch((error) => console.error('Error getting data, ', error));
     }, [])
