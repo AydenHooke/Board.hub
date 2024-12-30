@@ -13,39 +13,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import up.board.backend.Entity.Thread;
-import up.board.backend.Service.ThreadService;
+import up.board.backend.Entity.Reply;
+import up.board.backend.Service.ReplyService;
 
 @RestController
 @RequestMapping("/thread")
 @CrossOrigin(origins = "http://localhost:5174")
-public class ThreadController {
+public class ReplyController {
 
-  private static final Logger logger = LoggerFactory.getLogger(ThreadController.class);
+  private static final Logger logger = LoggerFactory.getLogger(ReplyService.class);
 
-  ThreadService threadService;
+  ReplyService replyService;
 
   //
-  public ThreadController(ThreadService threadService) {
-    this.threadService = threadService;
+  public ReplyController(ReplyService replyService) {
+    this.replyService = replyService;
   }
 
   /// Endpoints
-  @GetMapping("/get/{forumId}")
-  public ResponseEntity<List<Thread>> getThreads(@PathVariable Integer forumId) {
+  @GetMapping("/get/{threadId}")
+  public ResponseEntity<List<Reply>> getReplies(@PathVariable Integer threadId) {
 
     // Return threads for forum
-    var threads = threadService.getThreads(forumId);
-    return ResponseEntity.ok().body(threads);
+    var replies = replyService.getReplies(threadId);
+    return ResponseEntity.ok().body(replies);
   }
 
   @PostMapping("/post")
-  public ResponseEntity<String> postThread(@RequestBody Thread thread) {
+  public ResponseEntity<String> postThread(@RequestBody Reply reply) {
 
     // Input sanitization
 
     // Return threads for forum
-    threadService.create(thread);
+    replyService.create(reply);
     return ResponseEntity.ok().body("Created");
   }
+
 }
