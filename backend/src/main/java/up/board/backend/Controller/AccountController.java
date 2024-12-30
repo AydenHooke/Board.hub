@@ -26,9 +26,9 @@ public class AccountController {
   JwtUtil jwtUtil;
 
   //
-  public AccountController(AccountService accountService) {
+  public AccountController(AccountService accountService, JwtUtil jwtUtil) {
     this.accountService = accountService;
-    this.jwtUtil = new JwtUtil();
+    this.jwtUtil = jwtUtil;
   }
 
   /// Endpoints
