@@ -28,7 +28,8 @@ function ProfileLogic() {
     function handleProfileEdit(e: FormEvent){
       e.preventDefault();
 
-      axios.patch(`http://localhost:8080/account/${contextId}`, {
+      axios.patch(`http://localhost:8080/account/`, {
+        accountId: contextId,
         email: email,
         username: username,
         passwordHash: password
