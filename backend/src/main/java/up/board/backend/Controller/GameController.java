@@ -73,7 +73,7 @@ public class GameController {
             if(testGame == null){
                 gameService.Register(games.get(i));
 
-                System.out.println("Someone created the " + gameService.findAllGames().size() + "th game");
+                System.out.println(games.get(i).getTitle() + " has been added to the database");
             }
             else
                 error = true;
