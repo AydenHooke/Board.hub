@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import up.board.backend.Enum.Event.Status;
+import up.board.backend.Enum.Event.Type;
 
 @Entity
 @Table
@@ -23,7 +25,8 @@ public class Event {
   String content;
 
   @Column
-  String status;
+  @Enumerated(EnumType.STRING)
+  Status status;
 
   @Column(name = "date_created")
   LocalDateTime dateCreated;
@@ -32,12 +35,13 @@ public class Event {
   LocalDateTime dateMeet;
 
   @Column
-  String type;
+  @Enumerated(EnumType.STRING)
+  Type type;
 
   @JoinColumn(name = "account_id")
   Integer accountId;
 
-  @JoinColumn(name = "game_id")
+  @JoinColumn(name = "game_id", nullable = true)
   Integer gameId;
 
   // Constructor
