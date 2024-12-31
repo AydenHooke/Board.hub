@@ -1,12 +1,12 @@
 import axios from "axios";
-import { useEffect, useState } from "react"
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import { useContext, useEffect, useState } from "react"
 import { Forum } from "./Forums";
 import ThreadPage from "./Thread/ThreadPage";
 import CreateThreadLogic from "./CreateThread/CreateThreadLogic";
+import { AccountContext } from "../../Context/AccountContext";
 
 export type Thread = {
-    id: number,
+    threadId: number,
     title: string,
     content: string,
     user_id: number,
@@ -14,52 +14,60 @@ export type Thread = {
 }
 
 function ForumPage({
-    id,
+    forumId,
     title,
     description,
     type}: Forum
 ) {
+    const context = useContext(AccountContext);
+
     const [data, setData] = useState<Thread[]>([]);
+    const [threadId, setThreadId] = useState(-1);
 
     useEffect(() => {
         axios
-            .get('http://localhost:8080/thread/get/' + id)
+            .get('http://localhost:8080/thread/get/' + forumId)
             .then((Response) => setData(Response.data))
             .catch((error) => console.error('Error getting data, ', error));
     }, [])
 
     return (
         <>
-            <h2>{title}</h2>
-            <h3>{description}</h3>
+            {(threadId == -1) && <h2>{title}</h2>}
+            {(threadId == -1) && <h3>{description}</h3>}
 
-            <CreateThreadLogic
-                id={id}
-                title={title}
-                description={description}
-                type={type}
-            />
-            <br/>
-            <br/>
+            {
+                (context?.id != '' && threadId == -1) && <CreateThreadLogic
+                    forumId={forumId}
+                    title={title}
+                    description={description}
+                    type={type}
+                />
+            }
+
+            {(threadId == -1) && (<br/>)}
+            {(threadId == -1) && (<br/>)}
 
             {data.map((thread) => {
                 return (
                     <>
-                        <BrowserRouter>
-                            <Routes>
-                                <Route path={'/Forums/' + title + '/' + thread.title} element={
-                                    <ThreadPage
-                                        id={thread.id}
-                                        title={thread.title}
-                                        content={thread.content}
-                                        user_id={thread.user_id}
-                                        forum_id={thread.forum_id}
-                                    />
-                                }></Route>
-                            </Routes>
-                        </BrowserRouter>
-                        <div id={(thread.id).toString()}>
-                            <Link to={"/Forums/" + title + '/' + thread.title}>{thread.title}</Link>
+                        <div key={thread.threadId}>
+                            {
+                                (threadId == -1) &&
+                                <button onClick={
+                                    (e: any) => setThreadId(thread.threadId)
+                                }>{thread.title}</button>
+                            }
+
+                            {
+                                (threadId == thread.threadId) && <ThreadPage
+                                    threadId={thread.threadId}
+                                    title={thread.title}
+                                    content={thread.content}
+                                    user_id={thread.user_id}
+                                    forum_id={thread.forum_id}
+                                />
+                            }
                         </div>
                     </>
                 )

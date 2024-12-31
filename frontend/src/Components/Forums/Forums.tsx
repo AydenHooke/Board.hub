@@ -1,10 +1,9 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { BrowserRouter, Link, Routes, Route } from "react-router-dom";
 import ForumPage from "./ForumPage";
 
 export type Forum = {
-    id: number,
+    forumId: number,
     title: string,
     description: string,
     type: string
@@ -12,6 +11,7 @@ export type Forum = {
 
 function Forums() {
     const [data, setData] = useState<Forum[]>([]);
+    const [forumId, setForumId] = useState(-1);
 
     useEffect(() => {
         axios
@@ -22,29 +22,27 @@ function Forums() {
 
     return (
         <>
-            <h2>Main Forums</h2>
+            {(forumId == -1) && <h2>Main Forums</h2>}
 
-            <Routes>
-                {data.map((forum) => {
-                    return (
-                        <>
-                            <Route path={'/Forums/' + forum.title} element={
-                                <ForumPage
-                                    id={forum.id}
+            {data.map((forum) => {
+                return (
+                    <>
+                        <div key={forum.forumId}>
+                            {
+                                (forumId == -1) &&
+                                <button onClick={
+                                    (e: any) => setForumId(forum.forumId)
+                                }>{forum.title}</button>
+                            }
+
+                            {
+                                (forumId == forum.forumId) && <ForumPage
+                                    forumId={forum.forumId}
                                     title={forum.title}
                                     description={forum.description}
                                     type={forum.type}
                                 />
-                            }></Route>
-                        </>
-                    )
-                })}
-            </Routes>
-            {data.map((forum) => {
-                return (
-                    <>
-                        <div>
-                            <Link to={"/Forums/" + forum.title}>{forum.title}</Link>
+                            }
                         </div>
                     </>
                 )
