@@ -20,7 +20,7 @@ public class Reply {
   @JoinColumn(name = "thread_id")
   int threadId;
 
-  @JoinColumn(name = "reply_to_id")
+  @JoinColumn(name = "reply_to_id", nullable = true)
   Integer replyToId;
 
   @JoinColumn(name = "account_id")
