@@ -16,9 +16,9 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
   public Account findByEmail(String email);
 
   public interface PasswordHashOnly {
-    String getPasswordHash();
+    public String getPasswordHash();
   }
   public PasswordHashOnly findPasswordHashByUsername(String username);
 
-  
+
 }

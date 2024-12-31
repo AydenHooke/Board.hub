@@ -1,4 +1,4 @@
-package up.board.backend;
+package up.board.backend.Utils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -27,7 +27,7 @@ public class JwtUtil {
     claimsMap.put("id", account.getAccountId());
 
     // Build Jwt
-    return Jwts
+    return "Bearer " + Jwts
         .builder()
         .setClaims(claimsMap)
         .setSubject(account.getUsername())
