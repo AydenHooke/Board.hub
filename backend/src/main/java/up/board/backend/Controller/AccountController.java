@@ -129,10 +129,10 @@ public class AccountController {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
 
-    // Check if bggAccount is valid
+    /*/ Check if bggAccount is valid
     if (bggAccount == null || bggAccount.length() == 0) {
       return ResponseEntity.status(409).body(null);
-    }
+    }*/
 
     // Check if email is valid
     if (!EmailValidator.isValid(newEmail)) {

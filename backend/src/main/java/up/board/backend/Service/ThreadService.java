@@ -20,6 +20,10 @@ public class ThreadService {
     return threadRepository.save(thread);
   }
 
+  public Thread getThreadById(int threadId) {
+    return threadRepository.getThreadByThreadId(threadId);
+  }
+
   public List<Thread> getThreads(int forumId) {
     return threadRepository.getThreadsByForumId(forumId);
   }

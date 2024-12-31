@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReplyRepository extends JpaRepository<Reply, Integer> {
 
+  public Reply getReplyByReplyId(int replyId);
+
   //
   public List<Reply> getReplyByThreadId(int threadId);
 
