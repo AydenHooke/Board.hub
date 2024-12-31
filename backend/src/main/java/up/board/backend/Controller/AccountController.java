@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import up.board.backend.JwtUtil;
 import up.board.backend.Entity.Account;
 import up.board.backend.Service.AccountService;
 import up.board.backend.Utils.EmailValidator;
+import up.board.backend.Utils.JwtUtil;
 
 @RestController
 @RequestMapping("/account")
