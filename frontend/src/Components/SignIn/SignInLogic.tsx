@@ -30,7 +30,7 @@ function SignInLogic() {
                 setContextEmail(Response.data.email);
                 setContextId(Response.data.accountId);
 
-                console.log("Context username:", contextUsername); // Print the context email
+//deprecated                console.log("Context username:", contextUsername); // Print the context email
                 navigate("/games")
             })
             .catch((error) => console.error('Error posting data, ', error));

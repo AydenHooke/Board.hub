@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Reply } from "./ThreadPage";
 import CreateReplyLogic from "./CreateReply/CreateReplyLogic";
+import { AccountContext } from "../../../Context/AccountContext";
 
 function ReplyComment({
     id,
@@ -9,6 +10,8 @@ function ReplyComment({
     user_id,
     content}: Reply
 ) {    
+    const context = useContext(AccountContext);
+
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -17,7 +20,11 @@ function ReplyComment({
             const childReply = document.createElement("div");
 
             childReply.id = id.toString();
-            childReply.innerHTML = content + createReply();
+            if (context?.id != '') {
+                childReply.innerHTML = content + createReply();
+            } else {
+                childReply.innerHTML = content;
+            }
             parentReply?.appendChild(childReply);
         }
     }, [])
@@ -50,7 +57,7 @@ function ReplyComment({
             ) : (
                 <div id={(id).toString()}>
                     {content}
-                    {createReply()}
+                    {(context?.id != '') && createReply()}
                 </div>
             )}
         </>

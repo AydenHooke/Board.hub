@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ThreadRepository extends JpaRepository<Thread, Integer> {
 
+  public Thread getThreadByThreadId(int threadId);
+
   //
   public List<Thread> getThreadsByForumId(int forumId);
 

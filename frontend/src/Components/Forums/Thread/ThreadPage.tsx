@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Thread } from "../ForumPage"
 import axios from "axios";
 import ReplyComment from "./ReplyComment";
 import CreateReplyLogic from "./CreateReply/CreateReplyLogic";
+import { AccountContext } from "../../../Context/AccountContext";
 
 export type Reply = {
     id: number,
@@ -13,17 +14,19 @@ export type Reply = {
 }
 
 function ThreadPage({
-    id,
+    threadId,
     title,
     content,
     user_id,
     forum_id}: Thread
 ) {
+    const context = useContext(AccountContext);
+
     const [data, setData] = useState<Reply[]>([]);
 
     useEffect(() => {
         axios
-            .get('http://localhost:8080/reply/get/' + id)
+            .get('http://localhost:8080/reply/get/' + threadId)
             .then((Response) => setData(Response.data))
             .catch((error) => console.error('Error getting data, ', error));
     }, [])
@@ -34,14 +37,16 @@ function ThreadPage({
             <h3>{content}</h3>
 
             <div>
-                <CreateReplyLogic
-                    reply_id={null}
-                    id={id}
-                    title={title}
-                    content={content}
-                    user_id={user_id}
-                    forum_id={forum_id}
-                />
+                { (context?.id != '') && 
+                    <CreateReplyLogic
+                        reply_id={null}
+                        threadId={threadId}
+                        title={title}
+                        content={content}
+                        user_id={user_id}
+                        forum_id={forum_id}
+                    />
+                }
             </div>
 
             {data.map((reply) => {

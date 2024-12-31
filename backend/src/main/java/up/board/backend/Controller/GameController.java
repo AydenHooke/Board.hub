@@ -23,68 +23,66 @@ import up.board.backend.Service.GameService;
 
 public class GameController {
 
-    private static final Logger logger = LoggerFactory.getLogger(GameController.class);
+  private static final Logger logger = LoggerFactory.getLogger(GameController.class);
 
-    AccountService accountService;
-    GameService gameService;
+  AccountService accountService;
+  GameService gameService;
 
-    public GameController(GameService gameService) {
-        this.gameService = gameService;
-      }
+  public GameController(GameService gameService) {
+    this.gameService = gameService;
+  }
 
-    @PostMapping("/validateGamePersistence")
-    public ResponseEntity<?> validateGamePersistence(@RequestBody List<String> gameIds) {
-        System.out.println("Validating persistance...");
-        List<String> gameIdsNotPersisted = gameService.returnIfNotPersisted(gameIds); // this returns a list of every ID we don't have a game for
-        if(gameIdsNotPersisted != null){ // i.e. if there wasn't an error, return the gameIds as requested
-        System.out.println("Returning missing games");
-            return ResponseEntity.status(HttpStatus.OK)
-                .body(gameIdsNotPersisted);
+  @PostMapping("/validateGamePersistence")
+  public ResponseEntity<?> validateGamePersistence(@RequestBody List<String> gameIds) {
+    logger.info("Validating persistance...");
+    List<String> gameIdsNotPersisted = gameService.returnIfNotPersisted(gameIds); // this returns a list of every ID we
+                                                                                  // don't have a game for
+    if (gameIdsNotPersisted != null) { // i.e. if there wasn't an error, return the gameIds as requested
+      logger.info("Returning missing games");
+      return ResponseEntity.status(HttpStatus.OK)
+          .body(gameIdsNotPersisted);
+    } else {
+      logger.error("Game persistance error!!!");
+      return ResponseEntity.status(HttpStatus.CONFLICT)
+          .build(); // if there was an error, report a conflict
     }
-        else{
-            System.out.println("Game persistance error!!!");
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                .build(); // if there was an error, report a conflict 
-        }}
+  }
 
-    @PostMapping("/persistOneGame")
-    public ResponseEntity<?> persistOneGame(@RequestBody Game game) {
-        
-        Game testGame = gameService.findOneGame(game);
-        if(testGame == null){
-            gameService.Register(game);
-            System.out.println("Someone created a game");
-            return ResponseEntity.status(HttpStatus.CREATED)
-                .build();
-        }
-        else{
-            System.out.println("There was an error creating a game");
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                .build();
-        }
+  @PostMapping("/persistOneGame")
+  public ResponseEntity<?> persistOneGame(@RequestBody Game game) {
 
+    Game testGame = gameService.findOneGame(game);
+    if (testGame == null) {
+      gameService.Register(game);
+      logger.info("Someone created a game");
+      return ResponseEntity.status(HttpStatus.CREATED)
+          .build();
+    } else {
+      logger.error("There was an error creating a game");
+      return ResponseEntity.status(HttpStatus.CONFLICT)
+          .build();
     }
 
-    @PostMapping("/persistManyGames")
-    public ResponseEntity<?> persistManyGames(@RequestBody List<Game> games) {
-        boolean error = false;
-        for(int i=0; i<games.size();i++){
-            Game testGame = gameService.findOneGame(games.get(i));
-            if(testGame == null){
-                gameService.Register(games.get(i));
+  }
 
-                System.out.println(games.get(i).getTitle() + " has been added to the database");
-            }
-            else
-                error = true;
-        }
-        if(error == false)
-            return ResponseEntity.status(HttpStatus.CREATED)
-                .build();
-        else{
-            System.out.println("There was an error creating lots of games");
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                .build();
-        }
+  @PostMapping("/persistManyGames")
+  public ResponseEntity<?> persistManyGames(@RequestBody List<Game> games) {
+    boolean error = false;
+    for (int i = 0; i < games.size(); i++) {
+      Game testGame = gameService.findOneGame(games.get(i));
+      if (testGame == null) {
+        gameService.Register(games.get(i));
+        logger.info(games.get(i).getTitle() + " has been added to the database");
+      } else
+        error = true;
     }
+    if (error == false)
+      return ResponseEntity.status(HttpStatus.CREATED)
+          .build();
+    else {
+      logger.error("There was an error creating lots of games");
+      return ResponseEntity.status(HttpStatus.CONFLICT)
+          .build();
+    }
+  }
 }

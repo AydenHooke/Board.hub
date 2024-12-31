@@ -6,7 +6,7 @@ import { AccountContext } from "../../../../Context/AccountContext";
 
 function CreateReplyLogic(
     reply_id: any,
-    {id,
+    {threadId,
     title,
     content,
     user_id,
@@ -20,7 +20,7 @@ function CreateReplyLogic(
         event.preventDefault();
         axios
             .post('http://localhost:8080/reply/post', {
-                thread_id: id,
+                thread_id: threadId,
                 reply_id: reply_id,
                 user_id: context?.id,
                 content: replyContent

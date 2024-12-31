@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +23,7 @@ import up.board.backend.Service.AccountService;
 import up.board.backend.Service.EventService;
 import up.board.backend.Enum.Event.Status;
 import up.board.backend.Enum.Event.Type;
+import up.board.backend.Utils.JwtUtil;
 
 @RestController
 @RequestMapping("/event")
@@ -34,11 +36,13 @@ public class EventController {
   EventService eventService;
 
   @Autowired
-  AccountService accountService;
+  JwtUtil jwtUtil;
 
-  // //
+  @Autowired
+  AccountService accountService;
+  
   // public EventController(EventService eventService) {
-  //   this.eventService = eventService;
+  //   this.jwtUtil = jwtUtil;
   // }
 
   /// Endpoints
@@ -59,7 +63,8 @@ public class EventController {
   }
 
   @PostMapping("/")
-  public ResponseEntity<Event> postEvent(@RequestBody Event event) {
+  public ResponseEntity<Event> postEvent(@RequestHeader("Authorization") String bearerToken, 
+  @RequestBody Event event) {
 
     // Input sanitization
     var title = event.getTitle();
@@ -70,23 +75,27 @@ public class EventController {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
-    //Check if id matches a user
-    var accountId = event.getAccountId();
-    if (accountId == null || accountService.findById(accountId) == null) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-    }
-
     // Set default values
     event.setStatus(Status.SCHEDULED);
-    // event.setType(event.getType().equals("MEETUP") ? Type.MEETING : Type.TOURNAMENT);
-    
-    
 
+    // Check user exists
+    var existingAccount = accountService.findById(event.getAccountId());
+    if (existingAccount == null) {
+      return ResponseEntity.status(409).header("server-error", "Account does not exist").body(null);
+    }
+
+    // Validate JWT
+    if (bearerToken == null) {
+      return ResponseEntity.status(409).header("server-error", "Missing JTW").body(null);
+    }
+    var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
+    if (!tokenUsername.equals(existingAccount.getUsername())) {
+      return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
+    }
 
     // Return threads for forum
     var createdEvent = eventService.create(event);
     return ResponseEntity.ok().body(createdEvent);
   }
-
 
 }

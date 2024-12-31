@@ -5,7 +5,7 @@ import axios from "axios";
 import { AccountContext } from "../../../Context/AccountContext";
 
 function CreateThreadLogic({
-    id,
+    forumId,
     title,
     description,
     type}: Forum
@@ -22,7 +22,7 @@ function CreateThreadLogic({
                 title: threadTitle,
                 content: threadContent,
                 user_id: context?.id,
-                forum_id: id
+                forum_id: forumId
             }, {
                 headers: {"authorization" : `Bearer ${context?.jwt}`}
             })

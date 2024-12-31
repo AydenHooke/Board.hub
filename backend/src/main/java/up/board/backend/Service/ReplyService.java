@@ -20,6 +20,10 @@ public class ReplyService {
     return replyRepository.save(reply);
   }
 
+  public Reply getReplyById(int replyId) {
+    return replyRepository.getReplyByReplyId(replyId);
+  }
+
   public List<Reply> getReplies(int threadId) {
     return replyRepository.getReplyByThreadId(threadId);
   }

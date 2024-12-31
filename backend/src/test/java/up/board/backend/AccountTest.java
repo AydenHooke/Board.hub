@@ -16,6 +16,7 @@ import up.board.backend.Controller.AccountController;
 import up.board.backend.Entity.Account;
 import up.board.backend.Repository.AccountRepository;
 import up.board.backend.Service.AccountService;
+import up.board.backend.Utils.JwtUtil;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -44,7 +45,7 @@ class AccountTest {
     var password = "test456";
     var email = "test@test.com";
 
-    var passwordHash = "fake_password_hash";
+    var jwt = "Bearer test.jwt.test";
 
     var mock = new Account();
     mock.setAccountId(1);
@@ -53,23 +54,198 @@ class AccountTest {
     mock.setEmail(email);
 
     when(accountRepository.findByUsername(any(String.class))).thenReturn(null);
-    when(jwtUtil.generateToken(any(Account.class))).thenReturn(passwordHash);
+    when(jwtUtil.generateToken(any(Account.class))).thenReturn(jwt);
     when(accountRepository.save(any(Account.class))).thenReturn(mock);
 
     //
     var response = accountController.register(mock);
     var responseAccount = response.getBody();
+    var responseHeaders = response.getHeaders();
 
     assertEquals(200, response.getStatusCode().value());
     assertEquals(mock.getAccountId(), responseAccount.getAccountId());
     assertEquals(mock.getUsername(), responseAccount.getUsername());
     assertEquals(mock.getPasswordHash(), null);
 
-    // assertEquals(accountRepository, accountController);
+    assertEquals(jwt, responseHeaders.get("Authorization").get(0));
 
     verify(accountRepository).findByUsername(any(String.class));
     verify(jwtUtil).generateToken(any(Account.class));
     verify(accountRepository).save(any(Account.class));
+  }
+
+  @Test
+  void register_nullUsername() {
+
+    var password = "test456";
+    var email = "test@test.com";
+
+    var mock = new Account();
+    mock.setAccountId(1);
+    mock.setPasswordHash(password);
+    mock.setEmail(email);
+
+    //
+    var response = accountController.register(mock);
+    var responseAccount = response.getBody();
+
+    assertEquals(409, response.getStatusCode().value());
+    assertEquals(null, responseAccount);
+  }
+
+  @Test
+  void register_nullEmail() {
+
+    var username = "test123";
+    var password = "test456";
+
+    var mock = new Account();
+    mock.setAccountId(1);
+    mock.setUsername(username);
+    mock.setPasswordHash(password);
+
+    //
+    var response = accountController.register(mock);
+    var responseAccount = response.getBody();
+
+    assertEquals(409, response.getStatusCode().value());
+    assertEquals(null, responseAccount);
+  }
+
+  @Test
+  void register_shortPassword() {
+
+    var username = "test123";
+    var password = "";
+    var email = "test@test.com";
+
+    var mock = new Account();
+    mock.setAccountId(1);
+    mock.setUsername(username);
+    mock.setPasswordHash(password);
+    mock.setEmail(email);
+
+    //
+    var response = accountController.register(mock);
+    var responseAccount = response.getBody();
+
+    assertEquals(409, response.getStatusCode().value());
+    assertEquals(null, responseAccount);
+  }
+
+  @Test
+  void login() {
+
+    var username = "test123";
+    var password = "test456";
+    var email = "test@test.com";
+
+    var passwordHash = "$2a$10$57JaK6CjPr1TjtBf8A9Ko.g.EttVMC2D00yj5tKnr1NETBO38ZjNW";
+    var passwordHashOnly = new AccountRepository.PasswordHashOnly() {
+      @Override
+      public String getPasswordHash() {
+        return passwordHash;
+      }
+    };
+
+    var jwt = "Bearer test.jwt.test";
+
+    var mock = new Account();
+    mock.setAccountId(1);
+    mock.setUsername(username);
+    mock.setPasswordHash(password);
+    mock.setEmail(email);
+
+    when(accountRepository.findByUsername(any(String.class))).thenReturn(mock);
+    when(accountRepository.findPasswordHashByUsername(any(String.class))).thenReturn(passwordHashOnly);
+    when(jwtUtil.generateToken(any(Account.class))).thenReturn(jwt);
+
+    //
+    var response = accountController.login(mock);
+    var responseAccount = response.getBody();
+    var responseHeaders = response.getHeaders();
+
+    assertEquals(200, response.getStatusCode().value());
+    assertEquals(mock.getAccountId(), responseAccount.getAccountId());
+    assertEquals(mock.getUsername(), responseAccount.getUsername());
+    assertEquals(mock.getPasswordHash(), null);
+
+    assertEquals(jwt, responseHeaders.get("Authorization").get(0));
+
+    verify(accountRepository).findByUsername(any(String.class));
+    verify(accountRepository).findPasswordHashByUsername(any(String.class));
+    verify(jwtUtil).generateToken(any(Account.class));
+  }
+
+  @Test
+  void login_incorrectPassword() {
+
+    var username = "test123";
+    var password = "wrong.password";
+    var email = "test@test.com";
+
+    var passwordHash = "$2a$10$57JaK6CjPr1TjtBf8A9Ko.g.EttVMC2D00yj5tKnr1NETBO38ZjNW";
+    var passwordHashOnly = new AccountRepository.PasswordHashOnly() {
+      @Override
+      public String getPasswordHash() {
+        return passwordHash;
+      }
+    };
+
+    var mock = new Account();
+    mock.setAccountId(1);
+    mock.setUsername(username);
+    mock.setPasswordHash(password);
+    mock.setEmail(email);
+
+    when(accountRepository.findByUsername(any(String.class))).thenReturn(mock);
+    when(accountRepository.findPasswordHashByUsername(any(String.class))).thenReturn(passwordHashOnly);
+
+    //
+    var response = accountController.login(mock);
+    var responseAccount = response.getBody();
+
+    assertEquals(401, response.getStatusCode().value());
+    assertEquals(null, responseAccount);
+
+    verify(accountRepository).findByUsername(any(String.class));
+    verify(accountRepository).findPasswordHashByUsername(any(String.class));
+  }
+
+  @Test
+  void update() {
+
+    var username = "test123";
+    var password = "test456";
+    var email = "test@test.com";
+
+    var jwt = "Bearer test.jwt.test";
+
+    var mock = new Account();
+    mock.setAccountId(1);
+    mock.setUsername(username);
+    mock.setPasswordHash(password);
+    mock.setEmail(email);
+
+    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(mock);
+    when(jwtUtil.validateTokenAndGetUsername(any(String.class))).thenReturn(username);
+    when(accountRepository.findByUsername(any(String.class))).thenReturn(null);
+    when(accountRepository.findByEmail(any(String.class))).thenReturn(null);
+
+    //
+    var response = accountController.updateAccount(jwt, mock);
+    var responseAccount = response.getBody();
+
+    assertEquals(200, response.getStatusCode().value());
+    assertEquals(mock.getAccountId(), responseAccount.getAccountId());
+    assertEquals(mock.getUsername(), responseAccount.getUsername());
+    assertEquals(mock.getPasswordHash(), null);
+    assertEquals(mock.getEmail(), responseAccount.getEmail());
+
+    verify(accountRepository).findByAccountId(any(Integer.class));
+    verify(jwtUtil).validateTokenAndGetUsername(any(String.class));
+    verify(accountRepository).findByUsername(any(String.class));
+    verify(accountRepository).findByEmail(any(String.class));
   }
 
 }
