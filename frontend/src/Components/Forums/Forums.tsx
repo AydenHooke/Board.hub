@@ -15,7 +15,7 @@ function Forums() {
 
     useEffect(() => {
         axios
-            .get('http://localhost:8080/Forum/get')
+            .get('http://localhost:8080/forum/get')
             .then((Response) => setData(Response.data))
             .catch((error) => console.error('Error getting data, ', error));
     }, [])
@@ -24,22 +24,26 @@ function Forums() {
         <>
             <h2>Main Forums</h2>
 
+            <Routes>
+                {data.map((forum) => {
+                    return (
+                        <>
+                            <Route path={'/Forums/' + forum.title} element={
+                                <ForumPage
+                                    id={forum.id}
+                                    title={forum.title}
+                                    description={forum.description}
+                                    type={forum.type}
+                                />
+                            }></Route>
+                        </>
+                    )
+                })}
+            </Routes>
             {data.map((forum) => {
                 return (
                     <>
-                        <BrowserRouter>
-                            <Routes>
-                                <Route path={'/Forums/' + forum.title} element={
-                                    <ForumPage
-                                        id={forum.id}
-                                        title={forum.title}
-                                        description={forum.description}
-                                        type={forum.type}
-                                    />
-                                }></Route>
-                            </Routes>
-                        </BrowserRouter>
-                        <div id={(forum.id).toString()}>
+                        <div>
                             <Link to={"/Forums/" + forum.title}>{forum.title}</Link>
                         </div>
                     </>
