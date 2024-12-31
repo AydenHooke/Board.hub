@@ -5,6 +5,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,236 +14,120 @@ import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import up.board.backend.Controller.AccountController;
+import up.board.backend.Controller.EventController;
 import up.board.backend.Entity.Account;
+import up.board.backend.Entity.Event;
 import up.board.backend.Repository.AccountRepository;
+import up.board.backend.Repository.EventRepository;
 import up.board.backend.Service.AccountService;
+import up.board.backend.Service.EventService;
 import up.board.backend.Utils.JwtUtil;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
-class AccountTest {
-
-  @Mock
-  private AccountRepository accountRepository;
+class EventTest {
 
   @Mock
   private JwtUtil jwtUtil;
 
+  @Mock
+  private EventRepository eventRepository;
+
+  @InjectMocks
+  private EventService eventService;
+
+  @Mock
+  private AccountRepository accountRepository;
+
   @InjectMocks
   private AccountService accountService;
 
-  private AccountController accountController;
+  private EventController eventController;
 
   @BeforeEach
   void setup() {
-    this.accountController = new AccountController(accountService, jwtUtil);
+    this.eventController = new EventController(eventService, accountService, jwtUtil);
   }
 
   @Test
-  void register() {
+  void getEvents() {
 
-    var username = "test123";
-    var password = "test456";
-    var email = "test@test.com";
+    var event0 = new Event();
+    event0.setAccountId(1);
+    event0.setTitle("Test event 1");
+    event0.setContent("Test description");
+
+    var event1 = new Event();
+    event1.setAccountId(2);
+    event1.setTitle("Test event 2");
+    event1.setContent("Test description");
+
+    var events = new ArrayList<Event>();
+    events.add(event0);
+    events.add(event1);
+
+    when(eventRepository.findAll()).thenReturn(events);
+
+    //
+    var response = eventController.getEvents();
+    var responseEvents = response.getBody();
+
+    assertEquals(200, response.getStatusCode().value());
+    assertEquals(2, responseEvents.size());
+    assertEquals(1, responseEvents.get(0).getAccountId());
+    assertEquals(2, responseEvents.get(1).getAccountId());
+
+    verify(eventRepository).findAll();
+  }
+
+  @Test
+  void getEvent() {
+
+    var event = new Event();
+    event.setAccountId(1);
+    event.setTitle("Test event 1");
+    event.setContent("Test description");
+
+    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(event);
+
+    //
+    var response = eventController.getEvent(1);
+    var responseEvent = response.getBody();
+
+    assertEquals(200, response.getStatusCode().value());
+    assertEquals(1, responseEvent.getAccountId());
+
+    verify(eventRepository).findByEventId(any(Integer.class));
+  }
+
+  @Test
+  void postEvent() {
+
+    var event = new Event();
+    event.setAccountId(1);
+    event.setTitle("Test event 1");
+    event.setContent("Test description");
+
+    var account = new Account();
+    account.setAccountId(1);
+    account.setUsername("test");
 
     var jwt = "Bearer test.jwt.test";
 
-    var mock = new Account();
-    mock.setAccountId(1);
-    mock.setUsername(username);
-    mock.setPasswordHash(password);
-    mock.setEmail(email);
-
-    when(accountRepository.findByUsername(any(String.class))).thenReturn(null);
-    when(jwtUtil.generateToken(any(Account.class))).thenReturn(jwt);
-    when(accountRepository.save(any(Account.class))).thenReturn(mock);
+    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(account);
+    when(jwtUtil.validateTokenAndGetUsername(any(String.class))).thenReturn(account.getUsername());
+    when(eventRepository.save(any(Event.class))).thenReturn(event);
 
     //
-    var response = accountController.register(mock);
-    var responseAccount = response.getBody();
-    var responseHeaders = response.getHeaders();
+    var response = eventController.postEvent(jwt, event);
+    var responseEvent = response.getBody();
 
     assertEquals(200, response.getStatusCode().value());
-    assertEquals(mock.getAccountId(), responseAccount.getAccountId());
-    assertEquals(mock.getUsername(), responseAccount.getUsername());
-    assertEquals(mock.getPasswordHash(), null);
-
-    assertEquals(jwt, responseHeaders.get("Authorization").get(0));
-
-    verify(accountRepository).findByUsername(any(String.class));
-    verify(jwtUtil).generateToken(any(Account.class));
-    verify(accountRepository).save(any(Account.class));
-  }
-
-  @Test
-  void register_nullUsername() {
-
-    var password = "test456";
-    var email = "test@test.com";
-
-    var mock = new Account();
-    mock.setAccountId(1);
-    mock.setPasswordHash(password);
-    mock.setEmail(email);
-
-    //
-    var response = accountController.register(mock);
-    var responseAccount = response.getBody();
-
-    assertEquals(409, response.getStatusCode().value());
-    assertEquals(null, responseAccount);
-  }
-
-  @Test
-  void register_nullEmail() {
-
-    var username = "test123";
-    var password = "test456";
-
-    var mock = new Account();
-    mock.setAccountId(1);
-    mock.setUsername(username);
-    mock.setPasswordHash(password);
-
-    //
-    var response = accountController.register(mock);
-    var responseAccount = response.getBody();
-
-    assertEquals(409, response.getStatusCode().value());
-    assertEquals(null, responseAccount);
-  }
-
-  @Test
-  void register_shortPassword() {
-
-    var username = "test123";
-    var password = "";
-    var email = "test@test.com";
-
-    var mock = new Account();
-    mock.setAccountId(1);
-    mock.setUsername(username);
-    mock.setPasswordHash(password);
-    mock.setEmail(email);
-
-    //
-    var response = accountController.register(mock);
-    var responseAccount = response.getBody();
-
-    assertEquals(409, response.getStatusCode().value());
-    assertEquals(null, responseAccount);
-  }
-
-  @Test
-  void login() {
-
-    var username = "test123";
-    var password = "test456";
-    var email = "test@test.com";
-
-    var passwordHash = "$2a$10$57JaK6CjPr1TjtBf8A9Ko.g.EttVMC2D00yj5tKnr1NETBO38ZjNW";
-    var passwordHashOnly = new AccountRepository.PasswordHashOnly() {
-      @Override
-      public String getPasswordHash() {
-        return passwordHash;
-      }
-    };
-
-    var jwt = "Bearer test.jwt.test";
-
-    var mock = new Account();
-    mock.setAccountId(1);
-    mock.setUsername(username);
-    mock.setPasswordHash(password);
-    mock.setEmail(email);
-
-    when(accountRepository.findByUsername(any(String.class))).thenReturn(mock);
-    when(accountRepository.findPasswordHashByUsername(any(String.class))).thenReturn(passwordHashOnly);
-    when(jwtUtil.generateToken(any(Account.class))).thenReturn(jwt);
-
-    //
-    var response = accountController.login(mock);
-    var responseAccount = response.getBody();
-    var responseHeaders = response.getHeaders();
-
-    assertEquals(200, response.getStatusCode().value());
-    assertEquals(mock.getAccountId(), responseAccount.getAccountId());
-    assertEquals(mock.getUsername(), responseAccount.getUsername());
-    assertEquals(mock.getPasswordHash(), null);
-
-    assertEquals(jwt, responseHeaders.get("Authorization").get(0));
-
-    verify(accountRepository).findByUsername(any(String.class));
-    verify(accountRepository).findPasswordHashByUsername(any(String.class));
-    verify(jwtUtil).generateToken(any(Account.class));
-  }
-
-  @Test
-  void login_incorrectPassword() {
-
-    var username = "test123";
-    var password = "wrong.password";
-    var email = "test@test.com";
-
-    var passwordHash = "$2a$10$57JaK6CjPr1TjtBf8A9Ko.g.EttVMC2D00yj5tKnr1NETBO38ZjNW";
-    var passwordHashOnly = new AccountRepository.PasswordHashOnly() {
-      @Override
-      public String getPasswordHash() {
-        return passwordHash;
-      }
-    };
-
-    var mock = new Account();
-    mock.setAccountId(1);
-    mock.setUsername(username);
-    mock.setPasswordHash(password);
-    mock.setEmail(email);
-
-    when(accountRepository.findByUsername(any(String.class))).thenReturn(mock);
-    when(accountRepository.findPasswordHashByUsername(any(String.class))).thenReturn(passwordHashOnly);
-
-    //
-    var response = accountController.login(mock);
-    var responseAccount = response.getBody();
-
-    assertEquals(401, response.getStatusCode().value());
-    assertEquals(null, responseAccount);
-
-    verify(accountRepository).findByUsername(any(String.class));
-    verify(accountRepository).findPasswordHashByUsername(any(String.class));
-  }
-
-  @Test
-  void update() {
-
-    var username = "test123";
-    var password = "test456";
-    var email = "test@test.com";
-
-    var mock = new Account();
-    mock.setAccountId(1);
-    mock.setUsername(username);
-    mock.setPasswordHash(password);
-    mock.setEmail(email);
-
-    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(mock);
-    when(accountRepository.findByUsername(any(String.class))).thenReturn(null);
-    when(accountRepository.findByEmail(any(String.class))).thenReturn(null);
-
-    //
-    var response = accountController.updateAccount(mock);
-    var responseAccount = response.getBody();
-
-    assertEquals(200, response.getStatusCode().value());
-    assertEquals(mock.getAccountId(), responseAccount.getAccountId());
-    assertEquals(mock.getUsername(), responseAccount.getUsername());
-    assertEquals(mock.getPasswordHash(), null);
-    assertEquals(mock.getEmail(), responseAccount.getEmail());
+    assertEquals(1, responseEvent.getAccountId());
 
     verify(accountRepository).findByAccountId(any(Integer.class));
-    verify(accountRepository).findByUsername(any(String.class));
-    verify(accountRepository).findByEmail(any(String.class));
+    verify(jwtUtil).validateTokenAndGetUsername(any(String.class));
+    verify(eventRepository).save(any(Event.class));
   }
 
 }

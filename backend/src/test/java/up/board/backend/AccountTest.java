@@ -219,6 +219,8 @@ class AccountTest {
     var password = "test456";
     var email = "test@test.com";
 
+    var jwt = "Bearer test.jwt.test";
+
     var mock = new Account();
     mock.setAccountId(1);
     mock.setUsername(username);
@@ -226,11 +228,12 @@ class AccountTest {
     mock.setEmail(email);
 
     when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(mock);
+    when(jwtUtil.validateTokenAndGetUsername(any(String.class))).thenReturn(username);
     when(accountRepository.findByUsername(any(String.class))).thenReturn(null);
     when(accountRepository.findByEmail(any(String.class))).thenReturn(null);
 
     //
-    var response = accountController.updateAccount(mock);
+    var response = accountController.updateAccount(jwt, mock);
     var responseAccount = response.getBody();
 
     assertEquals(200, response.getStatusCode().value());
@@ -240,6 +243,7 @@ class AccountTest {
     assertEquals(mock.getEmail(), responseAccount.getEmail());
 
     verify(accountRepository).findByAccountId(any(Integer.class));
+    verify(jwtUtil).validateTokenAndGetUsername(any(String.class));
     verify(accountRepository).findByUsername(any(String.class));
     verify(accountRepository).findByEmail(any(String.class));
   }
