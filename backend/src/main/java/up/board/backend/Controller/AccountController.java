@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.experimental.var;
 import up.board.backend.JwtUtil;
 import up.board.backend.Entity.Account;
 import up.board.backend.Service.AccountService;
@@ -107,11 +108,13 @@ public class AccountController {
     return ResponseEntity.ok().header("Authorization", "Bearer " + token).body(existingAccount);
   }
 
-  @PatchMapping("/{id}")
-  public ResponseEntity<Account> updateAccount(@PathVariable Integer id, @RequestBody Account account) {
+  @PatchMapping("/")
+  public ResponseEntity<Account> updateAccount(@RequestBody Account account) {
+        var id = account.getAccountId();
         var newUsername = account.getUsername();
         var newPassword = account.getPasswordHash();
         var newEmail = account.getEmail();
+        var bggAccount = account.getBggAccount();
 
         if (newUsername == null || newPassword == null || newEmail == null) {
             return ResponseEntity.status(409).body(null);
@@ -121,6 +124,10 @@ public class AccountController {
         var existingAccount = accountService.findById(id);
         if (existingAccount == null) {
             return ResponseEntity.status(404).body(null);
+        }
+        //Check if bggAccount is valid
+        if (bggAccount == null || bggAccount.length() == 0) {
+            return ResponseEntity.status(409).body(null);
         }
 
         // Check if email is valid
@@ -145,6 +152,7 @@ public class AccountController {
         existingAccount.setPasswordHash(passwordHash);
         existingAccount.setUsername(newUsername);
         existingAccount.setEmail(newEmail);
+        existingAccount.setBggAccount(bggAccount);
 
         // Save updated account
         accountService.register(existingAccount);
