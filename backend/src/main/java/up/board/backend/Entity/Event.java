@@ -37,7 +37,7 @@ public class Event {
   @JoinColumn(name = "account_id")
   Integer accountId;
 
-  @JoinColumn(name = "game_id")
+  @JoinColumn(name = "game_id", nullable = true)
   Integer gameId;
 
   // Constructor
