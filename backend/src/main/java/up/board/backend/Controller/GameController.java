@@ -72,8 +72,7 @@ public class GameController {
       Game testGame = gameService.findOneGame(games.get(i));
       if (testGame == null) {
         gameService.Register(games.get(i));
-
-        System.out.println(games.get(i).getTitle() + " has been added to the database");
+        logger.info(games.get(i).getTitle() + " has been added to the database");
       } else
         error = true;
     }
@@ -81,7 +80,7 @@ public class GameController {
       return ResponseEntity.status(HttpStatus.CREATED)
           .build();
     else {
-      System.out.println("There was an error creating lots of games");
+      logger.error("There was an error creating lots of games");
       return ResponseEntity.status(HttpStatus.CONFLICT)
           .build();
     }
