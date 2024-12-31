@@ -18,7 +18,7 @@ function CreateThreadLogic({
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
         axios
-            .post('http://localhost:8080/Thread', {
+            .post('http://localhost:8080/thread/post', {
                 title: threadTitle,
                 content: threadContent,
                 user_id: context?.id,

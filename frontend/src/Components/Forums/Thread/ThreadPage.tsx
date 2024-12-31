@@ -23,7 +23,7 @@ function ThreadPage({
 
     useEffect(() => {
         axios
-            .get('http://localhost:8080/Thread/' + id)
+            .get('http://localhost:8080/reply/get/' + id)
             .then((Response) => setData(Response.data))
             .catch((error) => console.error('Error getting data, ', error));
     }, [])

@@ -19,7 +19,7 @@ function CreateReplyLogic(
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
         axios
-            .post('http://localhost:8080/Reply', {
+            .post('http://localhost:8080/reply/post', {
                 thread_id: id,
                 reply_id: reply_id,
                 user_id: context?.id,

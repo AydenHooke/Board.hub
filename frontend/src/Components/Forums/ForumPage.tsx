@@ -23,7 +23,7 @@ function ForumPage({
 
     useEffect(() => {
         axios
-            .get('http://localhost:8080/Forum/' + id)
+            .get('http://localhost:8080/thread/get/' + id)
             .then((Response) => setData(Response.data))
             .catch((error) => console.error('Error getting data, ', error));
     }, [])
