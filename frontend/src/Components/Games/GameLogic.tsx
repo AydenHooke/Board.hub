@@ -8,62 +8,65 @@ function GameLogic() {
   });
 
   useEffect(()=>{
-    console.log("") // blank space to keep logs together
+    if(JSON.stringify(state.collection).length > 2){//so that this doesn't run when nothing is there
+      console.log("") // blank space to keep logs together
 
-    let parser, xmlDoc;
-    
-    parser = new DOMParser();
-    xmlDoc = parser.parseFromString(state.collection as string, "text/html")
+      let parser, xmlDoc;
+      
+      parser = new DOMParser();
+      xmlDoc = parser.parseFromString(state.collection as string, "text/html")
 
-    let games = xmlDoc.getElementsByTagName('item');
-    let numberOfGames = xmlDoc.getElementsByTagName('item').length;
+      let games = xmlDoc.getElementsByTagName('item');
+      let numberOfGames = xmlDoc.getElementsByTagName('item').length;
 
-    let ids = [];
-    //console.log(games);
-    for(let i=0;i<numberOfGames;i++)
-      ids[i] = games[i].attributes[1].nodeValue; //attribute[1] specifically refers to the node that contains the game id
-    console.log("Collection comprised of:")
-    console.log(ids);
-    console.log("rectifying collection...");
+      let ids = [];
+      //console.log(games);
+      for(let i=0;i<numberOfGames;i++)
+        ids[i] = games[i].attributes[1].nodeValue; //attribute[1] specifically refers to the node that contains the game id
+      console.log("Collection comprised of:")
+      console.log(ids);
+      console.log("rectifying collection...");
 
-    const getUnpersisted = async () =>{
-      let importIdsFromBgg = await rectifyGameCollection(ids); //this is a JSON object full of Ids that are not in board.up's database yet
-      if(importIdsFromBgg.length!=0){ // this just sees if there is any changes
-        setState(()=>({
-          ...state,
-          unpersistedIds:importIdsFromBgg}));
-        }
-        else(
-          console.log("No rectification needed!")
-        )
+      const getUnpersisted = async () =>{
+        let importIdsFromBgg = await rectifyGameCollection(ids); //this is a JSON object full of Ids that are not in board.up's database yet
+        if(importIdsFromBgg.length!=0){ // this just sees if there is any changes
+          setState(()=>({
+            ...state,
+            unpersistedIds:importIdsFromBgg}));
+          }
+          else(
+            console.log("No rectification needed!")
+          )
+      }
+      
+      getUnpersisted();
     }
-    
-    getUnpersisted();
   }, [state.collection])
 
   useEffect(()=>{
-    let gamesToAdd = state.unpersistedIds;
-    let gameQueryString = "";
-    console.log("Collection is missing the following games:")
-    console.log(gamesToAdd);
-    let timeoutPeriod = 0;
-    while(gamesToAdd.length > 0){
-      //console.log("while loop ran!")
-      for(let i = 1; i<=20 && gamesToAdd.length > 0; i++){
-       // console.log("for loop ran!")
-        gameQueryString = gameQueryString.concat(gamesToAdd[0] + ",");
+    if(JSON.stringify(state.unpersistedIds).length > 2){//so that this doesn't run when nothing is there
+      let gamesToAdd = state.unpersistedIds;
+      let gameQueryString = "";
+      console.log("Collection is missing the following games:")
+      console.log(gamesToAdd);
+      let timeoutPeriod = 0;
+      while(gamesToAdd.length > 0){
+        //console.log("while loop ran!")
+        for(let i = 1; i<=20 && gamesToAdd.length > 0; i++){
+          // console.log("for loop ran!")
+          gameQueryString = gameQueryString.concat(gamesToAdd[0] + ",");
+          //console.log(gameQueryString);
+          gamesToAdd.splice(0,1);
+          // this manuevers the list of ids and splits by 20 to not be limited by BGG api
+        }
+        gameQueryString = gameQueryString.slice(0, -1); // this cuts off the last comma, because otherwise it will count as 21 items, which bgg cannot return
         //console.log(gameQueryString);
-        gamesToAdd.splice(0,1);
-       // this manuevers the list of ids and splits by 20 to not be limited by BGG api
+        setTimeout(grabBggInfo, timeoutPeriod, gameQueryString)
+        timeoutPeriod += 5001; // waits 5 extra seconds every time this is run
+        //console.log("while loop finished!")
+        gameQueryString = "";
       }
-      gameQueryString = gameQueryString.slice(0, -1); // this cuts off the last comma, because otherwise it will count as 21 items, which bgg cannot return
-      //console.log(gameQueryString);
-      setTimeout(grabBggInfo, timeoutPeriod, gameQueryString)
-      timeoutPeriod += 5001; // waits 5 extra seconds every time this is run
-      //console.log("while loop finished!")
-      gameQueryString = "";
-    }
-
+  }
   }, [state.unpersistedIds])
   
 
