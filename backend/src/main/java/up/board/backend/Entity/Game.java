@@ -18,13 +18,18 @@ public class Game {
   Integer bggId;
 
   @Column
-  String title;
+  String gameImageUrl;
 
   @Column
+  String title;
+
+  @Column(length = 25565)
   String description;
 
   @Column
   Float price;
+
+  
 
   // Constructor
   public Game() {

@@ -3,10 +3,12 @@ package up.board.backend.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import up.board.backend.Entity.Account;
 import up.board.backend.Repository.AccountRepository;
 
 @Service
+@Transactional
 public class AccountService {
 
   AccountRepository accountRepository;

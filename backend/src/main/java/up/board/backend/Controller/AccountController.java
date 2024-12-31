@@ -1,7 +1,10 @@
 package up.board.backend.Controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -16,6 +19,7 @@ import up.board.backend.JwtUtil;
 import up.board.backend.Entity.Account;
 import up.board.backend.Service.AccountService;
 import up.board.backend.Utils.EmailValidator;
+import up.board.backend.Service.GameService;
 
 @RestController
 @RequestMapping("/account")
@@ -25,6 +29,7 @@ public class AccountController {
   private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
 
   AccountService accountService;
+  GameService gameService;
   JwtUtil jwtUtil;
 
   //
@@ -170,4 +175,5 @@ public class AccountController {
     return ResponseEntity.ok().body("Yup");
   }
 
+  
 }
