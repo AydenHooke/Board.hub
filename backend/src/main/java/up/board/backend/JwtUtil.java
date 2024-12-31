@@ -27,7 +27,7 @@ public class JwtUtil {
     claimsMap.put("id", account.getAccountId());
 
     // Build Jwt
-    return Jwts
+    return "Bearer " + Jwts
         .builder()
         .setClaims(claimsMap)
         .setSubject(account.getUsername())

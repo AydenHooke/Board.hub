@@ -16,7 +16,7 @@ public class AccountService {
   }
 
   //
-  public Account register(Account account) {
+  public Account save(Account account) {
     return accountRepository.save(account);
   }
 
@@ -30,13 +30,13 @@ public class AccountService {
   }
 
   //
-  public static String GetPasswordHash(String plaintextPassword) {
+  public String getPasswordHash(String plaintextPassword) {
 
     var encoder = new BCryptPasswordEncoder();
     return encoder.encode(plaintextPassword);
   }
 
-  public static boolean PasswordMatches(String plaintextPassword, String hashPassword) {
+  public boolean passwordMatches(String plaintextPassword, String hashPassword) {
     var encoder = new BCryptPasswordEncoder();
     return encoder.matches(plaintextPassword, hashPassword);
   }
@@ -48,6 +48,6 @@ public class AccountService {
   public Account findById(Integer id) {
     return accountRepository.findByAccountId(id);
   }
-  
+
 
 }

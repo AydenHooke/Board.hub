@@ -62,15 +62,15 @@ public class AccountController {
     }
 
     // Encode password
-    var passwordHash = AccountService.GetPasswordHash(password);
+    var passwordHash = accountService.getPasswordHash(password);
     account.setPasswordHash(passwordHash);
 
-    var accountNew = accountService.register(account);
+    var accountNew = accountService.save(account);
 
     // Return JWT + stripped account
     var token = jwtUtil.generateToken(account);
     accountNew.setPasswordHash(null);
-    return ResponseEntity.ok().header("Authorization", "Bearer " + token).body(accountNew);
+    return ResponseEntity.ok().header("Authorization", token).body(accountNew);
   }
 
   @PostMapping("/login")
@@ -92,64 +92,67 @@ public class AccountController {
     // Authenticate
     var passwordPlain = password;
     var passwordHash = accountService.findPasswordHash(existingAccount);
-    if (!AccountService.PasswordMatches(passwordPlain, passwordHash)) {
+    if (!accountService.passwordMatches(passwordPlain, passwordHash)) {
       return ResponseEntity.status(401).header("server-error", "Invalid credentials").body(null);
     }
 
     // Return token + stripped account
     var token = jwtUtil.generateToken(existingAccount);
     existingAccount.setPasswordHash(null);
-    return ResponseEntity.ok().header("Authorization", "Bearer " + token).body(existingAccount);
+    return ResponseEntity.ok().header("Authorization", token).body(existingAccount);
   }
 
-  @PatchMapping("/{id}")
-  public ResponseEntity<Account> updateAccount(@PathVariable Integer id, @RequestBody Account account) {
-        var newUsername = account.getUsername();
-        var newPassword = account.getPasswordHash();
-        var newEmail = account.getEmail();
+  @PatchMapping("/")
+  public ResponseEntity<Account> updateAccount(@RequestBody Account account) {
+    var accountId = account.getAccountId();
+    var newUsername = account.getUsername();
+    var newPassword = account.getPasswordHash();
+    var newEmail = account.getEmail();
 
-        if (newUsername == null || newPassword == null || newEmail == null) {
-            return ResponseEntity.status(409).body(null);
-        }
+    if (newUsername == null || newPassword == null || newEmail == null) {
+      return ResponseEntity.status(409).body(null);
+    }
 
-        // Check if account exists
-        var existingAccount = accountService.findById(id);
-        if (existingAccount == null) {
-            return ResponseEntity.status(404).body(null);
-        }
+    // Check account exists
+    var existingAccount = accountService.findById(accountId);
+    if (existingAccount == null) {
+      return ResponseEntity.status(404).body(null);
+    }
 
-        // Check if email is valid
-        if (!EmailValidator.isValid(newEmail)) {
-            return ResponseEntity.status(409).body(null);
-        }
+    // Check email is valid
+    if (!EmailValidator.isValid(newEmail)) {
+      return ResponseEntity.status(409).body(null);
+    }
 
-        // Check if username is already in use by another account
-        var accountWithSameUsername = accountService.findByUsername(newUsername);
-        if (accountWithSameUsername != null && !(accountWithSameUsername.getAccountId() == id)) {
-            return ResponseEntity.status(409).body(null);
-        }
+    // Check if username is already in use by another account
+    var accountWithSameUsername = accountService.findByUsername(newUsername);
+    if (accountWithSameUsername != null && !(accountWithSameUsername.getAccountId() == accountId)) {
+      return ResponseEntity.status(409).body(null);
+    }
 
-         // Check if email is already in use by another account
-         var accountWithSameEmail = accountService.findByEmail(newEmail);
-         if (accountWithSameEmail != null && !(accountWithSameEmail.getAccountId() == id)) {
-             return ResponseEntity.status(409).body(null);
-         }
+    // Check if email is already in use by another account
+    var accountWithSameEmail = accountService.findByEmail(newEmail);
+    if (accountWithSameEmail != null && !(accountWithSameEmail.getAccountId() == accountId)) {
+      return ResponseEntity.status(409).body(null);
+    }
 
-         // Encode password
-        var passwordHash = AccountService.GetPasswordHash(newPassword);
-        existingAccount.setPasswordHash(passwordHash);
-        existingAccount.setUsername(newUsername);
-        existingAccount.setEmail(newEmail);
+    // Encode password
+    var passwordHash = accountService.getPasswordHash(newPassword);
+    existingAccount.setPasswordHash(passwordHash);
+    existingAccount.setUsername(newUsername);
+    existingAccount.setEmail(newEmail);
 
-        // Save updated account
-        accountService.register(existingAccount);
+    // Save updated account
+    accountService.save(existingAccount);
 
-        // Return updated account
-        return ResponseEntity.ok().body(existingAccount);
+    // Return updated account
+    existingAccount.setPasswordHash(null);
+    return ResponseEntity.ok().body(existingAccount);
   }
 
-  @PostMapping("/authTest")
-  public ResponseEntity<String> authTest(@RequestHeader("Authorization") String bearerToken, @RequestBody Account account) {
+  /*@PostMapping("/authTest")
+  public ResponseEntity<String> authTest(@RequestHeader("Authorization") String bearerToken,
+      @RequestBody Account account) {
 
     // Input sanitize
     var username = account.getUsername();
@@ -168,6 +171,6 @@ public class AccountController {
 
     // Return ok
     return ResponseEntity.ok().body("Yup");
-  }
+  }*/
 
 }
