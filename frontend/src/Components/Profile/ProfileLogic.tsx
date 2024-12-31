@@ -17,27 +17,32 @@ function ProfileLogic() {
 
     const { username: contextUsername, setUsername: setContextUsername, 
             email: contextEmail, setEmail: setContextEmail,
-            id: contextId, setId: setContextId
+            id: contextId, setId: setContextId,
+            bggUsername: contextBggUsername, setBggUsername: setContextBggUsername
     } = useAccount();
 
     const [email, setEmail] = useState(contextEmail);
     const [username, setUsername] = useState(contextUsername);
     const [password, setPassword] = useState("");
+    const [bggUsername, setBggUsername] = useState(contextBggUsername);
 
 
     function handleProfileEdit(e: FormEvent){
       e.preventDefault();
 
-      axios.patch(`http://localhost:8080/account/${contextId}`, {
+      axios.patch(`http://localhost:8080/account/`, {
+        accountId: contextId,
         email: email,
         username: username,
-        passwordHash: password
+        passwordHash: password,
+        bggAccount: bggUsername
       })
       .then(response => {
         console.log(response.data);
         setContextEmail(response.data.email);
         setContextUsername(response.data.username);
         setContextId(response.data.accountId);
+        setContextBggUsername(bggUsername);
       })
       .catch(error => {
         console.error('Error patching data, ', error)
@@ -51,6 +56,7 @@ function ProfileLogic() {
         email={email} setEmail={setEmail}
         username={username} setUsername={setUsername}
         password={password} setPassword={setPassword}
+        bggUsername={bggUsername} setBggUsername={setBggUsername}
         handleProfileEdit={handleProfileEdit}/>
     </div>
   )

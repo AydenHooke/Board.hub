@@ -4,6 +4,7 @@ type ProfileInputProps = {
     email: string, setEmail: React.Dispatch<React.SetStateAction<string>>,
     username: string, setUsername: React.Dispatch<React.SetStateAction<string>>,
     password: string, setPassword: React.Dispatch<React.SetStateAction<string>>,
+    bggUsername: string, setBggUsername: React.Dispatch<React.SetStateAction<string>>,
     handleProfileEdit: (e: React.FormEvent<HTMLFormElement>) => void
 };
 
@@ -11,6 +12,7 @@ function ProfileInput({
   email, setEmail,
   username, setUsername,
   password, setPassword,
+  bggUsername, setBggUsername,
   handleProfileEdit}: ProfileInputProps
 ) {
   return (
@@ -32,6 +34,13 @@ function ProfileInput({
                       Username
                       <input required type="text" placeholder="Enter Username" value={username} onChange={
                           (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)
+                      }></input>
+                  </label>
+                  <br/>
+                  <label>
+                      Bgg Username
+                      <input required type="text" placeholder="Enter BGG Username" value={bggUsername} onChange={
+                          (e: React.ChangeEvent<HTMLInputElement>) => setBggUsername(e.target.value)
                       }></input>
                   </label>
                   <br/>
