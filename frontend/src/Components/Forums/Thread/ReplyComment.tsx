@@ -1,32 +1,33 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { renderToString } from "react-dom/server";
 import { Reply } from "./ThreadPage";
+import { useAccount } from "../../../Context/useAccount";
 import CreateReplyLogic from "./CreateReply/CreateReplyLogic";
-import { AccountContext } from "../../../Context/AccountContext";
 
 function ReplyComment({
-    id,
-    thread_id,
-    reply_id,
-    user_id,
+    replyId,
+    threadId,
+    replyToId,
+    accountId,
     content}: Reply
 ) {    
-    const context = useContext(AccountContext);
+    const { id: contextId } = useAccount();
 
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
-        if (reply_id != null) {
-            const parentReply = document.getElementById((reply_id).toString());
+        console.log("test");
+        if (replyToId != null) {
+            const parentReply = document.getElementById((replyToId).toString());
             const childReply = document.createElement("div");
+            const staticElement = renderToString(createReply());
+            
+            if (contextId != '') childReply.innerHTML = content + staticElement;
+            else childReply.innerHTML = content;
 
-            childReply.id = id.toString();
-            if (context?.id != '') {
-                childReply.innerHTML = content + createReply();
-            } else {
-                childReply.innerHTML = content;
-            }
+            childReply.id = replyId + "";
             parentReply?.appendChild(childReply);
-        }
+        }  
     }, [])
 
     function createReply() {
@@ -37,12 +38,12 @@ function ReplyComment({
                 {isVisible &&
                     <div>
                         <CreateReplyLogic
-                            reply_id={reply_id}
-                            id={thread_id}
+                            threadId={threadId}
                             title={"null"}
                             content={"null"}
-                            user_id={user_id}
-                            forum_id={0}
+                            accountId={accountId}
+                            forumId={0}
+                            replyToId={replyId}
                         />
                     </div>
                 }
@@ -52,12 +53,12 @@ function ReplyComment({
 
     return (
         <>
-            {(reply_id != null) ? (
+            {(replyToId != null) ? (
                 <></>
             ) : (
-                <div id={(id).toString()}>
+                <div id={(replyId).toString()}>
                     {content}
-                    {(context?.id != '') && createReply()}
+                    {(contextId != '') && createReply()}
                 </div>
             )}
         </>

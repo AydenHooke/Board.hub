@@ -9,8 +9,8 @@ export type Thread = {
     threadId: number,
     title: string,
     content: string,
-    user_id: number,
-    forum_id: number
+    accountId: number,
+    forumId: number
 }
 
 function ForumPage({
@@ -64,8 +64,8 @@ function ForumPage({
                                     threadId={thread.threadId}
                                     title={thread.title}
                                     content={thread.content}
-                                    user_id={thread.user_id}
-                                    forum_id={thread.forum_id}
+                                    accountId={thread.accountId}
+                                    forumId={thread.forumId}
                                 />
                             }
                         </div>

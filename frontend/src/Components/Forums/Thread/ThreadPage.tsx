@@ -3,13 +3,13 @@ import { Thread } from "../ForumPage"
 import axios from "axios";
 import ReplyComment from "./ReplyComment";
 import CreateReplyLogic from "./CreateReply/CreateReplyLogic";
-import { AccountContext } from "../../../Context/AccountContext";
+import { useAccount } from "../../../Context/useAccount";
 
 export type Reply = {
-    id: number,
-    thread_id: number,
-    reply_id: number,
-    user_id: number,
+    replyId: number,
+    threadId: number,
+    replyToId: number | null,
+    accountId: number,
     content: string
 }
 
@@ -17,10 +17,10 @@ function ThreadPage({
     threadId,
     title,
     content,
-    user_id,
-    forum_id}: Thread
+    accountId,
+    forumId}: Thread
 ) {
-    const context = useContext(AccountContext);
+    const { id: contextId } = useAccount();
 
     const [data, setData] = useState<Reply[]>([]);
 
@@ -37,14 +37,14 @@ function ThreadPage({
             <h3>{content}</h3>
 
             <div>
-                { (context?.id != '') && 
+                { (contextId != '') && 
                     <CreateReplyLogic
-                        reply_id={null}
                         threadId={threadId}
                         title={title}
                         content={content}
-                        user_id={user_id}
-                        forum_id={forum_id}
+                        accountId={accountId}
+                        forumId={forumId}
+                        replyToId={null}
                     />
                 }
             </div>
@@ -53,10 +53,10 @@ function ThreadPage({
                 return (
                     <>
                         <ReplyComment
-                            id={reply.id}
-                            thread_id={reply.thread_id}
-                            reply_id={reply.reply_id}
-                            user_id={reply.user_id}
+                            replyId={reply.replyId}
+                            threadId={reply.threadId}
+                            replyToId={reply.replyToId}
+                            accountId={reply.accountId}
                             content={reply.content}
                         />
                     </>
