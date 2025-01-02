@@ -13,24 +13,27 @@ function SignUpLogic() {
         setEmail: setContextEmail, 
         setUsername: setContextUsername,
         setId: setContextId,
+        setJwt: setContextJwt,
     } = useAccount();
 
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
-
-        axios
-            .post('http://localhost:8080/account/register', {
+        axios.post('http://localhost:8080/account/register', {
                 email: email,
                 username: username,
                 passwordHash: password
             })
             .then((response) => {
-                console.log(response.data);
-                
+                console.log(response.data)
+                console.log(response.headers)
+                const token = response.headers['authorization']; // Try both cases
+                console.log(token);
+                if (token) {
+                   setContextJwt(token);
+                }
                 setContextEmail(response.data.email);
                 setContextUsername(response.data.username);
                 setContextId(response.data.accountId);
-
                 navigate("/games")
             })
             .catch((error) => console.error('Error posting data, ', error));

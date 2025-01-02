@@ -1,9 +1,13 @@
 package up.board.backend.Controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import up.board.backend.Entity.Event;
 import up.board.backend.Service.AccountService;
 import up.board.backend.Service.EventService;
+import up.board.backend.Enum.Event.Status;
 import up.board.backend.Utils.JwtUtil;
 
 @RestController
@@ -26,19 +31,21 @@ public class EventController {
 
   private static final Logger logger = LoggerFactory.getLogger(EventController.class);
 
+  @Autowired
   EventService eventService;
-  AccountService accountService;
+
+  @Autowired
   JwtUtil jwtUtil;
 
-  //
-  public EventController(EventService eventService, AccountService accountService, JwtUtil jwtUtil) {
-    this.eventService = eventService;
-    this.accountService = accountService;
-    this.jwtUtil = jwtUtil;
-  }
+  @Autowired
+  AccountService accountService;
+  
+  // public EventController(EventService eventService) {
+  //   this.jwtUtil = jwtUtil;
+  // }
 
   /// Endpoints
-  @GetMapping("/get")
+  @GetMapping("/")
   public ResponseEntity<List<Event>> getEvents() {
 
     // Return event
@@ -46,7 +53,7 @@ public class EventController {
     return ResponseEntity.ok().body(events);
   }
 
-  @GetMapping("/get/{id}")
+  @GetMapping("/{id}")
   public ResponseEntity<Event> getEvent(@PathVariable Integer id) {
 
     // Return event
@@ -54,11 +61,31 @@ public class EventController {
     return ResponseEntity.ok().body(event);
   }
 
-  @PostMapping("/post")
-  public ResponseEntity<Event> postEvent(@RequestHeader("Authorization") String bearerToken,
-      @RequestBody Event event) {
+  @PostMapping("/")
+  public ResponseEntity<Event> postEvent(@RequestHeader("Authorization") String bearerToken, 
+  @RequestBody Event event) {
 
     // Input sanitization
+    var title = event.getTitle();
+    var content = event.getContent();
+
+    LocalDateTime dateTime;
+
+    // Validate the 'time' parameter
+    try {
+        dateTime = event.getDateMeet();
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("server-error", "Invalid Date syntax").body(null);
+    }
+
+    // Return error if title or content is empty
+    if (title == null || title.isBlank() || content == null || content.isBlank()) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("server-error", "Blank title or content").body(null);
+    }
+
+    // Set default values
+    event.setDateMeet(dateTime);
+    event.setStatus(Status.SCHEDULED);
 
     // Check user exists
     var existingAccount = accountService.findById(event.getAccountId());
@@ -76,8 +103,8 @@ public class EventController {
     }
 
     // Return threads for forum
-    event = eventService.create(event);
-    return ResponseEntity.ok().body(event);
+    var createdEvent = eventService.create(event);
+    return ResponseEntity.ok().body(createdEvent);
   }
 
 }

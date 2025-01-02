@@ -22,7 +22,7 @@ function ProfileInput({
 
         <section className='profile-section'>
           <form className="profile-form" onSubmit={handleProfileEdit}>
-                  <h2>Sign Up</h2>
+                  <h2>Edit Profile</h2>
                   <label>
                     Email
                       <input required type="email" placeholder="Change Email" value={email} onChange={
