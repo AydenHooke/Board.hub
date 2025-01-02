@@ -5,19 +5,19 @@ function EventLogic() {
 
   const navigate = useNavigate();
 
-  const handleMeetingAdd = () => {
-    console.log('Add Meeting');
-    navigate("/submit?type=MEETING");
+  const handleFindEvents = (eventName: string) => {
+    console.log(`Finding ${eventName}`);
+    navigate(`/list?type=${eventName}`);
   }
 
-  const handleTournamentAdd = () => {
-    console.log('Add Tournament');
-    navigate('/submit?type=TOURNAMENT');
+  const handleEventAdd = (eventName: string) => {
+    console.log(`Adding ${eventName}`);
+    navigate(`/submit?type=${eventName}`);
   };
 
   return (
     <>
-        <EventInput handleMeetingAdd={handleMeetingAdd} handleTournamentAdd={handleTournamentAdd}/>
+        <EventInput  handleEventAdd={handleEventAdd} handleFindEvents={handleFindEvents}/>
     </>
   )
 }

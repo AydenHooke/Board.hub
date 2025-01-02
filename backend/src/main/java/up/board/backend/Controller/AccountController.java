@@ -18,7 +18,7 @@ import up.board.backend.Utils.JwtUtil;
 
 @RestController
 @RequestMapping("/account")
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = "http://localhost:5174", exposedHeaders = "Authorization")
 public class AccountController {
 
   private static final Logger logger = LoggerFactory.getLogger(AccountController.class);

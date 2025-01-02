@@ -11,7 +11,7 @@ function SubmitEventLogic() {
   const [name, setName] = useState('');
   const [content, setContent] = useState('');
   const [time, setTime] = useState('');
-  const { id } = useAccount();
+  const { id, jwt : contextJwt } = useAccount();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -22,6 +22,10 @@ function SubmitEventLogic() {
       type: eventType,
       dateMeet: time,
       accountId: id
+    },{
+      headers: {
+        Authorization: `${contextJwt}`
+      }
     }).then((response) => {
       console.log(response.data);
     }).catch((error) => {

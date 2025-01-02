@@ -10,6 +10,7 @@ import ProfileLogic from './Components/Profile/ProfileLogic';
 import EventLogic from './Components/Events/EventLogic';
 import { AccountProvider } from './Context/AccountContext';
 import SubmitEventLogic from './Components/Events/SubmitEventLogic';
+import EventListLogic from './Components/Events/EventListLogic';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path='/events' element={<EventLogic/>}></Route>
             <Route path='/profile' element={<ProfileLogic/>}></Route>
             <Route path='/submit' element={<SubmitEventLogic/>}></Route>
+            <Route path='/list' element={<EventListLogic/>}></Route>
           </Routes>
         </BrowserRouter>
       </AccountProvider>

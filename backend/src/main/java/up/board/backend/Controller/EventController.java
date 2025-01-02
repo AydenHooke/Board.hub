@@ -1,13 +1,13 @@
 package up.board.backend.Controller;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +22,6 @@ import up.board.backend.Entity.Event;
 import up.board.backend.Service.AccountService;
 import up.board.backend.Service.EventService;
 import up.board.backend.Enum.Event.Status;
-import up.board.backend.Enum.Event.Type;
 import up.board.backend.Utils.JwtUtil;
 
 @RestController
@@ -70,12 +69,22 @@ public class EventController {
     var title = event.getTitle();
     var content = event.getContent();
 
+    LocalDateTime dateTime;
+
+    // Validate the 'time' parameter
+    try {
+        dateTime = event.getDateMeet();
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("server-error", "Invalid Date syntax").body(null);
+    }
+
     // Return error if title or content is empty
     if (title == null || title.isBlank() || content == null || content.isBlank()) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("server-error", "Blank title or content").body(null);
     }
 
     // Set default values
+    event.setDateMeet(dateTime);
     event.setStatus(Status.SCHEDULED);
 
     // Check user exists
