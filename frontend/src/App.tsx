@@ -22,9 +22,9 @@ function App() {
             <Route path='/' element={<Home/>}></Route>
             <Route path='/SignUp' element={<SignUpLogic/>}></Route>
             <Route path='/SignIn' element={<SignInLogic/>}></Route>
-            <Route path='/Forums' element={<Forums/>}></Route>
+            <Route path='/Forums/*' element={<Forums/>}></Route>
             <Route path='/games' element={<GameLogic/>}></Route>
-            <Route path='/events' element={<EventLogic/>}></Route>
+            <Route path='/events/*' element={<EventLogic/>}></Route>
             <Route path='/profile' element={<ProfileLogic/>}></Route>
             <Route path='/submit' element={<SubmitEventLogic/>}></Route>
             <Route path='/list' element={<EventListLogic/>}></Route>
