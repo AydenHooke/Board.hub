@@ -93,7 +93,7 @@ function GameLogic() {
     }
 
     async function rectifyGameCollection(ids: any) {
-      let collectionResults = await axios.post(`http://localhost:8080/game/validateGamePersistence`,ids)
+      let collectionResults = await axios.post(`http://18.224.45.201:8080/game/validateGamePersistence`,ids)
       let collectionData = collectionResults.data;
         if(collectionResults.status == 200)
           return collectionData;
@@ -124,7 +124,7 @@ function GameLogic() {
     console.log(allGames);
     //console.log(allGames)
       async function makeTheGames() {
-        await axios.post(`http://localhost:8080/game/persistManyGames`,allGames)
+        await axios.post(`http://18.224.45.201:8080/game/persistManyGames`,allGames)
       }
       makeTheGames();
     console.log("All games have been created (hopefully)")
