@@ -27,7 +27,6 @@ function SignUpLogic() {
                 console.log(response.data)
                 console.log(response.headers)
                 const token = response.headers['authorization']; // Try both cases
-                console.log(token);
                 if (token) {
                    setContextJwt(token);
                 }

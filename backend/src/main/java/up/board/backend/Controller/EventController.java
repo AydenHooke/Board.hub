@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,11 +19,17 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.websocket.server.PathParam;
+import up.board.backend.Entity.Account;
 import up.board.backend.Entity.Event;
+import up.board.backend.Entity.Rsvp;
 import up.board.backend.Service.AccountService;
 import up.board.backend.Service.EventService;
 import up.board.backend.Enum.Event.Status;
+import up.board.backend.Enum.Event.Type;
 import up.board.backend.Utils.JwtUtil;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/event")
@@ -53,11 +60,29 @@ public class EventController {
     return ResponseEntity.ok().body(events);
   }
 
+  /// Endpoints
+  @GetMapping("/unadded/{accountId}")
+  public ResponseEntity<List<Event>> getUnAddedEvents(@PathVariable Integer accountId) {
+    var existingAccount = accountService.findById(accountId);
+
+    if (existingAccount == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Invalid account id").body(null);
+    }
+
+    // Return event
+    var events = eventService.getAll();
+
+    // Filter out events that are already added
+    events.removeIf(event -> existingAccount.getEvents().contains(event));
+    
+    return ResponseEntity.ok().body(events);
+  }
+
   @GetMapping("/{id}")
   public ResponseEntity<Event> getEvent(@PathVariable Integer id) {
 
     // Return event
-    var event = eventService.getById(id);
+    var event = eventService.findById(id);
     return ResponseEntity.ok().body(event);
   }
 
@@ -88,6 +113,7 @@ public class EventController {
 
     // Set default values
     event.setDateMeet(dateTime);
+    event.setDateCreated(LocalDateTime.now());
     event.setStatus(Status.SCHEDULED);
 
     // Check user exists
@@ -110,4 +136,79 @@ public class EventController {
     return ResponseEntity.ok().body(createdEvent);
   }
 
+  @GetMapping("/{type}")
+  public ResponseEntity<List<Event>> getEvents(@RequestParam Type type) {
+    if (type == null) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Type parameter is required").body(null);
+    }
+    
+    List<Event> events = eventService.getAllByType(type);
+    return ResponseEntity.ok().body(events);
+  }
+
+  @PostMapping("/account/{accountId}")
+  public ResponseEntity<Account> storeEventToAccount(@PathVariable Integer accountId, @RequestBody Event event) {
+    
+    var existingEvent = eventService.findById(event.getEventId());
+    var existingAccount = accountService.findById(accountId);
+
+    if(existingEvent == null ) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Invalid event id: " + event.getEventId()).body(null);
+    }
+
+    if(existingAccount == null) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Missing account").body(null);
+    }
+
+    if (existingAccount.getEvents().contains(existingEvent)) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).header("error", "Event already associated with account").body(null);
+    }
+
+    existingAccount.getEvents().add(existingEvent);
+    accountService.save(existingAccount);
+
+    return ResponseEntity.ok().body(existingAccount);
+  }
+
+  @GetMapping("/account/{accountId}")
+  public ResponseEntity<List<Event>> storeEventToAccount(@PathVariable Integer accountId, @RequestParam Type type) {
+    
+    var existingAccount = accountService.findById(accountId);
+
+    if(existingAccount == null) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Missing account").body(null);
+    }
+
+    List<Event> events = existingAccount.getEvents();
+
+    List<Event> filteredEvents = events.stream()
+    .filter(event -> event.getType() == type)
+    .toList();
+
+    return ResponseEntity.ok().body(filteredEvents);
+  }
+
+  @DeleteMapping("/account/{accountId}/event/{eventId}")
+  public ResponseEntity<Account> deleteEventFromAccount(@PathVariable Integer accountId, @PathVariable Integer eventId) {
+    
+    var existingEvent = eventService.findById(eventId);
+    var existingAccount = accountService.findById(accountId);
+
+    if(existingEvent == null ) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Invalid event id: " + eventId).body(null);
+    }
+
+    if(existingAccount == null) {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Missing account").body(null);
+    }
+
+    if (!existingAccount.getEvents().contains(existingEvent)) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).header("error", "Event not associated with account").body(null);
+    }
+
+    existingAccount.getEvents().remove(existingEvent);
+    accountService.save(existingAccount);
+
+    return ResponseEntity.ok().body(existingAccount);
+  }
 }

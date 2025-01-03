@@ -1,9 +1,44 @@
+// import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import EventInput from './EventInput'
 import {useNavigate } from 'react-router-dom'
+import axios from 'axios';
+import { useAccount } from '../../Context/useAccount';
+import { Event } from '../../Types/Event';
 
 function EventLogic() {
-
   const navigate = useNavigate();
+  const {id : contextId} = useAccount();
+  const [myMeetings, setMyMeetings] = useState([]);
+  const [myTournaments, setMyTournaments] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response1 = await axios.get(`http://localhost:8080/event/account/${contextId}`, {
+            params: {
+                type: "MEETING"
+            }
+        });
+        const data1 = response1.data;
+        setMyMeetings(data1);
+        console.log(data1);
+    
+        const response2 = await axios.get(`http://localhost:8080/event/account/${contextId}`, {
+            params: {
+              type: "TOURNAMENT"
+           }
+        });
+        const data2 = response2.data;
+        setMyTournaments(data2);
+        console.log(data2);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    
+    fetchData();
+  }, [contextId]);
 
   const handleFindEvents = (eventName: string) => {
     console.log(`Finding ${eventName}`);
@@ -15,9 +50,24 @@ function EventLogic() {
     navigate(`/submit?type=${eventName}`);
   };
 
+  const handleLeaveEvent = async (event: Event, type: string) => {
+      try {
+        await axios.delete(`http://localhost:8080/event/account/${contextId}/event/${event.eventId}`);
+        console.log("Event deleted");
+        if(type === "MEETING"){
+          setMyMeetings(myMeetings.filter((meeting: Event) => meeting.eventId !== event.eventId));
+        }
+        else if(type === "TOURNAMENT"){
+          setMyMeetings(myTournaments.filter((tournament: Event) => tournament.eventId !== event.eventId));
+        }
+      } catch (error) {
+        console.error(error);
+      }
+  }
+
   return (
     <>
-        <EventInput  handleEventAdd={handleEventAdd} handleFindEvents={handleFindEvents}/>
+        <EventInput  handleEventAdd={handleEventAdd} handleFindEvents={handleFindEvents} handleLeaveEvent={handleLeaveEvent} myMeetings={myMeetings} myTournaments={myTournaments}/>
     </>
   )
 }
