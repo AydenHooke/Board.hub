@@ -10,7 +10,7 @@ export type Thread = {
     title: string,
     content: string,
     accountId: number,
-    accountName: string,
+    username: string,
     forumId: number
 }
 
@@ -70,7 +70,7 @@ function ForumPage({
                                     title={thread.title}
                                     content={thread.content}
                                     accountId={thread.accountId}
-                                    accountName={thread.accountName}
+                                    username={thread.username}
                                     forumId={thread.forumId}
                                 />
                             }

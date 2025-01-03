@@ -8,9 +8,9 @@ function ReplyComment({
     threadId,
     replyToId,
     accountId,
-    accountName,
+    username,
     content}: Reply
-) {    
+) {
     const { id: contextId } = useAccount();
 
     const [isVisible, setIsVisible] = useState(false);
@@ -40,7 +40,7 @@ function ReplyComment({
         const parentReply = document.getElementById(`${replyToId}`)!;
         const childReply = document.getElementById(`${replyId}`)!;
         parentReply?.appendChild(childReply);
-        
+
         return (<></>)
     }
 
@@ -50,7 +50,7 @@ function ReplyComment({
                 <>
                     <div className="replyToReply" id={`${replyId}`}>
                         <div className="reply">
-                            <h6>Posted by: {accountName}</h6>
+                            <h6>Posted by: {username}</h6>
 
                             {content}
                             {(contextId != '') && createReply()}
@@ -61,7 +61,7 @@ function ReplyComment({
             ) : (
                 <div className="rootReply" id={`${replyId}`}>
                     <div className="reply">
-                        <h6>Posted by: {accountName}</h6>
+                        <h6>Posted by: {username}</h6>
 
                         {content}
                         {(contextId != '') && createReply()}
