@@ -17,6 +17,8 @@ public class Rsvp {
   @JoinColumn(name = "account_id")
   int accountId;
 
+  @JoinTable
+
   @JoinColumn(name = "event_id")
   int eventId;
 

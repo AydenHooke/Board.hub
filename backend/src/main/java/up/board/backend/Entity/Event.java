@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import up.board.backend.Enum.Event.Status;
 import up.board.backend.Enum.Event.Type;
 
@@ -43,6 +47,11 @@ public class Event {
 
   @JoinColumn(name = "game_id", nullable = true)
   Integer gameId;
+
+  @ManyToMany(mappedBy = "events")
+  @JsonBackReference
+  List<Account> accounts;
+
 
   // Constructor
   public Event() {

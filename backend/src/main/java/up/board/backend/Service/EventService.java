@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import up.board.backend.Entity.Event;
 import up.board.backend.Repository.EventRepository;
+import up.board.backend.Enum.Event.Type;
 
 @Service
 public class EventService {
@@ -20,12 +21,16 @@ public class EventService {
     return eventRepository.save(event);
   }
 
-  public Event getById(int eventId){
+  public Event findById(int eventId){
     return eventRepository.findByEventId(eventId);
   }
 
   public List<Event> getAll() {
     return eventRepository.findAll();
+  }
+
+  public List<Event> getAllByType(Type type) {
+    return eventRepository.findAllByType(type);
   }
 
 }

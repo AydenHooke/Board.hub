@@ -1,5 +1,9 @@
 package up.board.backend.Entity;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +35,16 @@ public class Account {
 
   @Column
   String role;
+
+  @ManyToMany
+  @JoinTable(
+    name = "account_event",
+    joinColumns = @JoinColumn(name = "account_id"),
+    inverseJoinColumns = @JoinColumn(name = "event_id"),
+    uniqueConstraints = @UniqueConstraint(columnNames = {"account_id", "event_id"})
+  )
+  @JsonBackReference
+  List<Event> events;
 
   // Constructor
   public Account() {
