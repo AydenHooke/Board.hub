@@ -23,18 +23,22 @@ function ThreadPage({
     const { id: contextId } = useAccount();
 
     const [data, setData] = useState<Reply[]>([]);
+    const [reload, setReload] = useState(false);
 
     useEffect(() => {
+        setReload(false);
         axios
             .get('http://localhost:8080/reply/get/' + threadId)
             .then((Response) => setData(Response.data))
             .catch((error) => console.error('Error getting data, ', error));
-    }, [])
+    }, [reload])
 
     return (
         <>
             <h2>{title}</h2>
             <h3>{content}</h3>
+
+            <button onClick={(e: any) => setReload(true)}>Reload</button>
 
             <div>
                 { (contextId != '') && 
