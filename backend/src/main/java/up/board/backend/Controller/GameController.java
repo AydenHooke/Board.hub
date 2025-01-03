@@ -33,32 +33,25 @@ public class GameController {
   }
 
   @PostMapping("/validateGamePersistence")
-  public ResponseEntity<?> validateGamePersistence(@RequestBody List<String> gameIds) {
+  public ResponseEntity<List<String>> validateGamePersistence(@RequestBody List<String> gameIds) {
     logger.info("Validating persistance...");
-    List<String> gameIdsNotPersisted = gameService.returnIfNotPersisted(gameIds); // this returns a list of every ID we
-                                                                                  // don't have a game for
-    if (gameIdsNotPersisted != null) { // i.e. if there wasn't an error, return the gameIds as requested
-      logger.info("Returning missing games");
-      return ResponseEntity.status(HttpStatus.OK)
-          .body(gameIdsNotPersisted);
-    } else {
-      logger.error("Game persistance error!!!");
-      return ResponseEntity.status(HttpStatus.CONFLICT)
-          .build(); // if there was an error, report a conflict
-    }
+    var gameIdsNotPersisted = gameService.returnIfNotPersisted(gameIds); // this returns a list of every ID we don't have a game for
+    logger.info("Returning missing games");
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(gameIdsNotPersisted);
   }
 
   @PostMapping("/persistOneGame")
   public ResponseEntity<?> persistOneGame(@RequestBody Game game) {
 
-    Game testGame = gameService.findOneGame(game);
+    var testGame = gameService.findOneGame(game);
     if (testGame == null) {
-      gameService.Register(game);
-      logger.info("Someone created a game");
+      gameService.register(game);
+      logger.info("Game persisted");
       return ResponseEntity.status(HttpStatus.CREATED)
           .build();
     } else {
-      logger.error("There was an error creating a game");
+      logger.error("Game already persisted");
       return ResponseEntity.status(HttpStatus.CONFLICT)
           .build();
     }
@@ -67,11 +60,11 @@ public class GameController {
 
   @PostMapping("/persistManyGames")
   public ResponseEntity<?> persistManyGames(@RequestBody List<Game> games) {
-    boolean error = false;
+    var error = false;
     for (int i = 0; i < games.size(); i++) {
-      Game testGame = gameService.findOneGame(games.get(i));
+      var testGame = gameService.findOneGame(games.get(i));
       if (testGame == null) {
-        gameService.Register(games.get(i));
+        gameService.register(games.get(i));
         logger.info(games.get(i).getTitle() + " has been added to the database");
       } else
         error = true;

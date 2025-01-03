@@ -126,4 +126,76 @@ class ReplyTest {
     verify(replyRepository).save(any(Reply.class));
   }
 
+  @Test
+  void postReply_replyToNullThread() {
+
+    var reply = new Reply();
+    reply.setAccountId(1);
+    reply.setContent("Test event 1");
+    reply.setThreadId(1);
+    reply.setReplyToId(2);
+
+    when(threadRepository.getThreadByThreadId(any(Integer.class))).thenReturn(null);
+
+    //
+    var response = replyController.postReply("", reply);
+    var responseReply = response.getBody();
+
+    assertEquals(409, response.getStatusCode().value());
+    assertEquals(null, responseReply);
+
+    verify(threadRepository).getThreadByThreadId(any(Integer.class));
+  }
+
+  @Test
+  void postReply_replyToNullReply() {
+
+    var reply = new Reply();
+    reply.setAccountId(1);
+    reply.setContent("Test event 1");
+    reply.setThreadId(1);
+    reply.setReplyToId(2);
+
+    var thread = new Thread();
+    thread.setThreadId(1);
+
+    when(threadRepository.getThreadByThreadId(any(Integer.class))).thenReturn(thread);
+    when(replyRepository.getReplyByReplyId(any(Integer.class))).thenReturn(null);
+
+    //
+    var response = replyController.postReply("", reply);
+    var responseReply = response.getBody();
+
+    assertEquals(409, response.getStatusCode().value());
+    assertEquals(null, responseReply);
+
+    verify(threadRepository).getThreadByThreadId(any(Integer.class));
+    verify(replyRepository).getReplyByReplyId(any(Integer.class));
+  }
+
+  @Test
+  void postReply_nullAccount() {
+
+    var reply = new Reply();
+    reply.setAccountId(1);
+    reply.setContent("Test event 1");
+    reply.setThreadId(1);
+
+    var thread = new Thread();
+    thread.setThreadId(1);
+
+    when(threadRepository.getThreadByThreadId(any(Integer.class))).thenReturn(thread);
+    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(null);
+
+    //
+    var response = replyController.postReply("", reply);
+    var responseReply = response.getBody();
+
+    assertEquals(409, response.getStatusCode().value());
+    assertEquals(null, responseReply);
+
+    verify(threadRepository).getThreadByThreadId(any(Integer.class));
+    verify(accountRepository).findByAccountId(any(Integer.class));
+  }
+
 }
