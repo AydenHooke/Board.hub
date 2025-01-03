@@ -27,7 +27,7 @@ public class Reply {
   int accountId;
 
   @Transient
-  String accountName;
+  String username;
 
   @Column
   boolean isDeleted;

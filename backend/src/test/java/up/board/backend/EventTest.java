@@ -21,6 +21,7 @@ import up.board.backend.Entity.Account;
 import up.board.backend.Entity.Event;
 import up.board.backend.Repository.AccountRepository;
 import up.board.backend.Repository.EventRepository;
+import up.board.backend.Repository.ThreadRepository;
 import up.board.backend.Service.AccountService;
 import up.board.backend.Service.EventService;
 import up.board.backend.Utils.JwtUtil;
@@ -58,17 +59,39 @@ class EventTest {
     event0.setAccountId(1);
     event0.setTitle("Test event 1");
     event0.setContent("Test description");
+    var eventWithUsername0 = new EventRepository.EventWithUsername() {
+      @Override
+      public Event getEvent() {
+        return event0;
+      }
+
+      @Override
+      public String getUsername() {
+        return "test_user_0";
+      }
+    };
 
     var event1 = new Event();
     event1.setAccountId(2);
     event1.setTitle("Test event 2");
     event1.setContent("Test description");
+    var eventWithUsername1 = new EventRepository.EventWithUsername() {
+      @Override
+      public Event getEvent() {
+        return event1;
+      }
 
-    var events = new ArrayList<Event>();
-    events.add(event0);
-    events.add(event1);
+      @Override
+      public String getUsername() {
+        return "test_user_1";
+      }
+    };
 
-    when(eventRepository.findAll()).thenReturn(events);
+    var events = new ArrayList<EventRepository.EventWithUsername>();
+    events.add(eventWithUsername0);
+    events.add(eventWithUsername1);
+
+    when(eventRepository.findAllPlusUsername()).thenReturn(events);
 
     //
     var response = eventController.getEvents();
@@ -79,7 +102,7 @@ class EventTest {
     assertEquals(1, responseEvents.get(0).getAccountId());
     assertEquals(2, responseEvents.get(1).getAccountId());
 
-    verify(eventRepository).findAll();
+    verify(eventRepository).findAllPlusUsername();
   }
 
   @Test

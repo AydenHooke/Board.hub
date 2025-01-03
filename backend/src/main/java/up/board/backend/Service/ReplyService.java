@@ -28,21 +28,13 @@ public class ReplyService {
   }
 
   public List<Reply> getReplies(int threadId) {
-    var nativeReults = replyRepository.getReplyByThreadId(threadId);
+    var replyDTOs = replyRepository.getReplyByThreadId(threadId);
 
     var replyList = new ArrayList<Reply>();
-
-    for (var element : nativeReults) {
-      var newReply = new Reply();
-      newReply.setAccountId((int) element.get("account_id"));
-      newReply.setAccountName((String) element.get("username"));
-      newReply.setContent((String) element.get("content"));
-      newReply.setDeleted((boolean) element.get("is_deleted"));
-      newReply.setReplyId((int) element.get("reply_id"));
-      newReply.setReplyToId((Integer) element.get("reply_to_id"));
-      newReply.setThreadId((int) element.get("thread_id"));
-
-      replyList.add(newReply);
+    for (var dto : replyDTOs) {
+      var reply = dto.getReply();
+      reply.setUsername(dto.getUsername());
+      replyList.add(reply);
     }
 
     return replyList;

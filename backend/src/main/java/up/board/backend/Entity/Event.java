@@ -43,7 +43,10 @@ public class Event {
   Type type;
 
   @JoinColumn(name = "account_id")
-  Integer accountId;
+  int accountId;
+
+  @Transient
+  String username;
 
   @JoinColumn(name = "game_id", nullable = true)
   Integer gameId;
