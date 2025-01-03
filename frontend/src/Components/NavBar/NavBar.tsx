@@ -51,7 +51,7 @@ function NavBar() {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/Forums">
+                <Link className="nav-link" reloadDocument to="/Forums">
                   Forums
                 </Link>
               </li>

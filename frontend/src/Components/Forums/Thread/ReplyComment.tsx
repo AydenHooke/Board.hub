@@ -8,6 +8,7 @@ function ReplyComment({
     threadId,
     replyToId,
     accountId,
+    accountName,
     content}: Reply
 ) {    
     const { id: contextId } = useAccount();
@@ -49,6 +50,8 @@ function ReplyComment({
                 <>
                     <div className="replyToReply" id={`${replyId}`}>
                         <div className="reply">
+                            <h6>Posted by: {accountName}</h6>
+
                             {content}
                             {(contextId != '') && createReply()}
                         </div>
@@ -58,6 +61,8 @@ function ReplyComment({
             ) : (
                 <div className="rootReply" id={`${replyId}`}>
                     <div className="reply">
+                        <h6>Posted by: {accountName}</h6>
+
                         {content}
                         {(contextId != '') && createReply()}
                     </div>
