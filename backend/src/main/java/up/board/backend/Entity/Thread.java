@@ -24,7 +24,7 @@ public class Thread {
   int accountId;
 
   @Transient
-  String accountName;
+  String username;
 
   @JoinColumn
   int forumId;

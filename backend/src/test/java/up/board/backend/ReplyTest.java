@@ -66,30 +66,43 @@ class ReplyTest {
 
     var threadId = 1;
 
-    var nativeMap = new ArrayList<Map<String, Object>>();
+    var reply0 = new Reply();
+    reply0.setAccountId(1);
+    reply0.setThreadId(1);
+    reply0.setContent("Test description");
+    var replyWithUsername0 = new ReplyRepository.ReplyWithUsername() {
+      @Override
+      public Reply getReply(){
+        return reply0;
+      }
 
-    var reply0_native = new HashMap<String, Object>();
-    reply0_native.put("account_id", 1);
-    reply0_native.put("username", "test_user_0");
-    reply0_native.put("content", "Test content 0");
-    reply0_native.put("is_deleted", false);
-    reply0_native.put("reply_id", 1);
-    reply0_native.put("reply_to_id", null);
-    reply0_native.put("thread_id", threadId);
+      @Override
+      public String getUsername(){
+        return "test_user_0";
+      }
+    };
 
-    var reply1_native = new HashMap<String, Object>();
-    reply1_native.put("account_id", 2);
-    reply1_native.put("username", "test_user_1");
-    reply1_native.put("content", "Test content 1");
-    reply1_native.put("is_deleted", false);
-    reply1_native.put("reply_id", 1);
-    reply1_native.put("reply_to_id", null);
-    reply1_native.put("thread_id", threadId);
+    var reply1 = new Reply();
+    reply1.setAccountId(2);
+    reply1.setThreadId(1);
+    reply1.setContent("Test description");
+    var replyWithUsername1 = new ReplyRepository.ReplyWithUsername() {
+      @Override
+      public Reply getReply(){
+        return reply1;
+      }
 
-    nativeMap.add(reply0_native);
-    nativeMap.add(reply1_native);
+      @Override
+      public String getUsername(){
+        return "test_user_1";
+      }
+    };
 
-    when(replyRepository.getReplyByThreadId(any(Integer.class))).thenReturn(nativeMap);
+    var replies = new ArrayList<ReplyRepository.ReplyWithUsername>();
+    replies.add(replyWithUsername0);
+    replies.add(replyWithUsername1);
+
+    when(replyRepository.getReplyByThreadId(any(Integer.class))).thenReturn(replies);
 
     //
     var response = replyController.getReplies(threadId);

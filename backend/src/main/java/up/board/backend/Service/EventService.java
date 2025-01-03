@@ -1,5 +1,6 @@
 package up.board.backend.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -17,16 +18,25 @@ public class EventService {
     this.eventRepository = eventRepository;
   }
 
-  public Event create(Event event){
+  public Event create(Event event) {
     return eventRepository.save(event);
   }
 
-  public Event findById(int eventId){
+  public Event findById(int eventId) {
     return eventRepository.findByEventId(eventId);
   }
 
   public List<Event> getAll() {
-    return eventRepository.findAll();
+    var eventDTOs = eventRepository.findAllPlusUsername();
+
+    var eventList = new ArrayList<Event>();
+    for (var dto : eventDTOs) {
+      var event = dto.getEvent();
+      event.setUsername(dto.getUsername());
+      eventList.add(event);
+    }
+
+    return eventList;
   }
 
   public List<Event> getAllByType(Type type) {

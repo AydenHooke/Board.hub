@@ -19,10 +19,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.websocket.server.PathParam;
 import up.board.backend.Entity.Account;
 import up.board.backend.Entity.Event;
-import up.board.backend.Entity.Rsvp;
 import up.board.backend.Service.AccountService;
 import up.board.backend.Service.EventService;
 import up.board.backend.Enum.Event.Status;
@@ -60,7 +58,6 @@ public class EventController {
     return ResponseEntity.ok().body(events);
   }
 
-  /// Endpoints
   @GetMapping("/unadded/{accountId}")
   public ResponseEntity<List<Event>> getUnAddedEvents(@PathVariable Integer accountId) {
     var existingAccount = accountService.findById(accountId);
@@ -74,7 +71,7 @@ public class EventController {
 
     // Filter out events that are already added
     events.removeIf(event -> existingAccount.getEvents().contains(event));
-    
+
     return ResponseEntity.ok().body(events);
   }
 
@@ -141,14 +138,14 @@ public class EventController {
     if (type == null) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Type parameter is required").body(null);
     }
-    
+
     List<Event> events = eventService.getAllByType(type);
     return ResponseEntity.ok().body(events);
   }
 
   @PostMapping("/account/{accountId}")
   public ResponseEntity<Account> storeEventToAccount(@PathVariable Integer accountId, @RequestBody Event event) {
-    
+
     var existingEvent = eventService.findById(event.getEventId());
     var existingAccount = accountService.findById(accountId);
 
@@ -172,7 +169,7 @@ public class EventController {
 
   @GetMapping("/account/{accountId}")
   public ResponseEntity<List<Event>> storeEventToAccount(@PathVariable Integer accountId, @RequestParam Type type) {
-    
+
     var existingAccount = accountService.findById(accountId);
 
     if(existingAccount == null) {
@@ -190,7 +187,7 @@ public class EventController {
 
   @DeleteMapping("/account/{accountId}/event/{eventId}")
   public ResponseEntity<Account> deleteEventFromAccount(@PathVariable Integer accountId, @PathVariable Integer eventId) {
-    
+
     var existingEvent = eventService.findById(eventId);
     var existingAccount = accountService.findById(accountId);
 
