@@ -1,18 +1,26 @@
 import { FormEvent, useContext, useState } from "react";
-import { Thread } from "../../ForumPage"
 import axios from "axios";
 import CreateReplyInput from "./CreateReplyInput";
-import { AccountContext } from "../../../../Context/AccountContext";
+import { useAccount } from "../../../../Context/useAccount";
 
-function CreateReplyLogic(
-    reply_id: any,
-    {threadId,
+type threadReply = {
+    threadId: number,
+    title: string,
+    content: string,
+    accountId: number,
+    forumId: number,
+    replyToId: number | null
+}
+
+function CreateReplyLogic({
+    threadId,
     title,
     content,
-    user_id,
-    forum_id}: Thread
+    accountId,
+    forumId,
+    replyToId}: threadReply
 ) {
-    const context = useContext(AccountContext);
+    const { id: contextId, jwt: contextJwt } = useAccount();
 
     const [replyContent, setReplyContent] = useState("");
 
@@ -20,15 +28,15 @@ function CreateReplyLogic(
         event.preventDefault();
         axios
             .post('http://localhost:8080/reply/post', {
-                thread_id: threadId,
-                reply_id: reply_id,
-                user_id: context?.id,
+                threadId: threadId,
+                replyToId: replyToId,
+                accountId: contextId,
                 content: replyContent
             }, {
-                headers: {"authorization" : `Bearer ${context?.jwt}`}
+                headers: {"authorization" : `${contextJwt}`}
             })
             .then((Response) => console.log(Response.data))
-            .catch((Response) => console.error(Response.data));
+            .catch((error) => console.error(error));
     }
 
     return (

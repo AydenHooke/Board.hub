@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 
 import up.board.backend.Controller.EventController;
 import up.board.backend.Entity.Account;
@@ -107,6 +109,7 @@ class EventTest {
     event.setAccountId(1);
     event.setTitle("Test event 1");
     event.setContent("Test description");
+    event.setDateMeet(LocalDateTime.now());
 
     var account = new Account();
     account.setAccountId(1);
@@ -128,6 +131,58 @@ class EventTest {
     verify(accountRepository).findByAccountId(any(Integer.class));
     verify(jwtUtil).validateTokenAndGetUsername(any(String.class));
     verify(eventRepository).save(any(Event.class));
+  }
+
+  @Test
+  void postEvent_nullDateMeet() {
+
+    var event = new Event();
+    event.setAccountId(1);
+    event.setContent("Test description");
+
+    //
+    var response = eventController.postEvent("", event);
+    var responseEvent = response.getBody();
+
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    assertEquals(null, responseEvent);
+  }
+
+  @Test
+  void postEvent_nullTitle() {
+
+    var event = new Event();
+    event.setAccountId(1);
+    event.setContent("Test description");
+    event.setDateMeet(LocalDateTime.now());
+
+    //
+    var response = eventController.postEvent("", event);
+    var responseEvent = response.getBody();
+
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    assertEquals(null, responseEvent);
+  }
+
+  @Test
+  void postEvent_invalidAccount() {
+
+    var event = new Event();
+    event.setAccountId(1);
+    event.setTitle("Test event 1");
+    event.setContent("Test description");
+    event.setDateMeet(LocalDateTime.now());
+
+    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(null);
+
+    //
+    var response = eventController.postEvent("", event);
+    var responseEvent = response.getBody();
+
+    assertEquals(409, response.getStatusCode().value());
+    assertEquals(null, responseEvent);
+
+    verify(accountRepository).findByAccountId(any(Integer.class));
   }
 
 }

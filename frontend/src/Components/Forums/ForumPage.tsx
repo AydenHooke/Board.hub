@@ -9,8 +9,8 @@ export type Thread = {
     threadId: number,
     title: string,
     content: string,
-    user_id: number,
-    forum_id: number
+    accountId: number,
+    forumId: number
 }
 
 function ForumPage({
@@ -23,18 +23,22 @@ function ForumPage({
 
     const [data, setData] = useState<Thread[]>([]);
     const [threadId, setThreadId] = useState(-1);
+    const [reload, setReload] = useState(false);
 
     useEffect(() => {
+        setReload(false);
         axios
             .get('http://localhost:8080/thread/get/' + forumId)
             .then((Response) => setData(Response.data))
             .catch((error) => console.error('Error getting data, ', error));
-    }, [])
+    }, [reload])
 
     return (
         <>
             {(threadId == -1) && <h2>{title}</h2>}
             {(threadId == -1) && <h3>{description}</h3>}
+
+            {(threadId == -1) && <button onClick={(e: any) => setReload(true)}>Reload</button>}
 
             {
                 (context?.id != '' && threadId == -1) && <CreateThreadLogic
@@ -64,8 +68,8 @@ function ForumPage({
                                     threadId={thread.threadId}
                                     title={thread.title}
                                     content={thread.content}
-                                    user_id={thread.user_id}
-                                    forum_id={thread.forum_id}
+                                    accountId={thread.accountId}
+                                    forumId={thread.forumId}
                                 />
                             }
                         </div>

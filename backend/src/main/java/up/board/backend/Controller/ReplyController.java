@@ -64,7 +64,7 @@ public class ReplyController {
 
     // Check reply exists if replying to reply
     if (reply.getReplyToId() != null) {
-      var existingReply = replyService.getReplyById(reply.getReplyId());
+      var existingReply = replyService.getReplyById(reply.getReplyToId());
       if (existingReply == null) {
         return ResponseEntity.status(409).header("server-error", "Parent reply does not exist").body(null);
       }

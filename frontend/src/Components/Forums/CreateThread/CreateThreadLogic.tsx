@@ -2,7 +2,7 @@ import { FormEvent, useContext, useState } from "react"
 import { Forum } from "../Forums";
 import CreateThreadInput from "./CreateThreadInput";
 import axios from "axios";
-import { AccountContext } from "../../../Context/AccountContext";
+import { useAccount } from "../../../Context/useAccount";
 
 function CreateThreadLogic({
     forumId,
@@ -10,7 +10,7 @@ function CreateThreadLogic({
     description,
     type}: Forum
 ) {
-    const context = useContext(AccountContext);
+    const { id: contextId, jwt: contextJwt } = useAccount();
 
     const [threadTitle, setThreadTitle] = useState("");
     const [threadContent, setThreadContent] = useState("");
@@ -21,13 +21,13 @@ function CreateThreadLogic({
             .post('http://localhost:8080/thread/post', {
                 title: threadTitle,
                 content: threadContent,
-                user_id: context?.id,
-                forum_id: forumId
+                accountId: contextId,
+                forumId: forumId
             }, {
-                headers: {"authorization" : `Bearer ${context?.jwt}`}
+                headers: {"Authorization" : `${contextJwt}`}
             })
             .then((Response) => console.log(Response.data))
-            .catch((Response) => console.error(Response.data));
+            .catch((error) => console.error(error));
     }
 
     return (

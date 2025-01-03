@@ -1,33 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { Reply } from "./ThreadPage";
+import { useAccount } from "../../../Context/useAccount";
 import CreateReplyLogic from "./CreateReply/CreateReplyLogic";
-import { AccountContext } from "../../../Context/AccountContext";
 
 function ReplyComment({
-    id,
-    thread_id,
-    reply_id,
-    user_id,
+    replyId,
+    threadId,
+    replyToId,
+    accountId,
     content}: Reply
 ) {    
-    const context = useContext(AccountContext);
+    const { id: contextId } = useAccount();
 
     const [isVisible, setIsVisible] = useState(false);
-
-    useEffect(() => {
-        if (reply_id != null) {
-            const parentReply = document.getElementById((reply_id).toString());
-            const childReply = document.createElement("div");
-
-            childReply.id = id.toString();
-            if (context?.id != '') {
-                childReply.innerHTML = content + createReply();
-            } else {
-                childReply.innerHTML = content;
-            }
-            parentReply?.appendChild(childReply);
-        }
-    }, [])
 
     function createReply() {
         return (
@@ -37,12 +22,12 @@ function ReplyComment({
                 {isVisible &&
                     <div>
                         <CreateReplyLogic
-                            reply_id={reply_id}
-                            id={thread_id}
+                            threadId={threadId}
                             title={"null"}
                             content={"null"}
-                            user_id={user_id}
-                            forum_id={0}
+                            accountId={accountId}
+                            forumId={0}
+                            replyToId={replyId}
                         />
                     </div>
                 }
@@ -50,14 +35,32 @@ function ReplyComment({
         )
     }
 
+    function appendChild() {
+        const parentReply = document.getElementById(`${replyToId}`)!;
+        const childReply = document.getElementById(`${replyId}`)!;
+        parentReply?.appendChild(childReply);
+        
+        return (<></>)
+    }
+
     return (
         <>
-            {(reply_id != null) ? (
-                <></>
+            {(replyToId != null) ? (
+                <>
+                    <div className="replyToReply" id={`${replyId}`}>
+                        <div className="reply">
+                            {content}
+                            {(contextId != '') && createReply()}
+                        </div>
+                    </div>
+                    {appendChild()}
+                </>
             ) : (
-                <div id={(id).toString()}>
-                    {content}
-                    {(context?.id != '') && createReply()}
+                <div className="rootReply" id={`${replyId}`}>
+                    <div className="reply">
+                        {content}
+                        {(contextId != '') && createReply()}
+                    </div>
                 </div>
             )}
         </>
