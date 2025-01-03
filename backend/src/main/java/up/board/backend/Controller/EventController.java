@@ -31,18 +31,18 @@ public class EventController {
 
   private static final Logger logger = LoggerFactory.getLogger(EventController.class);
 
-  @Autowired
   EventService eventService;
 
-  @Autowired
   JwtUtil jwtUtil;
 
-  @Autowired
   AccountService accountService;
-  
-  // public EventController(EventService eventService) {
-  //   this.jwtUtil = jwtUtil;
-  // }
+
+  public EventController(EventService eventService, AccountService accountService, JwtUtil jwtUtil) {
+    this.eventService = eventService;
+    this.accountService = accountService;
+
+    this.jwtUtil = jwtUtil;
+  }
 
   /// Endpoints
   @GetMapping("/")
@@ -62,8 +62,8 @@ public class EventController {
   }
 
   @PostMapping("/")
-  public ResponseEntity<Event> postEvent(@RequestHeader("Authorization") String bearerToken, 
-  @RequestBody Event event) {
+  public ResponseEntity<Event> postEvent(@RequestHeader("Authorization") String bearerToken,
+      @RequestBody Event event) {
 
     // Input sanitization
     var title = event.getTitle();
@@ -73,9 +73,12 @@ public class EventController {
 
     // Validate the 'time' parameter
     try {
-        dateTime = event.getDateMeet();
+      dateTime = event.getDateMeet();
     } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("server-error", "Invalid Date syntax").body(null);
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("server-error", "Invalid Date syntax").body(null);
+    }
+    if(dateTime == null){
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("server-error", "Missing date meet").body(null);
     }
 
     // Return error if title or content is empty

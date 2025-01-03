@@ -19,30 +19,26 @@ public class GameService {
     this.gameRepository = gameRepository;
   }
 
-  
-  public Game Register(Game game) {
+  public Game register(Game game) {
     return gameRepository.save(game);
   }
 
-  public List<String> returnIfNotPersisted(List<String> gameIds){
+  public List<String> returnIfNotPersisted(List<String> gameIds) {
     List<String> idNotFound = new ArrayList<>();
     Game testGame;
-    for(int i = 0; i<gameIds.size(); i++){
-        testGame = gameRepository.findGameByBggId(Integer.parseInt(gameIds.get(i)));
-        if(testGame == null) // if you did NOT find the id, then add it to the list of games you did not find the id for
-            idNotFound.add(gameIds.get(i));
+    for (int i = 0; i < gameIds.size(); i++) {
+      testGame = gameRepository.findGameByBggId(Integer.parseInt(gameIds.get(i)));
+      if (testGame == null) // if you did NOT find the id, then add it to the list of games you did not find the id for
+        idNotFound.add(gameIds.get(i));
     }
     return idNotFound;
   }
 
-  public Game findOneGame(Game game){
-    if(gameRepository.findGameByBggId(game.getBggId())!=null)
-      return gameRepository.findGameByBggId((game.getBggId()));
-    else
-      return null;
+  public Game findOneGame(Game game) {
+    return gameRepository.findGameByBggId(game.getBggId());
   }
 
-  public List<Game> findAllGames(){
+  public List<Game> findAllGames() {
     return gameRepository.findGamesByGameIdNotNull();
   }
 
