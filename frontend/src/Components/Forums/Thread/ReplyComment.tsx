@@ -48,7 +48,7 @@ function ReplyComment({
             {(replyToId != null) ? (
                 <>
                     <div className="replyToReply" id={`${replyId}`}>
-                        <div>
+                        <div className="reply">
                             {content}
                             {(contextId != '') && createReply()}
                         </div>
@@ -57,7 +57,7 @@ function ReplyComment({
                 </>
             ) : (
                 <div className="rootReply" id={`${replyId}`}>
-                    <div>
+                    <div className="reply">
                         {content}
                         {(contextId != '') && createReply()}
                     </div>
