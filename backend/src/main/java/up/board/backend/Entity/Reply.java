@@ -9,7 +9,7 @@ import lombok.*;
 public class Reply {
 
   // Field values
-  @Column(name = "reply_id")
+  @Column
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   int replyId;
@@ -17,14 +17,20 @@ public class Reply {
   @Column
   String content;
 
-  @JoinColumn(name = "thread_id")
+  @JoinColumn
   int threadId;
 
-  @JoinColumn(name = "reply_to_id", nullable = true)
+  @JoinColumn(nullable = true)
   Integer replyToId;
 
-  @JoinColumn(name = "account_id")
+  @JoinColumn
   int accountId;
+
+  @Transient
+  String accountName;
+
+  @Column
+  boolean isDeleted;
 
   // Constructor
   public Reply() {

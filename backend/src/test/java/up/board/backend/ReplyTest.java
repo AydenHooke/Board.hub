@@ -6,6 +6,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,21 +66,30 @@ class ReplyTest {
 
     var threadId = 1;
 
-    var reply0 = new Reply();
-    reply0.setAccountId(1);
-    reply0.setThreadId(1);
-    reply0.setContent("Test description");
+    var nativeMap = new ArrayList<Map<String, Object>>();
 
-    var reply1 = new Reply();
-    reply1.setAccountId(2);
-    reply1.setThreadId(1);
-    reply1.setContent("Test description");
+    var reply0_native = new HashMap<String, Object>();
+    reply0_native.put("account_id", 1);
+    reply0_native.put("username", "test_user_0");
+    reply0_native.put("content", "Test content 0");
+    reply0_native.put("is_deleted", false);
+    reply0_native.put("reply_id", 1);
+    reply0_native.put("reply_to_id", null);
+    reply0_native.put("thread_id", threadId);
 
-    var replies = new ArrayList<Reply>();
-    replies.add(reply0);
-    replies.add(reply1);
+    var reply1_native = new HashMap<String, Object>();
+    reply1_native.put("account_id", 2);
+    reply1_native.put("username", "test_user_1");
+    reply1_native.put("content", "Test content 1");
+    reply1_native.put("is_deleted", false);
+    reply1_native.put("reply_id", 1);
+    reply1_native.put("reply_to_id", null);
+    reply1_native.put("thread_id", threadId);
 
-    when(replyRepository.getReplyByThreadId(any(Integer.class))).thenReturn(replies);
+    nativeMap.add(reply0_native);
+    nativeMap.add(reply1_native);
+
+    when(replyRepository.getReplyByThreadId(any(Integer.class))).thenReturn(nativeMap);
 
     //
     var response = replyController.getReplies(threadId);

@@ -6,6 +6,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,25 +56,30 @@ class ThreadTest {
 
     var forumId = 1;
 
-    var thread0 = new Thread();
-    thread0.setThreadId(1);
-    thread0.setForumId(forumId);
-    thread0.setAccountId(1);
-    thread0.setContent("Test thread content");
-    thread0.setTitle("Test thread title");
+    var nativeMap = new ArrayList<Map<String, Object>>();
 
-    var thread1 = new Thread();
-    thread1.setThreadId(2);
-    thread1.setForumId(forumId);
-    thread1.setAccountId(2);
-    thread1.setContent("Test thread content");
-    thread1.setTitle("Test thread title");
+    var thread0_native = new HashMap<String, Object>();
+    thread0_native.put("account_id", 1);
+    thread0_native.put("username", "test_user_0");
+    thread0_native.put("content", "Test content 0");
+    thread0_native.put("is_deleted", false);
+    thread0_native.put("forum_id", forumId);
+    thread0_native.put("thread_id", 1);
+    thread0_native.put("title", "Test title 0");
 
-    var threads = new ArrayList<Thread>();
-    threads.add(thread0);
-    threads.add(thread1);
+    var thread1_native = new HashMap<String, Object>();
+    thread1_native.put("account_id", 2);
+    thread1_native.put("username", "test_user_1");
+    thread1_native.put("content", "Test content 1");
+    thread1_native.put("is_deleted", false);
+    thread1_native.put("forum_id", forumId);
+    thread1_native.put("thread_id", 2);
+    thread1_native.put("title", "Test title 1");
 
-    when(threadRepository.getThreadsByForumId(any(Integer.class))).thenReturn(threads);
+    nativeMap.add(thread0_native);
+    nativeMap.add(thread1_native);
+
+    when(threadRepository.getThreadsByForumId(any(Integer.class))).thenReturn(nativeMap);
 
     //
     var response = threadController.getThreads(forumId);

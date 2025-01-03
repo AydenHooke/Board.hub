@@ -9,7 +9,7 @@ import lombok.*;
 public class Thread {
 
   // Field values
-  @Column(name = "thread_id")
+  @Column
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   int threadId;
@@ -20,11 +20,17 @@ public class Thread {
   @Column
   String content;
 
-  @JoinColumn(name = "account_id")
+  @JoinColumn
   int accountId;
 
-  @JoinColumn(name = "forum_id")
+  @Transient
+  String accountName;
+
+  @JoinColumn
   int forumId;
+
+  @Column
+  boolean isDeleted;
 
   // Constructor
   public Thread() {
