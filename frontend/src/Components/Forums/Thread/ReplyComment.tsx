@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { renderToString } from "react-dom/server";
+import { useState } from "react";
 import { Reply } from "./ThreadPage";
 import { useAccount } from "../../../Context/useAccount";
 import CreateReplyLogic from "./CreateReply/CreateReplyLogic";
@@ -14,21 +13,6 @@ function ReplyComment({
     const { id: contextId } = useAccount();
 
     const [isVisible, setIsVisible] = useState(false);
-
-    useEffect(() => {
-        console.log("test");
-        if (replyToId != null) {
-            const parentReply = document.getElementById((replyToId).toString());
-            const childReply = document.createElement("div");
-            const staticElement = renderToString(createReply());
-            
-            if (contextId != '') childReply.innerHTML = content + staticElement;
-            else childReply.innerHTML = content;
-
-            childReply.id = replyId + "";
-            parentReply?.appendChild(childReply);
-        }  
-    }, [])
 
     function createReply() {
         return (
@@ -51,14 +35,32 @@ function ReplyComment({
         )
     }
 
+    function appendChild() {
+        const parentReply = document.getElementById(`${replyToId}`)!;
+        const childReply = document.getElementById(`${replyId}`)!;
+        parentReply?.appendChild(childReply);
+        
+        return (<></>)
+    }
+
     return (
         <>
             {(replyToId != null) ? (
-                <></>
+                <>
+                    <div className="replyToReply" id={`${replyId}`}>
+                        <div>
+                            {content}
+                            {(contextId != '') && createReply()}
+                        </div>
+                    </div>
+                    {appendChild()}
+                </>
             ) : (
-                <div id={(replyId).toString()}>
-                    {content}
-                    {(contextId != '') && createReply()}
+                <div className="rootReply" id={`${replyId}`}>
+                    <div>
+                        {content}
+                        {(contextId != '') && createReply()}
+                    </div>
                 </div>
             )}
         </>
