@@ -91,14 +91,14 @@ public class ReplyController {
     return ResponseEntity.ok().body(reply);
   }
 
-  @DeleteMapping("/")
+  @DeleteMapping("/{id}")
   public ResponseEntity<Boolean> deleteReply(@RequestHeader("Authorization") String bearerToken,
-      @RequestBody Reply reply) {
+      @PathVariable Integer replyId) {
 
-    // Check user exists
-    var existingAccount = accountService.findById(reply.getAccountId());
-    if (existingAccount == null) {
-      return ResponseEntity.status(409).header("server-error", "Account does not exist").body(false);
+    // Get existing thread
+    var reply = replyService.getReplyById(replyId);
+    if (reply == null) {
+      return ResponseEntity.status(409).header("server-error", "Reply does not exist").body(false);
     }
 
     // Validate JWT
@@ -106,11 +106,18 @@ public class ReplyController {
       return ResponseEntity.status(409).header("server-error", "Missing JTW").body(false);
     }
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
-    if (!tokenUsername.equals(existingAccount.getUsername())) {
+
+    // Check user exists
+    var existingAccount = accountService.findByUsername(tokenUsername);
+    if (existingAccount == null) {
+      return ResponseEntity.status(409).header("server-error", "Account does not exist").body(false);
+    }
+
+    if (reply.getAccountId() != existingAccount.getAccountId()) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(false);
     }
 
-    //
+    // Return threads for forum
     replyService.deleteReply(reply);
     return ResponseEntity.ok().body(true);
   }
