@@ -10,6 +10,7 @@ export type Reply = {
     threadId: number,
     replyToId: number | null,
     accountId: number,
+    username: string,
     content: string
 }
 
@@ -18,6 +19,7 @@ function ThreadPage({
     title,
     content,
     accountId,
+    username,
     forumId}: Thread
 ) {
     const { id: contextId } = useAccount();
@@ -36,12 +38,14 @@ function ThreadPage({
     return (
         <>
             <h2>{title}</h2>
-            <h3>{content}</h3>
+            <h3>Posted by: {username}</h3>
+            <h4>{content}</h4>
+
 
             <button onClick={(e: any) => setReload(true)}>Reload</button>
 
             <div>
-                { (contextId != '') && 
+                { (contextId != '') &&
                     <CreateReplyLogic
                         threadId={threadId}
                         title={title}
@@ -61,6 +65,7 @@ function ThreadPage({
                             threadId={reply.threadId}
                             replyToId={reply.replyToId}
                             accountId={reply.accountId}
+                            username={reply.username}
                             content={reply.content}
                         />
                     </>
