@@ -11,18 +11,38 @@ function EventListLogic() {
     const {id : contextId} = useAccount();
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/event/unadded/${contextId}`, {
-            params: {
-                type: eventType
-            }
-        })
-        .then(response => {
-            console.log(response.data);
-            setEvents(response.data);
-        })
-        .catch(error => {
-            console.log(error);
-        });
+
+        // Call filetered events when logged in
+        if(contextId){
+            axios.get(`http://localhost:8080/event/unadded/${contextId}`, {
+                params: {
+                    type: eventType
+                }
+            })
+            .then(response => {
+                console.log(response.data);
+                setEvents(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        }
+
+        // Call all events when not logged in
+        else{
+            axios.get(`http://localhost:8080/event/`, {
+                params: {
+                    type: eventType
+                }
+            })
+            .then(response => {
+                console.log(response.data);
+                setEvents(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        }
     }, [eventType]);
 
 

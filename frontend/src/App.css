@@ -1,3 +1,12 @@
+:root{
+    --primary-color: #C9E3FF;
+}
+
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
 .right-links{
     display: flex;
     justify-content: space-between;
@@ -18,18 +27,106 @@
     cursor: pointer;
 }
 
-.sign-form{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.navbar{
+    padding: 0%;
+}
 
-    border: 1px solid black;
+.container-fluid{
+    background-color: var(--primary-color);
+    padding: 0%;
+}
+
+
+
+
+.sign-up-img-form{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    height: 80vh;
+
+}
+
+.sign-up-img-form > *{
+    margin: 5%;
+}
+
+#signup-image {
+    height: 40%;
+    transform: rotate(-22deg);
+}
+
+.sign-form{
+    
+
+    border: 3px solid black;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 50%;
-    height: 50%;
+    /* width: 50%;
+    height: 50%; */
     padding: 20px;
+
+    border-radius: 10px;
+}
+
+.greeting{
+    position: absolute;
+    left: 30%;
+    top: 15%;
+}
+
+.nav-heading{
+    font-size: 2rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    margin: 0;
+}
+
+.default-button{
+    background-color: var(--primary-color);
+    color: rgb(0, 0, 0);
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#profile-form{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#profile-heading{
+    position: absolute;
+    left: 43%;
+    top: 15%;
+    /* transform: translate(-50%, -50%); */
+}
+
+.profile-field{
+    display: flex;
+    justify-content: center;
+    
+}
+
+.profile-field-input{
+    margin-left: 20px;
+}
+
+#profile-button{
+    position: relative;
+    margin-top: 5%;
+    width: 50%;
+    left: 25%;
 }

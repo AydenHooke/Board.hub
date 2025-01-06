@@ -18,40 +18,39 @@ function ProfileInput({
   return (
     <>
      
-        <h1>Your Profile</h1>
+        <h1 id='profile-heading'>Edit Profile</h1>
 
         <section className='profile-section'>
-          <form className="profile-form" onSubmit={handleProfileEdit}>
-                  <h2>Edit Profile</h2>
-                  <label>
-                    Email
-                      <input required type="email" placeholder="Change Email" value={email} onChange={
+          <form id="profile-form" onSubmit={handleProfileEdit}>
+                  <label className='profile-field'>
+                      <b>Email:</b>
+                      <input required type="email" className="profile-field-input" placeholder="Change Email" value={email} onChange={
                           (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)
                       }></input>
                   </label>
                   <br/>
-                  <label>
-                      Username
-                      <input required type="text" placeholder="Enter Username" value={username} onChange={
+                  <label className="profile-field">
+                      <b>Username:</b>
+                      <input required type="text" className="profile-field-input" placeholder="Enter Username" value={username} onChange={
                           (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)
                       }></input>
                   </label>
                   <br/>
-                  <label>
-                      Bgg Username
-                      <input required type="text" placeholder="Enter BGG Username" value={bggUsername} onChange={
+                  <label className='profile-field'>
+                      <b>BGG Username:</b>
+                      <input required type="text" className="profile-field-input" placeholder="Enter BGG Username" value={bggUsername} onChange={
                           (e: React.ChangeEvent<HTMLInputElement>) => setBggUsername(e.target.value)
                       }></input>
                   </label>
                   <br/>
-                  <label>
-                      Password
-                      <input required type="password" placeholder="Enter Password" value={password} onChange={
+                  <label className="profile-field">
+                      <b>Password:</b>
+                      <input required type="password" className="profile-field-input" placeholder="Enter Password" value={password} onChange={
                           (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)
                       }></input>
                   </label>
                   <br />
-                  <button type="submit">Save Changes</button>
+                  <button className="default-button" id="profile-button" type="submit">Save Changes</button>
           </form>
         </section>
     </>

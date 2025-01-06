@@ -10,7 +10,7 @@ function NavBar() {
         <div className="container-fluid">
           <p className="navbar-brand">
             <Link className="nav-link" to="/">
-              Board.up
+              <h1 className="nav-heading">Board.up</h1>
             </Link>
           </p>
           <button

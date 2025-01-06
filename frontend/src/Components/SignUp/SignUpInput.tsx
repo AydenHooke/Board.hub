@@ -15,30 +15,34 @@ function SignUpInput({
 ) {
     return (
         <>
-            <form className="sign-form" onSubmit={handleSubmit}>
-                <h2>Sign Up</h2>
-                <label>
-                    <input required type="email" placeholder="Enter Email" value={email} onChange={
-                        (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)
-                    }></input>
-                </label>
-                <br/>
-                <label>
-                    <input required type="text" placeholder="Enter Username" value={username} onChange={
-                        (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)
-                    }></input>
-                </label>
-                <br/>
-                <label>
-                    <input required type="password" placeholder="Enter Password" value={password} onChange={
-                        (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)
-                    }></input>
-                </label>
-                <br/>
-                <button type="submit">Sign Up</button>
-                <br/>
-                <Link to="/SignIn">Go to Sign in page.</Link>
-            </form>
+            <h2 className="greeting">Rate and Talk About Board Games Today!</h2>
+            <div className={"sign-up-img-form"}>
+                <img id="signup-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQi45fo3as8o56D64P3dES6enhP_M2OwKF0IKybc6f29OFVSqGnwH7qGUI&s" alt="Chess Board Icon" />
+                <form className="sign-form" onSubmit={handleSubmit}>
+                    <h2>Sign Up</h2>
+                    <label>
+                        <input required type="email" placeholder="Enter Email" value={email} onChange={
+                            (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)
+                        }></input>
+                    </label>
+                    <br/>
+                    <label>
+                        <input required type="text" placeholder="Enter Username" value={username} onChange={
+                            (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)
+                        }></input>
+                    </label>
+                    <br/>
+                    <label>
+                        <input required type="password" placeholder="Enter Password" value={password} onChange={
+                            (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)
+                        }></input>
+                    </label>
+                    <br/>
+                    <button className="default-button" type="submit">Sign Up</button>
+                    <br/>
+                    <Link to="/SignIn">Go to Sign in page.</Link>
+                </form>
+            </div>
         </>
     )
 }
