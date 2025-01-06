@@ -29,13 +29,13 @@ function NavBar() {
               {username == '' && (
                 <>
                   <li className="nav-item">
-                    <Link className="nav-link" to="/SignUp">
-                      Sign Up
+                    <Link className="nav-link" to="/SignIn">
+                      Sign In
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link className="nav-link" to="/SignIn">
-                      Sign In
+                    <Link className="nav-link" to="/SignUp">
+                      Sign Up
                     </Link>
                   </li>
                 </>
@@ -55,11 +55,13 @@ function NavBar() {
                   Forums
                 </Link>
               </li>
+              {username && (
               <li>
                 <Link className="nav-link" to="/profile">
                   Profile
                 </Link>
               </li>
+              )}
             </ul>
           </div>
         </div>
