@@ -12,6 +12,7 @@ function SignInLogic() {
             setEmail: setContextEmail,
             setId: setContextId,
             setJwt: setContextJwt,
+            setBggUsername: setContextBggUsername
     } = useAccount();
     const navigate = useNavigate();
 
@@ -33,6 +34,7 @@ function SignInLogic() {
                 setContextUsername(response.data.username);
                 setContextEmail(response.data.email);
                 setContextId(response.data.accountId);
+                setContextBggUsername(response.data.bggAccount);
                 navigate("/games")
             })
             .catch((error) => console.error('Error posting data, ', error));
