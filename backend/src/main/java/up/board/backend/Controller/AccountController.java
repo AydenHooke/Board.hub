@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import up.board.backend.Entity.Account;
+import up.board.backend.Kafka.KafkaProducerService;
 import up.board.backend.Service.AccountService;
 import up.board.backend.Utils.EmailValidator;
 import up.board.backend.Utils.JwtUtil;
@@ -74,8 +75,13 @@ public class AccountController {
     return ResponseEntity.ok().header("Authorization", token).body(accountNew);
   }
 
+  @Autowired
+  private KafkaProducerService producerService;
+
   @PostMapping("/login")
   public ResponseEntity<Account> login(@RequestBody Account account) {
+
+    producerService.sendMessage("test", "testLogin");
 
     // Input sanitize
     var username = account.getUsername();
