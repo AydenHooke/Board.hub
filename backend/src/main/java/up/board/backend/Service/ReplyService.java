@@ -40,4 +40,13 @@ public class ReplyService {
     return replyList;
   }
 
+  public Reply deleteReply(Reply reply) {
+    var foundReply = getReplyById(reply.getReplyId());
+    if (foundReply == null)
+      return null;
+
+    foundReply.setDeleted(true);
+    return replyRepository.save(foundReply);
+  }
+
 }

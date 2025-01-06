@@ -3,8 +3,6 @@ package up.board.backend.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import up.board.backend.Entity.Thread;
@@ -12,8 +10,6 @@ import up.board.backend.Repository.ThreadRepository;
 
 @Service
 public class ThreadService {
-
-  private static final Logger logger = LoggerFactory.getLogger(ThreadService.class);
 
   ThreadRepository threadRepository;
 
@@ -33,13 +29,22 @@ public class ThreadService {
     var threadDTOs = threadRepository.getThreadsByForumId(forumId);
 
     var threadList = new ArrayList<Thread>();
-    for(var dto : threadDTOs){
+    for (var dto : threadDTOs) {
       var thread = dto.getThread();
       thread.setUsername(dto.getUsername());
       threadList.add(thread);
     }
 
     return threadList;
+  }
+
+  public Thread deleteThread(Thread thread) {
+    var foundThread = getThreadById(thread.getThreadId());
+    if (foundThread == null)
+      return null;
+
+    foundThread.setDeleted(true);
+    return threadRepository.save(foundThread);
   }
 
 }

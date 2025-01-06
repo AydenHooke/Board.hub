@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -70,5 +71,31 @@ public class ThreadController {
     // Return threads for forum
     threadService.create(thread);
     return ResponseEntity.ok().body(thread);
+  }
+
+  @DeleteMapping("/")
+  public ResponseEntity<Boolean> deleteThread(@RequestHeader("Authorization") String bearerToken,
+      @RequestBody Thread thread) {
+
+    // Input sanitization
+
+    // Check user exists
+    var existingAccount = accountService.findById(thread.getAccountId());
+    if (existingAccount == null) {
+      return ResponseEntity.status(409).header("server-error", "Account does not exist").body(false);
+    }
+
+    // Validate JWT
+    if (bearerToken == null) {
+      return ResponseEntity.status(409).header("server-error", "Missing JTW").body(false);
+    }
+    var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
+    if (!tokenUsername.equals(existingAccount.getUsername())) {
+      return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(false);
+    }
+
+    // Return threads for forum
+    threadService.deleteThread(thread);
+    return ResponseEntity.ok().body(true);
   }
 }
