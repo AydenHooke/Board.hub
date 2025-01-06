@@ -9,7 +9,8 @@ function DeleteReply({
     replyToId,
     accountId,
     username,
-    content}: Reply
+    content,
+    deleted}: Reply
 ) {
     const { jwt: contextJwt } = useAccount();
 

@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Forum } from "./Forums";
 import ThreadPage from "./Thread/ThreadPage";
 import CreateThreadLogic from "./CreateThread/CreateThreadLogic";
-import { AccountContext } from "../../Context/AccountContext";
+import DeleteThread from "./Delete/DeleteThread";
+import { useAccount } from "../../Context/useAccount";
 
 export type Thread = {
     threadId: number,
@@ -20,7 +21,7 @@ function ForumPage({
     description,
     type}: Forum
 ) {
-    const context = useContext(AccountContext);
+    const { id: contextId } = useAccount();
 
     const [data, setData] = useState<Thread[]>([]);
     const [threadId, setThreadId] = useState(-1);
@@ -42,7 +43,7 @@ function ForumPage({
             {(threadId == -1) && <button onClick={(e: any) => setReload(true)}>Reload</button>}
 
             {
-                (context?.id != '' && threadId == -1) && <CreateThreadLogic
+                (contextId != '' && threadId == -1) && <CreateThreadLogic
                     forumId={forumId}
                     title={title}
                     description={description}
@@ -62,6 +63,18 @@ function ForumPage({
                                 <button onClick={
                                     (e: any) => setThreadId(thread.threadId)
                                 }>{thread.title}</button>
+                            }
+
+                            {
+                                ((contextId == `${thread.accountId}`) && (threadId == -1)) && 
+                                <DeleteThread 
+                                    threadId={thread.threadId}
+                                    title={""}
+                                    content={""}
+                                    accountId={0}
+                                    username={""}
+                                    forumId={0}
+                                />
                             }
 
                             {

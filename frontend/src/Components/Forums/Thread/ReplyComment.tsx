@@ -10,7 +10,8 @@ function ReplyComment({
     replyToId,
     accountId,
     username,
-    content}: Reply
+    content,
+    deleted}: Reply
 ) {
     const { id: contextId } = useAccount();
 
@@ -51,6 +52,7 @@ function ReplyComment({
                         accountId={0}
                         username={""}
                         content={""}
+                        deleted={deleted}
                     />
                 }
             </>
@@ -74,7 +76,7 @@ function ReplyComment({
                             <h6>Posted by: {username}</h6>
 
                             {content}
-                            {Delete()}
+                            {(!deleted) && Delete()}
                             {(contextId != '') && createReply()}
                         </div>
                     </div>
@@ -86,7 +88,7 @@ function ReplyComment({
                         <h6>Posted by: {username}</h6>
 
                         {content}
-                        {Delete()}
+                        {(!deleted) && Delete()}
                         {(contextId != '') && createReply()}
                     </div>
                 </div>
