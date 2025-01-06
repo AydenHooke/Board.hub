@@ -16,7 +16,6 @@ function ReplyComment({
     const { id: contextId } = useAccount();
 
     const [isVisible, setIsVisible] = useState(false);
-    const [isVisible2, setIsVisible2] = useState(true);
 
     function createReply() {
         return (

@@ -1,4 +1,3 @@
-
 type CreateReplyInputProps = {
     replyContent: string, setReplyContent: React.Dispatch<React.SetStateAction<string>>,
     handleSubmit: any

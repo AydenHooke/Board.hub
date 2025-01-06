@@ -1,4 +1,4 @@
-import { FormEvent, useContext, useState } from "react"
+import { FormEvent, useState } from "react"
 import { Forum } from "../Forums";
 import CreateThreadInput from "./CreateThreadInput";
 import axios from "axios";
