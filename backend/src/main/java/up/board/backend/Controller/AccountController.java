@@ -2,7 +2,9 @@ package up.board.backend.Controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -129,10 +131,12 @@ public class AccountController {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
 
-    /*/ Check if bggAccount is valid
-    if (bggAccount == null || bggAccount.length() == 0) {
-      return ResponseEntity.status(409).body(null);
-    }*/
+    /*
+     * / Check if bggAccount is valid
+     * if (bggAccount == null || bggAccount.length() == 0) {
+     * return ResponseEntity.status(409).body(null);
+     * }
+     */
 
     // Check if email is valid
     if (!EmailValidator.isValid(newEmail)) {
@@ -169,27 +173,31 @@ public class AccountController {
     return ResponseEntity.ok().header("Authorization", token).body(existingAccount);
   }
 
-  /*@PostMapping("/authTest")
-  public ResponseEntity<String> authTest(@RequestHeader("Authorization") String bearerToken,
-      @RequestBody Account account) {
-
-    // Input sanitize
-    var username = account.getUsername();
-    if (username == null) {
-      return ResponseEntity.status(409).body("Missing username");
-    }
-    if (bearerToken == null) {
-      return ResponseEntity.status(409).body("Missing JWT");
-    }
-
-    // Validate JWT
-    var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
-    if (!tokenUsername.equals(username)) {
-      return ResponseEntity.status(401).body("Invalid JWT");
-    }
-
-    // Return ok
-    return ResponseEntity.ok().body("Yup");
-  }*/
+  /*
+   * @PostMapping("/authTest")
+   * public ResponseEntity<String> authTest(@RequestHeader("Authorization") String
+   * bearerToken,
+   *
+   * @RequestBody Account account) {
+   *
+   * // Input sanitize
+   * var username = account.getUsername();
+   * if (username == null) {
+   * return ResponseEntity.status(409).body("Missing username");
+   * }
+   * if (bearerToken == null) {
+   * return ResponseEntity.status(409).body("Missing JWT");
+   * }
+   *
+   * // Validate JWT
+   * var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
+   * if (!tokenUsername.equals(username)) {
+   * return ResponseEntity.status(401).body("Invalid JWT");
+   * }
+   *
+   * // Return ok
+   * return ResponseEntity.ok().body("Yup");
+   * }
+   */
 
 }
