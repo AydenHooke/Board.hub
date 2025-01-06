@@ -1,3 +1,4 @@
+import { useAccount } from '../../Context/useAccount';
 import { Event } from '../../Types/Event';
 
 
@@ -8,6 +9,8 @@ interface EventListInputProps {
 }
 
 function EventListInput({eventType, events, handleAddEvent}: EventListInputProps) {
+  const {id : contextId} = useAccount();
+
   return (
     <>
       <div>EventListInput {eventType}</div>
@@ -18,7 +21,7 @@ function EventListInput({eventType, events, handleAddEvent}: EventListInputProps
             <p>Account ID: {event.accountId}</p>
             <p>Description: {event.content}</p>
             <p>Status: {event.status}</p>
-            <button onClick={() => handleAddEvent(event)}>Add Event</button>
+            {contextId && (<button onClick={() => handleAddEvent(event)}>Add Event</button>)}
           </li>
         ))}
       </ul>

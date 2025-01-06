@@ -13,6 +13,10 @@ function EventLogic() {
   const [myTournaments, setMyTournaments] = useState([]);
 
   useEffect(() => {
+    if(!contextId){
+      navigate('/list?type=MEETING');
+    };
+
     async function fetchData() {
       try {
         const response1 = await axios.get(`http://localhost:8080/event/account/${contextId}`, {

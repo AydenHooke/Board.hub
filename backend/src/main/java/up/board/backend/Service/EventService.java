@@ -34,6 +34,19 @@ public class EventService {
       var event = dto.getEvent();
       event.setUsername(dto.getUsername());
       eventList.add(event);
+  }
+
+    return eventList;
+  }
+
+  public List<Event> getAllByAccountId(Integer accountId) {
+    var eventDTOs = eventRepository.findAllByAccountIdPlusUsername(accountId);
+
+    var eventList = new ArrayList<Event>();
+    for (var dto : eventDTOs) {
+      var event = dto.getEvent();
+      event.setUsername(dto.getUsername());
+      eventList.add(event);
     }
 
     return eventList;

@@ -7,5 +7,7 @@ export interface Event{
     gameId: number | null,
     status: string | null,
     title: string | null,
-    type: string | null  
+    type: string | null,
+    username: string | null 
 }
+
