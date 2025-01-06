@@ -15,6 +15,7 @@ function ReplyComment({
     const { id: contextId } = useAccount();
 
     const [isVisible, setIsVisible] = useState(false);
+    const [isVisible2, setIsVisible2] = useState(true);
 
     function createReply() {
         return (
@@ -40,6 +41,7 @@ function ReplyComment({
     function Delete() {
         return (
             <>
+                <br/>
                 {
                     (contextId == `${accountId}`) && 
                     <DeleteReply 
@@ -59,13 +61,13 @@ function ReplyComment({
         const parentReply = document.getElementById(`${replyToId}`)!;
         const childReply = document.getElementById(`${replyId}`)!;
         parentReply?.appendChild(childReply);
-
+        
         return (<></>)
     }
 
     return (
         <>
-            {((replyToId != null) && (document.getElementById(`${replyToId}`) != null)) ? (
+            {(replyToId != null) ? (
                 <>
                     <div className="replyToReply" id={`${replyId}`}>
                         <div className="reply">

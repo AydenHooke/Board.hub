@@ -27,21 +27,12 @@ function DeleteThread({
         setIsVisable2(false);
     }
 
-    function confirmDelete() {
-        setIsVisable(true);
-
-        return (
-            <>
-                {(isVisable) && <p>Are you sure you want to Delete:</p>}
-                {(isVisable) && <button onClick={DeleteSubmit}>Confirm</button>}
-                {(isVisable) && <button onClick={() => setIsVisable(false)}>Cancel</button>}
-            </>
-        )
-    }
-
     return (
         <>
-            {((!isVisable) && (isVisable2)) && <button onClick={confirmDelete}>Delete Thread?</button>}
+            {((!isVisable) && (isVisable2)) && <button onClick={() => setIsVisable(true)}>Delete Thread?</button>}
+            {(isVisable) && <p>Are you sure you want to Delete:</p>}
+            {(isVisable) && <button onClick={DeleteSubmit}>Confirm</button>}
+            {(isVisable) && <button onClick={() => setIsVisable(false)}>Cancel</button>}
         </>
     )
 }
