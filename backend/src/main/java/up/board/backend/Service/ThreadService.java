@@ -32,7 +32,9 @@ public class ThreadService {
     for (var dto : threadDTOs) {
       var thread = dto.getThread();
       thread.setUsername(dto.getUsername());
-      threadList.add(thread);
+
+      if (!thread.isDeleted())
+        threadList.add(thread);
     }
 
     return threadList;

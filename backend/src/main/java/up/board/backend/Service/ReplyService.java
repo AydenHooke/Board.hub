@@ -34,7 +34,9 @@ public class ReplyService {
     for (var dto : replyDTOs) {
       var reply = dto.getReply();
       reply.setUsername(dto.getUsername());
-      replyList.add(reply);
+
+      if (!reply.isDeleted())
+        replyList.add(reply);
     }
 
     return replyList;
