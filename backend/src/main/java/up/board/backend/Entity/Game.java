@@ -29,6 +29,9 @@ public class Game {
   @Column
   Float price;
 
+  @Column
+  int rating;
+
   
 
   // Constructor
