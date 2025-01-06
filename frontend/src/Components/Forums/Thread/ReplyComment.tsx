@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Reply } from "./ThreadPage";
 import { useAccount } from "../../../Context/useAccount";
 import CreateReplyLogic from "./CreateReply/CreateReplyLogic";
+import DeleteReply from "../Delete/DeleteReply";
 
 function ReplyComment({
     replyId,
@@ -36,6 +37,24 @@ function ReplyComment({
         )
     }
 
+    function Delete() {
+        return (
+            <>
+                {
+                    (contextId == `${accountId}`) && 
+                    <DeleteReply 
+                        replyId={replyId}
+                        threadId={0}
+                        replyToId={0}
+                        accountId={0}
+                        username={""}
+                        content={""}
+                    />
+                }
+            </>
+        )
+    }
+
     function appendChild() {
         const parentReply = document.getElementById(`${replyToId}`)!;
         const childReply = document.getElementById(`${replyId}`)!;
@@ -46,13 +65,14 @@ function ReplyComment({
 
     return (
         <>
-            {(replyToId != null) ? (
+            {((replyToId != null) && (document.getElementById(`${replyToId}`) != null)) ? (
                 <>
                     <div className="replyToReply" id={`${replyId}`}>
                         <div className="reply">
                             <h6>Posted by: {username}</h6>
 
                             {content}
+                            {Delete()}
                             {(contextId != '') && createReply()}
                         </div>
                     </div>
@@ -64,6 +84,7 @@ function ReplyComment({
                         <h6>Posted by: {username}</h6>
 
                         {content}
+                        {Delete()}
                         {(contextId != '') && createReply()}
                     </div>
                 </div>

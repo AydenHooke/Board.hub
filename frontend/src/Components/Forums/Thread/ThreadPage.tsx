@@ -4,6 +4,7 @@ import axios from "axios";
 import ReplyComment from "./ReplyComment";
 import CreateReplyLogic from "./CreateReply/CreateReplyLogic";
 import { useAccount } from "../../../Context/useAccount";
+import DeleteThread from "../Delete/DeleteThread";
 
 export type Reply = {
     replyId: number,
@@ -41,6 +42,17 @@ function ThreadPage({
             <h3>Posted by: {username}</h3>
             <h4>{content}</h4>
 
+            {
+                (contextId == `${accountId}`) && 
+                <DeleteThread 
+                    threadId={threadId}
+                    title={""}
+                    content={""}
+                    accountId={0}
+                    username={""}
+                    forumId={0}
+                />
+            }
 
             <button onClick={(e: any) => setReload(true)}>Reload</button>
 
