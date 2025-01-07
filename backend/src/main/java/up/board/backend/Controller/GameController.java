@@ -178,5 +178,9 @@ public class GameController {
         .body(allOwnedGames);
   }
 
-  
+  @GetMapping("/getAllGames")
+  public ResponseEntity<?> getAllGames(){
+    return ResponseEntity.status(HttpStatus.OK)
+      .body(gameService.findAllGames());
+  }
 }
