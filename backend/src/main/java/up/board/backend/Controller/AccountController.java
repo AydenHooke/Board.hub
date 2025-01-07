@@ -1,10 +1,12 @@
 package up.board.backend.Controller;
 
+import org.apache.catalina.connector.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -15,6 +17,12 @@ import up.board.backend.Entity.Account;
 import up.board.backend.Service.AccountService;
 import up.board.backend.Utils.EmailValidator;
 import up.board.backend.Utils.JwtUtil;
+import up.board.backend.Enum.Account.Role;
+
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/account")
@@ -59,6 +67,9 @@ public class AccountController {
     if (existingAccount != null) {
       return ResponseEntity.status(409).header("server-error", "Username taken").body(null);
     }
+
+    // Set Default Role
+    account.setRole(Role.USER);
 
     // Encode password
     var passwordHash = accountService.getPasswordHash(password);
@@ -168,6 +179,24 @@ public class AccountController {
     existingAccount.setPasswordHash(null);
     return ResponseEntity.ok().header("Authorization", token).body(existingAccount);
   }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<Account> getMethodName(@PathVariable Integer id) {
+    var account = accountService.findById(id);
+
+    if (account == null) {
+      return ResponseEntity.status(404).body(null);
+    }
+
+    // Strip account
+    account.setPasswordHash(null);
+    account.setEmail(null);
+    account.setAddress(null);
+
+    
+    return ResponseEntity.ok().body(account);
+  }
+  
 
   /*@PostMapping("/authTest")
   public ResponseEntity<String> authTest(@RequestHeader("Authorization") String bearerToken,

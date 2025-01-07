@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import up.board.backend.Enum.Account.Role;
+
 @Entity
 @Table
 @Data
@@ -34,7 +36,8 @@ public class Account {
   String bggAccount;
 
   @Column
-  String role;
+  @Enumerated(EnumType.STRING)
+  Role role;
 
   @ManyToMany
   @JoinTable(
