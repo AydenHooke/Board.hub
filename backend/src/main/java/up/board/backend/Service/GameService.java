@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import up.board.backend.Entity.Game;
+import up.board.backend.Entity.GameCollection;
+import up.board.backend.Repository.GameCollectionRepository;
 import up.board.backend.Repository.GameRepository;
 
 @Service
@@ -14,9 +16,11 @@ import up.board.backend.Repository.GameRepository;
 public class GameService {
 
   GameRepository gameRepository;
+  GameCollectionRepository gameCollectionRepository;
 
-  public GameService(GameRepository gameRepository) {
+  public GameService(GameRepository gameRepository, GameCollectionRepository gameCollectionRepository) {
     this.gameRepository = gameRepository;
+    this.gameCollectionRepository = gameCollectionRepository;
   }
 
   public Game register(Game game) {
@@ -55,8 +59,18 @@ public class GameService {
       return null;
   }
 
-  public List<Game> findAllGames() {
+  public List<Game> findAllGames(){
     return gameRepository.findGamesByGameIdNotNull();
   }
 
+  public List<Game> findWhoCollectedWhatGames(int accountId){
+    List<GameCollection> accountGameCollections = gameCollectionRepository.findGameCollectionsByAccountId(accountId);
+    List<Game> collectedGames = new ArrayList<>();
+    if(accountGameCollections != null)
+      for(GameCollection gameCollection: accountGameCollections)
+        collectedGames.add(gameRepository.findGameByGameId(gameCollection.getGameId()));
+      
+        
+    return collectedGames;
+  }
 }

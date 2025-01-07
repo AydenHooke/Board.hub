@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useAccount } from '../../Context/useAccount';
+import GameCollectionsLogic from './GameCollections/GameCollectionsLogic';
 
 function GameLogic() {
   const {id, jwt : contextJwt, bggUsername} = useAccount();
@@ -104,7 +105,7 @@ function GameLogic() {
     }
 
     async function rectifyGameCollection(ids: any) {
-      let collectionResults = await axios.post(`http://18.224.45.201:8080/game/validateGamePersistenceAndCollect?id=${id}`, ids, {headers: {Authorization: `${contextJwt}`}})
+      let collectionResults = await axios.post(`http://localhost:8080/game/validateGamePersistenceAndCollect?id=${id}`, ids, {headers: {Authorization: `${contextJwt}`}})
       let collectionData = collectionResults.data;
         if(collectionResults.status == 200)
           return collectionData;
@@ -135,7 +136,7 @@ function GameLogic() {
     console.log(allGames);
     //console.log(allGames)
       async function logTheGames() {
-        await axios.post(`http://18.224.45.201:8080/game/persistAndCollectManyGames?id=${id}`,allGames, {headers: {Authorization: `${contextJwt}`}})
+        await axios.post(`http://localhost:8080/game/persistAndCollectManyGames?id=${id}`,allGames, {headers: {Authorization: `${contextJwt}`}})
       }
       logTheGames();
     console.log("All games have been created (hopefully)")
@@ -146,6 +147,7 @@ function GameLogic() {
         <button onClick={handleGetGameCollection}>
             Get Game Collection From BGG
         </button>
+        <GameCollectionsLogic/>
     </>
   )
 }

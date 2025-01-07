@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -122,7 +123,7 @@ public class GameController {
     else
       logger.error("No game type was specified");
       return ResponseEntity.status(HttpStatus.CONFLICT)
-        .build();
+          .build();
   }
 
   @PostMapping("/persistAndCollectManyGames")
@@ -154,4 +155,28 @@ public class GameController {
       return ResponseEntity.status(HttpStatus.CREATED) //could later change status here instead of created
           .build();
   }
+
+  @GetMapping("/getGamesByAccount")
+  public ResponseEntity<?> getGamesByAccount(@RequestHeader("Authorization") String bearerToken, int accountId) {
+    if (bearerToken == null) {
+      return ResponseEntity.status(409).header("server-error", "Missing JTW").body(null);
+    }
+      //check if account exists
+    var existingAccount = accountService.findById(accountId);
+    if (existingAccount == null) {
+      return ResponseEntity.status(409).header("server-error", "Account does not exist").body(null);
+    }
+
+      //check the JWT and the user
+    var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
+    if (!tokenUsername.equals(existingAccount.getUsername())) {
+      return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
+    }
+  
+    List<Game> allOwnedGames = gameService.findWhoCollectedWhatGames(accountId);
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(allOwnedGames);
+  }
+
+  
 }
