@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import GameCollectionsDisplay from "./GameCollectionsDisplay"
+import axios from "axios";
+import { useAccount } from "../../../Context/useAccount";
 
 export type game = {
     gameId: number;
@@ -12,10 +14,17 @@ export type game = {
 }
 
 function GameCollectionsLogic() {
+    const { id: contextId, jwt: contextJwt } = useAccount();
+
     const [data, setData] = useState<game[]>([]);
 
     useEffect(() => {
-        
+        axios
+            .get(`http://localhost:8080/game?accountId=${contextId}`, {
+                headers: {"Authorization" : `${contextJwt}`}
+            })
+            .then((Response) => setData(Response.data))
+            .catch((error) => console.error(error));
     }, [])
 
     return (
