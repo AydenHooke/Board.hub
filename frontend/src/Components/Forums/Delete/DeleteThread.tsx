@@ -1,40 +1,42 @@
 import axios from "axios";
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { useAccount } from "../../../Context/useAccount";
-import { Thread } from "../ForumPage";
+import { ReloadForumContext, Thread } from "../ForumPage";
 
 function DeleteThread({
-    threadId,
-    title,
-    content,
-    accountId,
-    username,
-    forumId}: Thread
+  threadId,
+  title,
+  content,
+  accountId,
+  username,
+  forumId }: Thread
 ) {
-    const { jwt: contextJwt } = useAccount();
+  const { jwt: contextJwt } = useAccount();
 
-    const [isVisable, setIsVisable] = useState(false);
-    const [isVisable2, setIsVisable2] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible2, setIsVisible2] = useState(true);
 
-    function DeleteSubmit() {
-        axios
-            .delete(`http://localhost:8080/thread/${threadId}`, {
-                headers: {"Authorization" : `${contextJwt}`}
-            })
-            .then((Response) => console.log(Response.data))
-            .catch((error) => console.error(error));
-        setIsVisable(false);
-        setIsVisable2(false);
-    }
+  const reloadForumContext = useContext(ReloadForumContext);
 
-    return (
-        <>
-            {((!isVisable) && (isVisable2)) && <button onClick={() => setIsVisable(true)}>Delete Thread?</button>}
-            {(isVisable) && <p>Are you sure you want to Delete:</p>}
-            {(isVisable) && <button onClick={DeleteSubmit}>Confirm</button>}
-            {(isVisable) && <button onClick={() => setIsVisable(false)}>Cancel</button>}
-        </>
-    )
+  function DeleteSubmit() {
+    axios
+      .delete(`http://localhost:8080/thread/${threadId}`, {
+        headers: { "Authorization": `${contextJwt}` }
+      })
+      .then((Response) => { console.log(Response.data); reloadForumContext(); })
+      .catch((error) => console.error(error));
+    setIsVisible(false);
+    setIsVisible2(false);
+  }
+
+  return (
+    <>
+      {((!isVisible) && (isVisible2)) && <button onClick={() => setIsVisible(true)}>Delete Thread?</button>}
+      {(isVisible) && <p>Are you sure you want to Delete:</p>}
+      {(isVisible) && <button onClick={DeleteSubmit}>Confirm</button>}
+      {(isVisible) && <button onClick={() => setIsVisible(false)}>Cancel</button>}
+    </>
+  )
 }
 
 export default DeleteThread

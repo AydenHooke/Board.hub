@@ -55,48 +55,48 @@ function ForumPage({
             type={type}
           />
         }
+
+        {(threadId == -1) && (<br />)}
+        {(threadId == -1) && (<br />)}
+
+        {data.map((thread) => {
+          return (
+            <>
+              <div key={thread.threadId}>
+                {
+                  (threadId == -1) &&
+                  <button onClick={
+                    (e: any) => setThreadId(thread.threadId)
+                  }>{thread.title}</button>
+                }
+
+                {
+                  ((contextId == `${thread.accountId}`) && (threadId == -1)) &&
+                  <DeleteThread
+                    threadId={thread.threadId}
+                    title={""}
+                    content={""}
+                    accountId={0}
+                    username={""}
+                    forumId={0}
+                  />
+                }
+
+                {
+                  (threadId == thread.threadId) && <ThreadPage
+                    threadId={thread.threadId}
+                    title={thread.title}
+                    content={thread.content}
+                    accountId={thread.accountId}
+                    username={thread.username}
+                    forumId={thread.forumId}
+                  />
+                }
+              </div>
+            </>
+          )
+        })}
       </ReloadForumContext.Provider>
-
-      {(threadId == -1) && (<br />)}
-      {(threadId == -1) && (<br />)}
-
-      {data.map((thread) => {
-        return (
-          <>
-            <div key={thread.threadId}>
-              {
-                (threadId == -1) &&
-                <button onClick={
-                  (e: any) => setThreadId(thread.threadId)
-                }>{thread.title}</button>
-              }
-
-              {
-                ((contextId == `${thread.accountId}`) && (threadId == -1)) &&
-                <DeleteThread
-                  threadId={thread.threadId}
-                  title={""}
-                  content={""}
-                  accountId={0}
-                  username={""}
-                  forumId={0}
-                />
-              }
-
-              {
-                (threadId == thread.threadId) && <ThreadPage
-                  threadId={thread.threadId}
-                  title={thread.title}
-                  content={thread.content}
-                  accountId={thread.accountId}
-                  username={thread.username}
-                  forumId={thread.forumId}
-                />
-              }
-            </div>
-          </>
-        )
-      })}
     </>
   )
 }
