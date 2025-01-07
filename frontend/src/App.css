@@ -223,6 +223,25 @@ body {
     
 }
 
+.games-list-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    min-width: 80%;
+    grid-gap: 20px;
+    padding: 20px;
+}
+
+.game-tile{
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    border: 2px solid black;
+    border-radius: 6px;
+    width: fit-content;
+    margin: 2%;
+    background-color: var(--primary-color);
+}
+
 .circle {
     border-radius: 50%;
     width: 150px;

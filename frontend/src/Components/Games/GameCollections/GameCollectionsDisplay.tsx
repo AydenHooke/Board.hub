@@ -8,11 +8,11 @@ function GameCollectionsDisplay({
     data}: gameProps
 ) {
     return (
-        <ul>
+        <ul className="games-list-grid">
             {data.map((game) => {
                 return (
-                    <li>
-                        
+                    <li key={game.gameId} className="game-tile">
+                        <img src={game.gameImageUrl} alt={game.title}/>
                     </li>
                 )
             })}
