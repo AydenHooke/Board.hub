@@ -44,6 +44,8 @@ function ForumPage({
       {(threadId == -1) && <h2>{title}</h2>}
       {(threadId == -1) && <h3>{description}</h3>}
 
+      {(threadId == -1) && <button onClick={reloadForum}>Reload Forums</button>}
+
       <ReloadForumContext.Provider value={reloadForum}>
         {
           (contextId != '' && threadId == -1) && <CreateThreadLogic
