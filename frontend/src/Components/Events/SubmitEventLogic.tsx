@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import SubmitEventInput from './SubmitEventInput';
 import axios from 'axios';
 import { FormEvent, useState } from 'react';
@@ -12,6 +12,7 @@ function SubmitEventLogic() {
   const [content, setContent] = useState('');
   const [time, setTime] = useState('');
   const { id, jwt : contextJwt } = useAccount();
+  const navigate = useNavigate();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -36,9 +37,12 @@ function SubmitEventLogic() {
     }).then((response) => {
       console.log(response.data);
       console.log("Event Added");
+      navigate('/events');
     }).catch((error) => {
       console.log(error);
     });
+
+    
   }
 
   return (

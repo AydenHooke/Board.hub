@@ -13,6 +13,8 @@ function EventLogic() {
   const [myTournaments, setMyTournaments] = useState([]);
 
   useEffect(() => {
+
+    //Navigate to read-only if user didn't log in
     if(!contextId){
       navigate('/list?type=MEETING');
     };
@@ -62,7 +64,7 @@ function EventLogic() {
           setMyMeetings(myMeetings.filter((meeting: Event) => meeting.eventId !== event.eventId));
         }
         else if(type === "TOURNAMENT"){
-          setMyMeetings(myTournaments.filter((tournament: Event) => tournament.eventId !== event.eventId));
+          setMyTournaments(myTournaments.filter((tournament: Event) => tournament.eventId !== event.eventId));
         }
       } catch (error) {
         console.error(error);

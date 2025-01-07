@@ -29,6 +29,7 @@ function EventListInput({eventType, events, handleAddEvent}: EventListInputProps
           </li>
         ))}
       </ul>
+      {!events.length && <h2 className='heading-center'>No Events Found</h2>}
     </>
   )
 }
