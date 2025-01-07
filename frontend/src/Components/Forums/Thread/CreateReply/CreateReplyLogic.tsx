@@ -1,7 +1,8 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import axios from "axios";
 import CreateReplyInput from "./CreateReplyInput";
 import { useAccount } from "../../../../Context/useAccount";
+import { ReloadThreadContext } from "../ThreadPage";
 
 type threadReply = {
     threadId: number,
@@ -24,6 +25,8 @@ function CreateReplyLogic({
 
     const [replyContent, setReplyContent] = useState("");
 
+    const reloadThreadContext = useContext(ReloadThreadContext);
+
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
         axios
@@ -35,7 +38,7 @@ function CreateReplyLogic({
             }, {
                 headers: {"authorization" : `${contextJwt}`}
             })
-            .then((Response) => console.log(Response.data))
+            .then((Response) => {console.log(Response.data); reloadThreadContext(); })
             .catch((error) => console.error(error));
     }
 
