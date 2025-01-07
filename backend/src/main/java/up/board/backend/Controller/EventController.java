@@ -62,7 +62,7 @@ public class EventController {
 
   /// Endpoints
   @GetMapping("/unadded/{accountId}")
-  public ResponseEntity<List<Event>> getUnAddedEvents(@PathVariable Integer accountId) {
+  public ResponseEntity<List<Event>> getUnAddedEvents(@PathVariable Integer accountId, @RequestParam Type type) {
     var existingAccount = accountService.findById(accountId);
 
     if (existingAccount == null) {
@@ -73,7 +73,7 @@ public class EventController {
     var events = eventService.getAll();
 
     // Filter out events that are already added
-    events.removeIf(event -> existingAccount.getEvents().contains(event));
+    events.removeIf(event -> existingAccount.getEvents().contains(event) || event.getType() != type);
     
     return ResponseEntity.ok().body(events);
   }
@@ -189,7 +189,7 @@ public class EventController {
   }
 
   @DeleteMapping("/account/{accountId}/event/{eventId}")
-  public ResponseEntity<Account> deleteEventFromAccount(@PathVariable Integer accountId, @PathVariable Integer eventId) {
+  public ResponseEntity<Event> deleteEventFromAccount(@PathVariable Integer accountId, @PathVariable Integer eventId) {
     
     var existingEvent = eventService.findById(eventId);
     var existingAccount = accountService.findById(accountId);
@@ -206,9 +206,22 @@ public class EventController {
       return ResponseEntity.status(HttpStatus.CONFLICT).header("error", "Event not associated with account").body(null);
     }
 
+    // Remove the association
     existingAccount.getEvents().remove(existingEvent);
+    existingEvent.getAccounts().remove(existingAccount);
+
+    // Save both entities to update the join table
     accountService.save(existingAccount);
 
-    return ResponseEntity.ok().body(existingAccount);
+    // Delete the event if it is associated with this account
+    if(existingAccount.getAccountId() == existingEvent.getAccountId()){
+      Event deletedEvent = eventService.delete(existingEvent);
+      return ResponseEntity.ok().body(deletedEvent);
+    }
+
+    // Otherise, just save the event
+    eventService.create(existingEvent);
+
+    return ResponseEntity.ok().body(existingEvent);
   }
 }

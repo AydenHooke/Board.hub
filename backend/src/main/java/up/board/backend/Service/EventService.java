@@ -62,4 +62,9 @@ public class EventService {
     return eventRepository.findAllByType(type);
   }
 
+  public Event delete(Event event) {
+    eventRepository.delete(event);
+    return event;
+  }
+
 }

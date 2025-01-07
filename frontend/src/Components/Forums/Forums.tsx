@@ -26,14 +26,17 @@ function Forums() {
 
       {data.map((forum) => {
         return (
-          <div key={forum.forumId}>
+          <ul key={forum.forumId}>
+            <li>
             {
               (forumId == -1) &&
               <button onClick={
                 (e: any) => setForumId(forum.forumId)
               }>{forum.title}</button>
             }
+            </li>
 
+            <li>
             {
               (forumId == forum.forumId) && <ForumPage
                 forumId={forum.forumId}
@@ -42,7 +45,9 @@ function Forums() {
                 type={forum.type}
               />
             }
-          </div>
+            </li>
+            
+          </ul>
         )
       })}
     </>

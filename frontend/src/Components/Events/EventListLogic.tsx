@@ -43,7 +43,7 @@ function EventListLogic() {
                 console.log(error);
             });
         }
-    }, [eventType]);
+    }, [eventType, contextId]);
 
 
     const handleAddEvent = (event: Event) => {
