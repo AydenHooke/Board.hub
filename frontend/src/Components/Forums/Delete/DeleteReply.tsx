@@ -14,8 +14,8 @@ function DeleteReply({
 ) {
   const { jwt: contextJwt } = useAccount();
 
-  const [isVisable, setIsVisable] = useState(false);
-  const [isVisable2, setIsVisable2] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible2, setIsVisible2] = useState(true);
 
   const reloadThreadContext = useContext(ReloadThreadContext);
 
@@ -26,16 +26,16 @@ function DeleteReply({
       })
       .then((Response) => {console.log(Response.data); reloadThreadContext();})
       .catch((error) => console.error(error));
-    setIsVisable(false);
-    setIsVisable2(false);
+    setIsVisible(false);
+    setIsVisible2(false);
   }
 
   return (
     <>
-      {((!isVisable) && (isVisable2)) && <button onClick={() => setIsVisable(true)}>Delete Reply?</button>}
-      {(isVisable) && <p>Are you sure you want to Delete:</p>}
-      {(isVisable) && <button onClick={DeleteSubmit}>Confirm</button>}
-      {(isVisable) && <button onClick={() => setIsVisable(false)}>Cancel</button>}
+      {((!isVisible) && (isVisible2)) && <button onClick={() => setIsVisible(true)}>Delete Reply?</button>}
+      {(isVisible) && <p>Are you sure you want to Delete:</p>}
+      {(isVisible) && <button onClick={DeleteSubmit}>Confirm</button>}
+      {(isVisible) && <button onClick={() => setIsVisible(false)}>Cancel</button>}
     </>
   )
 }

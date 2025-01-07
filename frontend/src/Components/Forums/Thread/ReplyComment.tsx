@@ -58,14 +58,6 @@ function ReplyComment({
     )
   }
 
-  function appendChild() {
-    const parentReply = document.getElementById(`${replyToId}`)!;
-    const childReply = document.getElementById(`${replyId}`)!;
-
-    parentReply?.appendChild(childReply);
-
-    return (<></>)
-  }
   useEffect(() => {
     const parentReply = document.getElementById(`${replyToId}`)!;
     const childReply = document.getElementById(`${replyId}`)!;
@@ -77,7 +69,7 @@ function ReplyComment({
     <>
       {(replyToId != null) ? (
         <>
-          <div className="replyToReply" id={`${replyId}`} style={{ border: 'solid black 2px', marginLeft: '5px' }}>
+          <div className="replyToReply" id={`${replyId}`} style={{ border: 'solid #C9E3FF 2px', borderLeft: 'solid #C9E3FF 6px' }}>
             <div className="reply">
               <h6>Posted by: {username}</h6>
 
@@ -88,7 +80,7 @@ function ReplyComment({
           </div>
         </>
       ) : (
-        <div className="rootReply" id={`${replyId}`} style={{ border: 'solid black 2px' }}>
+        <div className="rootReply" id={`${replyId}`} style={{ border: 'solid #C9E3FF 2px' }}>
           <div className="reply">
             <h6>Posted by: {username}</h6>
 

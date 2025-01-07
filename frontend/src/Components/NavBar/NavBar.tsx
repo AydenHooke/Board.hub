@@ -8,11 +8,11 @@ function NavBar() {
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
-          <p className="navbar-brand">
+          <div className="navbar-brand">
             <Link className="nav-link" to="/">
               <h1 className="nav-heading">Board.up</h1>
             </Link>
-          </p>
+          </div>
           <button
             className="navbar-toggler"
             type="button"

@@ -64,7 +64,7 @@ function ThreadPage({
 
         {data.map((reply) => {
           return (
-            <>
+            <div key={reply.replyId}>
               <ReplyComment
                 replyId={reply.replyId}
                 threadId={reply.threadId}
@@ -74,7 +74,7 @@ function ThreadPage({
                 content={reply.content}
                 deleted={reply.deleted}
               />
-            </>
+            </div>
           )
         })}
       </ReloadThreadContext.Provider>
