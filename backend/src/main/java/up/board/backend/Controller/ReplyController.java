@@ -91,7 +91,7 @@ public class ReplyController {
     return ResponseEntity.ok().body(reply);
   }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/{replyId}")
   public ResponseEntity<Boolean> deleteReply(@RequestHeader("Authorization") String bearerToken,
       @PathVariable Integer replyId) {
 

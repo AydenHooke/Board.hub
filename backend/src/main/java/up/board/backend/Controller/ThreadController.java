@@ -73,7 +73,7 @@ public class ThreadController {
     return ResponseEntity.ok().body(thread);
   }
 
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/{threadId}")
   public ResponseEntity<Boolean> deleteThread(@RequestHeader("Authorization") String bearerToken,
       @PathVariable Integer threadId) {
 

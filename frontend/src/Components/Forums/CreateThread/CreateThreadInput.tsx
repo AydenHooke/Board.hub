@@ -1,4 +1,3 @@
-
 type CreateThreadInputProps = {
     threadTitle: string, setThreadTitle: React.Dispatch<React.SetStateAction<string>>,
     threadContent: string, setThreadContent: React.Dispatch<React.SetStateAction<string>>,

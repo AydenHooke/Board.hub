@@ -34,8 +34,25 @@ public class GameService {
     return idNotFound;
   }
 
-  public Game findOneGame(Game game) {
-    return gameRepository.findGameByBggId(game.getBggId());
+  public Game findGameByBggId(int bggId) {
+    if(gameRepository.findGameByBggId(bggId) != null)
+      return gameRepository.findGameByBggId(bggId);
+    else
+      return null;
+  }
+
+  public Game findGameByDatabaseGameId(int gameId) {
+    if(gameRepository.findGameByBggId(gameId) != null)
+      return gameRepository.findGameByBggId(gameId);
+    else
+      return null;
+  }
+
+  public Game findGameByTitle(String gameTitle){
+    if(gameRepository.findGameByTitle(gameTitle) != null)
+      return gameRepository.findGameByTitle(gameTitle);
+    else 
+      return null;
   }
 
   public List<Game> findAllGames() {

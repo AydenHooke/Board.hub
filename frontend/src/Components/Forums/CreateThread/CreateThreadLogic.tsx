@@ -3,6 +3,7 @@ import { Forum } from "../Forums";
 import CreateThreadInput from "./CreateThreadInput";
 import axios from "axios";
 import { useAccount } from "../../../Context/useAccount";
+import { ReloadForumContext } from "../ForumPage";
 
 function CreateThreadLogic({
     forumId,
@@ -15,6 +16,8 @@ function CreateThreadLogic({
     const [threadTitle, setThreadTitle] = useState("");
     const [threadContent, setThreadContent] = useState("");
 
+    const reloadForumContext = useContext(ReloadForumContext);
+
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
         axios
@@ -26,7 +29,7 @@ function CreateThreadLogic({
             }, {
                 headers: {"Authorization" : `${contextJwt}`}
             })
-            .then((Response) => console.log(Response.data))
+            .then((Response) => {console.log(Response.data); reloadForumContext();})
             .catch((error) => console.error(error));
     }
 

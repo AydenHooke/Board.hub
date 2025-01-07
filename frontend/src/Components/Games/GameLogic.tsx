@@ -1,18 +1,22 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useAccount } from '../../Context/useAccount';
 
 function GameLogic() {
+  const {id, jwt : contextJwt, bggUsername} = useAccount();
+
   const [state, setState] = useState({
     collection: {} as any,
     unpersistedIds: {} as any,
   });
 
   useEffect(()=>{
+    console.log(bggUsername);
     if(JSON.stringify(state.collection).length > 2){//so that this doesn't run when nothing is there
       console.log("") // blank space to keep logs together
 
       let parser, xmlDoc;
-      
+  
       parser = new DOMParser();
       xmlDoc = parser.parseFromString(state.collection as string, "text/html")
 
@@ -69,11 +73,14 @@ function GameLogic() {
   }
   }, [state.unpersistedIds])
   
-
-  let username = "Drsen57"; // this later will be the user's username of course
-
+  let username = bggUsername;
+  //let username = "Drsen57"; // this later will be the user's username of course
+  //let username = "Alan How"; // this is a BGG user with over 8k games. 35 minutes to populate, use with caution
+  //let username = "Trogdor64"; // this is a buddy of Ayden's with 161 games
+  //let username = "dmonty"; // this is a buddy of Ayden's from Dice Tower with 916 games. One game throws an error for a set of 20 without known reason (maybe missing metadata from XML - likely BGG issue)
 
     async function handleGetGameCollection() {
+      if(bggUsername != null){
         let myCollection;
         myCollection = await axios.get(`https://www.boardgamegeek.com/xmlapi2/collection?username=${username}&subtype=boardgame&own=1`)
 
@@ -88,12 +95,16 @@ function GameLogic() {
         setState(()=>({
           ...state,
           collection:collectionData}));
+        }}
+        else{
+          alert("Add your BGG account information to access this feature"); // or whatever alert we end up using
         }
+
           
     }
 
     async function rectifyGameCollection(ids: any) {
-      let collectionResults = await axios.post(`http://18.224.45.201:8080/game/validateGamePersistence`,ids)
+      let collectionResults = await axios.post(`http://18.224.45.201:8080/game/validateGamePersistenceAndCollect?id=${id}`, ids, {headers: {Authorization: `${contextJwt}`}})
       let collectionData = collectionResults.data;
         if(collectionResults.status == 200)
           return collectionData;
@@ -123,10 +134,10 @@ function GameLogic() {
     console.log("Serving these games to the server:")
     console.log(allGames);
     //console.log(allGames)
-      async function makeTheGames() {
-        await axios.post(`http://18.224.45.201:8080/game/persistManyGames`,allGames)
+      async function logTheGames() {
+        await axios.post(`http://18.224.45.201:8080/game/persistAndCollectManyGames?id=${id}`,allGames, {headers: {Authorization: `${contextJwt}`}})
       }
-      makeTheGames();
+      logTheGames();
     console.log("All games have been created (hopefully)")
   }
 

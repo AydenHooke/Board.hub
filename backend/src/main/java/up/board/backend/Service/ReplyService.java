@@ -35,8 +35,10 @@ public class ReplyService {
       var reply = dto.getReply();
       reply.setUsername(dto.getUsername());
 
-      if (!reply.isDeleted())
-        replyList.add(reply);
+      if (reply.isDeleted())
+        reply.setContent("[ deleted ]");
+
+      replyList.add(reply);
     }
 
     return replyList;

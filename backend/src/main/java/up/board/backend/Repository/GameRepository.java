@@ -11,5 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface GameRepository extends JpaRepository<Game, Integer> {
 
     public Game findGameByBggId(int bggId);
+    public Game findGameByGameId(int gameId);
     public List<Game> findGamesByGameIdNotNull();
+    public Game findGameByTitle(String name);
 }
