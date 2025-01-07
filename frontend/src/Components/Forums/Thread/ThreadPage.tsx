@@ -29,7 +29,7 @@ function ThreadPage({
 
   const [data, setData] = useState<Reply[]>([]);
   const [reload, setReload] = useState(0);
-  function reloadPage() {
+  function reloadThread() {
     setReload(reload + 1);
   }
 
@@ -46,7 +46,9 @@ function ThreadPage({
       <h3>Posted by: {username}</h3>
       <h4>{content}</h4>
 
-      <ReloadThreadContext.Provider value={reloadPage}>
+      {<button onClick={reloadThread}>Reload Thread</button>}
+
+      <ReloadThreadContext.Provider value={reloadThread}>
         <div>
           {(contextId != '') &&
             <CreateReplyLogic
