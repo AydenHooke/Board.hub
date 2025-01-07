@@ -29,9 +29,7 @@ function GameCollectionsLogic() {
 
     return (
         <>
-            <GameCollectionsDisplay 
-                data={data}
-            />
+            <GameCollectionsDisplay data={data}/>
         </>
     )
 }
