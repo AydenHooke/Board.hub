@@ -20,6 +20,7 @@ function GameCollectionsDisplay({
       <ul className="games-list-grid">
         {
           data
+            .sort((game0, game1) => {return game0.title.localeCompare(game1.title); })
             .filter((game) => {return game.title.toLowerCase().includes(filterString); })
             .map((game) => {
             return (
