@@ -15,9 +15,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     public Event getEvent();
     public String getUsername();
   }
-  
-  
-  
+
   public Event findByEventId(Integer eventId);
 
   public List<Event> findAllByType(Type type);
@@ -25,6 +23,9 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
   @Query(value = "SELECT e as event, a.username AS username FROM Event e JOIN Account a ON (e.accountId = a.accountId)")
   public List<EventWithUsername> findAllPlusUsername();
 
-  @Query(value = "SELECT e as event, a.username AS username FROM Event e JOIN Account a ON (e.accountId = a.accountId) WHERE a.accountId = ?1")
-  public List<EventWithUsername> findAllByAccountIdPlusUsername(Integer accountId);
+  //@Query(value = "SELECT e as event, a.username AS username FROM Event e JOIN Account a ON (e.accountId = a.accountId) WHERE a.accountId = ?1")
+  //public List<EventWithUsername> findAllByAccountIdPlusUsername(Integer accountId);
+
+  @Query(value = "SELECT e as event, (SELECT a0.username FROM Account a0 WHERE a0.accountId = e.accountId) AS username FROM Account a JOIN a.events ae JOIN Event e ON (e.eventId = ae.eventId) WHERE a.accountId = ?1")
+  public List<EventWithUsername> findAllJoinedEventsPlusUsername(Integer accountId);
 }

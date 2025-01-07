@@ -34,16 +34,22 @@ public class EventService {
       var event = dto.getEvent();
       event.setUsername(dto.getUsername());
       eventList.add(event);
-  }
+    }
 
     return eventList;
   }
 
   public List<Event> getAllByAccountId(Integer accountId) {
-    var eventDTOs = eventRepository.findAllByAccountIdPlusUsername(accountId);
+    //var eventOwnedDTOs = eventRepository.findAllByAccountIdPlusUsername(accountId);
+    var eventJoinedDTOs = eventRepository.findAllJoinedEventsPlusUsername(accountId);
 
     var eventList = new ArrayList<Event>();
-    for (var dto : eventDTOs) {
+    /*for (var dto : eventOwnedDTOs) {
+      var event = dto.getEvent();
+      event.setUsername(dto.getUsername());
+      eventList.add(event);
+    }*/
+    for (var dto : eventJoinedDTOs) {
       var event = dto.getEvent();
       event.setUsername(dto.getUsername());
       eventList.add(event);
