@@ -158,6 +158,14 @@ body {
     display: flex;
 }
 
+.event-list-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    min-width: 80%;
+    grid-gap: 20px;
+    padding: 20px;
+}
+
 .event-content{
     display: flex;
     flex-direction: column;
@@ -197,3 +205,30 @@ body {
     height: 50%;
     align-self: center;
 }
+
+.heading-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#profile-page-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
+    
+}
+
+.circle {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 1em;
+    box-shadow: 0px 0px 15px 0px;
+    overflow: hidden;
+  }
+
