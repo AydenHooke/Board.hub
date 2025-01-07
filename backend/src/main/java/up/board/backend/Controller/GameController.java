@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import up.board.backend.Entity.Account;
 import up.board.backend.Entity.Game;
 import up.board.backend.Entity.GameCollection;
 import up.board.backend.Service.AccountService;
@@ -65,7 +64,8 @@ public class GameController {
     if (gameToCollect != null){
       gameCollectionService.LinkAccountToGame(existingAccount, gameToCollect);
       GameCollection currentCollection = gameCollectionService.LinkAccountToGame(existingAccount, gameToCollect);
-      logger.info("Account #" + currentCollection.getAccountId() + " now owns game #" + currentCollection.getGameId());
+      if (currentCollection!=null)
+        logger.info("Account #" + currentCollection.getAccountId() + " now owns game #" + currentCollection.getGameId());
   }}
 
     var gameIdsNotPersisted = gameService.returnIfNotPersisted(gameIds); // this returns a list of every ID we don't have a game for
@@ -96,8 +96,7 @@ public class GameController {
       if (testGame == null) {
         gameService.register(game);
         logger.info(game.getTitle() + "has been added to the database");
-        GameCollection currentCollection = gameCollectionService.LinkAccountToGame(existingAccount, testGame);
-        logger.info("Account #" + currentCollection.getAccountId() + " now owns game #" + currentCollection.getGameId());
+        gameCollectionService.LinkAccountToGame(existingAccount, testGame);
         return ResponseEntity.status(HttpStatus.CREATED)
             .build();
       } else {
@@ -111,8 +110,7 @@ public class GameController {
       if (testGame == null) {
         gameService.register(game);
         logger.info("Custom game persisted");
-        GameCollection currentCollection = gameCollectionService.LinkAccountToGame(existingAccount, testGame);
-        logger.info("Account #" + currentCollection.getAccountId() + " now owns game #" + currentCollection.getGameId());
+        gameCollectionService.LinkAccountToGame(existingAccount, testGame);
         return ResponseEntity.status(HttpStatus.CREATED)
             .build();
       } else {
@@ -150,10 +148,10 @@ public class GameController {
         testGame = gameService.register(games.get(i));
         logger.info(games.get(i).getTitle() + " has been added to the database");
       }
-      GameCollection currentCollection = gameCollectionService.LinkAccountToGame(existingAccount, testGame);
-      logger.info("Account #" + currentCollection.getAccountId() + " now owns game #" + currentCollection.getGameId());
+      gameCollectionService.LinkAccountToGame(existingAccount, testGame);
+
     }
-      return ResponseEntity.status(HttpStatus.CREATED)
+      return ResponseEntity.status(HttpStatus.CREATED) //could later change status here instead of created
           .build();
   }
 }

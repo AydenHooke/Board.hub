@@ -3,6 +3,8 @@ package up.board.backend.Service;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -15,6 +17,8 @@ import up.board.backend.Repository.GameRepository;
 @Service
 @Transactional
 public class GameCollectionService {
+    private static final Logger logger = LoggerFactory.getLogger(GameCollectionService.class);
+
     GameRepository gameRepository;
     GameCollectionRepository gameCollectionRepository;
 
@@ -23,16 +27,20 @@ public class GameCollectionService {
         this.gameCollectionRepository = gameCollectionRepository;
       }
 
+
     public GameCollection LinkAccountToGame(Account account, Game game) {
-        GameCollection gameCollection = new GameCollection();
         if(account != null && game != null){ // the game collection class serves as a link to connect all the games a player owns to their account in an entity - a join table
-            gameCollection.setAccountId(account.getAccountId());
-            gameCollection.setGameId(game.getGameId());
-            return gameCollectionRepository.save(gameCollection);
+            GameCollection gameCollection = gameCollectionRepository.findGameCollectionByAccountIdAndGameId(account.getAccountId(), game.getGameId());
+            if(gameCollection == null){
+                gameCollection = new GameCollection();
+                gameCollection.setAccountId(account.getAccountId());
+                gameCollection.setGameId(game.getGameId());
+                logger.info(account.getUsername() + "(Account #" + gameCollection.getAccountId() + ") now owns " + game.getTitle() + "(Internal ID #" + gameCollection.getGameId() + ")");
+                return gameCollectionRepository.save(gameCollection);
+            }
         }
-        else
-            return null;
-       
+
+        return null;
     }
 
 

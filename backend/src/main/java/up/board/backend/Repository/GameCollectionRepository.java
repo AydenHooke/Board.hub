@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GameCollectionRepository extends JpaRepository<GameCollection, Integer> {
     public List<GameCollection> findGameCollectionsByAccountId(int accountId);
+    public GameCollection findGameCollectionByAccountIdAndGameId(int accountId, int gameId);
 }
