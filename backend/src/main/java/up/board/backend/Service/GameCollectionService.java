@@ -47,4 +47,8 @@ public class GameCollectionService {
         GameCollection gameCollection = gameCollectionRepository.findGameCollectionByAccountIdAndGameId(account.getAccountId(), game.getGameId());
         return gameCollection;
     }
+
+    public void removeOwnership(Account account, Game game){
+        gameCollectionRepository.delete(gameCollectionRepository.findGameCollectionByAccountIdAndGameId(account.getAccountId(), game.getGameId()));
+    }
 }
