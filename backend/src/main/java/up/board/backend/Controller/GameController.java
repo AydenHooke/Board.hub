@@ -164,7 +164,7 @@ public class GameController {
     gameCollectionService.removeOwnership(existingAccount, testGame);
     return ResponseEntity.status(HttpStatus.OK)
       .build();
-  
+
   }
 
 
@@ -226,4 +226,5 @@ public class GameController {
     return ResponseEntity.status(HttpStatus.OK)
         .body(gameService.findAllGames());
   }
+
 }
