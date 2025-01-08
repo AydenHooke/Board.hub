@@ -31,34 +31,37 @@ function Forums() {
     <>
       {(forumId == -1) && <h2>Main Forums</h2>}
 
-      {((forumId != -1) && (threadId == -1)) && <button onClick={() => {setForumId(-1); reloadForums();}}>Back</button>}
+      {((forumId != -1) && (threadId == -1)) && <button onClick={() => { setForumId(-1); reloadForums(); }}>Back</button>}
 
       <ReloadForumsContext.Provider value={reloadForums}>
-        {data.map((forum) => {
-          return (
-            <ul key={forum.forumId}>
-              <li>
-              {
-                (forumId == -1) &&
-                <button onClick={
-                  (e: any) => setForumId(forum.forumId)
-                }>{forum.title}</button>
-              }
-              </li>
-
-              <li>
-              {
-                (forumId == forum.forumId) && <ForumPage
-                  forum={forum}
-                  threadId={threadId}
-                  setThreadId={setThreadId}
-                />
-              }
-              </li>
-              
+        {
+          // If none selected, display list of forums to select
+          forumId == -1 && (
+            <ul>
+              {data.map((forum) => {
+                return (
+                  <li key={forum.forumId}>
+                    {
+                      (forumId == -1) &&
+                      <button onClick={
+                        (e: any) => setForumId(forum.forumId)
+                      }>{forum.title}</button>
+                    }
+                  </li>
+                )
+              })}
             </ul>
           )
-        })}
+        }
+
+        {
+          // If selected, display current forum
+          forumId != -1 && <ForumPage
+            forum={data.filter((f) => f.forumId == forumId)[0]}
+            threadId={threadId}
+            setThreadId={setThreadId}
+          />
+        }
       </ReloadForumsContext.Provider>
     </>
   )
