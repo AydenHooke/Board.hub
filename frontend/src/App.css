@@ -254,6 +254,7 @@ body {
     width: 65%;
     height: 65%;
     margin: 2%;
+    padding: 5px;
     background-color: var(--primary-color);
     overflow:scroll;
     overflow-x:hidden;
@@ -261,10 +262,8 @@ body {
 }
 
 .game-blur{
-    /*
     filter: blur(8px);
     -webkit-filter: blur(8px);
-    */
 }
 
 .circle {
