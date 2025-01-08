@@ -243,12 +243,28 @@ body {
 }
 
 .game-info{
-    position: absolute;
+    position: fixed;
     border: 2px solid black;
     border-radius: 6px;
-    width: fit-content;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 65%;
+    height: 65%;
     margin: 2%;
     background-color: var(--primary-color);
+    overflow:scroll;
+    overflow-x:hidden;
+    overflow-y:auto;
+}
+
+.game-blur{
+    /*
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+    */
 }
 
 .circle {

@@ -8,18 +8,19 @@ type gameProps = {
 
 function GameCollectionsDisplay({data }: gameProps) {
   const [filterString, setFilterString] = useState("");
+  const [gameClass, setGameClass] = useState("");
   const [checkToggle, setCheckToggle] = useState(false);
   const [gameId, setGameId] = useState(-1);
 
   return (
     <>
-      <span>Game filter: </span><input onInput={(e)=>{
-        setFilterString(e.currentTarget.value);
-      }} type="text"></input>
-
-      <div onClick={() => {
-            if (checkToggle) {setGameId(-1); setCheckToggle(!checkToggle);}
+      <div className={gameClass} onClick={() => {
+        if (checkToggle) {setGameId(-1); setCheckToggle(!checkToggle); setGameClass("");}
       }}>
+        <span>Game filter: </span><input onInput={(e)=>{
+          setFilterString(e.currentTarget.value);
+        }} type="text"></input>
+
         <ul className="games-list-grid">
           {
             data
@@ -29,9 +30,9 @@ function GameCollectionsDisplay({data }: gameProps) {
               return (
                 <li key={game.gameId} className="game-tile">
                   <img src={game.gameImageUrl} alt={game.title} onClick={() => {
-                      if (!checkToggle) {setGameId(game.gameId); setCheckToggle(!checkToggle);}
+                      if (!checkToggle) {setGameId(game.gameId); setCheckToggle(!checkToggle); setGameClass("game-blur");}
                   }}/>
-                  
+
                   {(gameId == game.gameId) && <GameInfoDisplay data={game}/>}
                 </li>
               )

@@ -15,18 +15,21 @@ export type Thread = {
   forumId: number
 }
 
+type useStateProp = {
+  forum: Forum
+  threadId: number, setThreadId: React.Dispatch<React.SetStateAction<number>>
+}
+
 export const ReloadForumContext = createContext(function () { });
 
 function ForumPage({
-  forumId,
-  title,
-  description,
-  type }: Forum
+  forum,
+  threadId,
+  setThreadId}: useStateProp
 ) {
   const { id: contextId } = useAccount();
 
   const [data, setData] = useState<Thread[]>([]);
-  const [threadId, setThreadId] = useState(-1);
   const [reload, setReload] = useState(0);
   function reloadForum() {
     setReload(reload + 1);
@@ -34,25 +37,26 @@ function ForumPage({
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/thread/get/' + forumId)
+      .get('http://localhost:8080/thread/get/' + forum.forumId)
       .then((Response) => setData(Response.data))
       .catch((error) => console.error('Error getting data, ', error));
   }, [reload])
 
   return (
     <>
-      {(threadId == -1) && <h2>{title}</h2>}
-      {(threadId == -1) && <h3>{description}</h3>}
+      {(threadId == -1) && <h2>{forum.title}</h2>}
+      {(threadId == -1) && <h3>{forum.description}</h3>}
 
       {(threadId == -1) && <button onClick={reloadForum}>Reload Forums</button>}
+      {(threadId != -1) && <button onClick={() => {setThreadId(-1); reloadForum();}}>Back</button>}
 
       <ReloadForumContext.Provider value={reloadForum}>
         {
           (contextId != '' && threadId == -1) && <CreateThreadLogic
-            forumId={forumId}
-            title={title}
-            description={description}
-            type={type}
+            forumId={forum.forumId}
+            title={forum.title}
+            description={forum.description}
+            type={forum.type}
           />
         }
 
