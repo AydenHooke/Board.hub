@@ -270,4 +270,48 @@ class ReplyTest {
     verify(replyRepository).getReplyByReplyId(any(Integer.class));
   }
 
+  @Test
+  void deleteReply_nullJwt() {
+
+    var reply = new Reply();
+    reply.setAccountId(1);
+    reply.setContent("Test reply 1");
+    reply.setThreadId(1);
+
+    when(replyRepository.getReplyByReplyId(any(Integer.class))).thenReturn(reply);
+
+    //
+    var response = replyController.deleteReply(null, reply.getReplyId());
+    var responseBody = response.getBody();
+
+    assertEquals(409, response.getStatusCode().value());
+    assertEquals(false, responseBody);
+
+    verify(replyRepository).getReplyByReplyId(any(Integer.class));
+  }
+
+  @Test
+  void deleteReply_invalidAccount() {
+
+    var reply = new Reply();
+    reply.setAccountId(1);
+    reply.setContent("Test reply 1");
+    reply.setThreadId(1);
+
+    var jwt = "Bearer test.jwt.test";
+
+    when(replyRepository.getReplyByReplyId(any(Integer.class))).thenReturn(reply);
+    when(jwtUtil.validateTokenAndGetUsername(any(String.class))).thenReturn("");
+
+    //
+    var response = replyController.deleteReply(jwt, reply.getReplyId());
+    var responseBody = response.getBody();
+
+    assertEquals(409, response.getStatusCode().value());
+    assertEquals(false, responseBody);
+
+    verify(replyRepository).getReplyByReplyId(any(Integer.class));
+    verify(jwtUtil).validateTokenAndGetUsername(any(String.class));
+  }
+
 }
