@@ -27,37 +27,71 @@ function Forums() {
       .catch((error) => console.error('Error getting data, ', error));
   }, [])
 
+  var currentForum = forumId == -1 ? null : data.filter((f) => f.forumId == forumId)[0];
+
   return (
     <>
-      {(forumId == -1) && <h2>Main Forums</h2>}
 
-      {((forumId != -1) && (threadId == -1)) && <button onClick={() => { setForumId(-1); reloadForums(); }}>Back</button>}
+      <div>
+
+        <a href="#" onClick={() => {
+
+          // Return to forum selection
+          if (forumId >= -1) {
+            setForumId(-1);
+            setThreadId(-1);
+            reloadForums();
+          }
+        }}>
+          Forums
+        </a>
+
+        {currentForum != null &&
+          <a href="#" onClick={() => {
+
+            // Return to thread selection
+            if (threadId >= -1) {
+              setThreadId(-1);
+              reloadForums();
+            }
+          }}>
+           &nbsp;-&gt; {(currentForum as Forum).title}
+          </a>
+        }
+
+      </div>
 
       <ReloadForumsContext.Provider value={reloadForums}>
         {
           // If none selected, display list of forums to select
           forumId == -1 && (
-            <ul>
+            <table style={{ width: '100%' }}>
               {data.map((forum) => {
                 return (
-                  <li key={forum.forumId}>
-                    {
-                      (forumId == -1) &&
-                      <button onClick={
-                        (e: any) => setForumId(forum.forumId)
-                      }>{forum.title}</button>
-                    }
-                  </li>
+                  <tr key={forum.forumId} style={{ border: 'solid black 2px' }}>
+                    <td>
+                      {
+                        (forumId == -1) &&
+                        <a href="#" onClick={
+                          (e: any) => setForumId(forum.forumId)
+                        }>{forum.title}</a>
+                      }
+                    </td>
+
+                    <td>
+                      {forum.description}
+                    </td>
+                  </tr>
                 )
               })}
-            </ul>
+            </table>
           )
         }
 
         {
           // If selected, display current forum
           forumId != -1 && <ForumPage
-            forum={data.filter((f) => f.forumId == forumId)[0]}
+            forum={currentForum as Forum}
             threadId={threadId}
             setThreadId={setThreadId}
           />
