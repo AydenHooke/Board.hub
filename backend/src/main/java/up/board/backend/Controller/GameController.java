@@ -116,12 +116,12 @@ public class GameController {
   }
 
   @GetMapping("/checkGameOwnership")
-  public ResponseEntity<?> checkGameOwnership(@RequestHeader("Authorization") String bearerToken, @RequestBody Game game, @RequestParam int id) {
+  public ResponseEntity<?> checkGameOwnership(@RequestHeader("Authorization") String bearerToken, @RequestParam int gameId, @RequestParam int accountId) {
     if (bearerToken == null) {
       return ResponseEntity.status(409).header("server-error", "Missing JTW").body(null);
     }
       //check if account exists
-    var existingAccount = accountService.findById(id);
+    var existingAccount = accountService.findById(accountId);
     if (existingAccount == null) {
       return ResponseEntity.status(409).header("server-error", "Account does not exist").body(null);
     }
@@ -131,9 +131,9 @@ public class GameController {
     if (!tokenUsername.equals(existingAccount.getUsername())) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
-  //the var changes are not Ayden's
-
-    GameCollection checkCollection = gameCollectionService.checkOwnership(existingAccount, game);
+      //the var changes are not Ayden's
+    Game testGame = gameService.findGameByDatabaseGameId(gameId);
+    GameCollection checkCollection = gameCollectionService.checkOwnership(existingAccount, testGame);
     if(checkCollection != null)
       return ResponseEntity.status(HttpStatus.OK)
         .build();
