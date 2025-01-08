@@ -2,9 +2,11 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useAccount } from '../../Context/useAccount';
 import GameCollectionsLogic from './GameCollections/GameCollectionsLogic';
+import { useNavigate } from 'react-router-dom';
 
 function GameLogic() {
   const {id, jwt : contextJwt, bggUsername} = useAccount();
+  const navigate = useNavigate();
 
   const [state, setState] = useState({
     collection: {} as any,
@@ -147,6 +149,9 @@ function GameLogic() {
         <button onClick={handleGetGameCollection}>
             Get Game Collection From BGG
         </button>
+
+        <button onClick={() => navigate("/addGame")}>Add Game</button>
+
         <GameCollectionsLogic/>
     </>
   )
