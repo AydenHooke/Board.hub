@@ -54,11 +54,14 @@ public class GameService {
   }
 
   public List<Game> findWhoCollectedWhatGames(int accountId) {
-    var accountGameCollections = gameCollectionRepository.findGameCollectionsByAccountId(accountId);
+    /*var accountGameCollections = gameCollectionRepository.findGameCollectionsByAccountId(accountId);
     var collectedGames = new ArrayList<Game>();
     if (accountGameCollections != null)
       for (var gameCollection : accountGameCollections)
         collectedGames.add(gameRepository.findGameByGameId(gameCollection.getGameId()));
+        */
+
+    var collectedGames = gameRepository.findGamesByCollection(accountId);
 
     return collectedGames;
   }
