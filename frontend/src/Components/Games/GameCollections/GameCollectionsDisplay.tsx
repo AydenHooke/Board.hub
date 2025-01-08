@@ -40,7 +40,7 @@ function GameCollectionsDisplay({data }: gameProps) {
           }
         </ul>
       </div>
-      
+
       {data.map((game) => {
         return (
           <>

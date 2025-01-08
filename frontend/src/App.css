@@ -62,7 +62,7 @@ body {
 }
 
 .sign-form{
-    
+
 
     border: 3px solid black;
     display: flex;
@@ -120,7 +120,7 @@ body {
 .profile-field{
     display: flex;
     justify-content: center;
-    
+
 }
 
 .profile-field-input{
@@ -220,7 +220,7 @@ body {
     align-items: center;
     width: auto;
     height: auto;
-    
+
 }
 
 .games-list-grid{
@@ -240,6 +240,9 @@ body {
     width: fit-content;
     margin: 2%;
     background-color: var(--primary-color);
+}
+.game-tile:hover{
+  cursor: pointer
 }
 
 .game-info{
