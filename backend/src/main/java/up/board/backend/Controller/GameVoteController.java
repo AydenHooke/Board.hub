@@ -1,7 +1,5 @@
 package up.board.backend.Controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import up.board.backend.Entity.Game;
-import up.board.backend.Entity.GameVote;
 import up.board.backend.Service.AccountService;
 import up.board.backend.Service.GameService;
 import up.board.backend.Service.GameVoteService;
@@ -26,19 +22,16 @@ import up.board.backend.Utils.JwtUtil;
 @CrossOrigin(origins = "http://localhost:5174")
 public class GameVoteController {
 
-  private static final Logger logger = LoggerFactory.getLogger(ReplyController.class);
+  //private static final Logger logger = LoggerFactory.getLogger(GameVoteController.class);
 
   GameVoteService gameVoteService;
   AccountService accountService;
-  GameService gameService;
   JwtUtil jwtUtil;
 
   //
-  public GameVoteController(GameVoteService gameVoteService, AccountService accountService, GameService gameService,
-      JwtUtil jwtUtil) {
+  public GameVoteController(GameVoteService gameVoteService, AccountService accountService, JwtUtil jwtUtil) {
     this.gameVoteService = gameVoteService;
     this.accountService = accountService;
-    this.gameService = gameService;
     this.jwtUtil = jwtUtil;
   }
 
