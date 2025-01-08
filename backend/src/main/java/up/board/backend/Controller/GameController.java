@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -141,6 +142,31 @@ public class GameController {
       return ResponseEntity.status(HttpStatus.NO_CONTENT)
         .build();
   }
+
+  @DeleteMapping("/removeGameOwnership")
+  public ResponseEntity<?> removeGameOwnership(@RequestHeader("Authorization") String bearerToken, @RequestParam int gameId, @RequestParam int accountId) {
+    if (bearerToken == null) {
+      return ResponseEntity.status(409).header("server-error", "Missing JTW").body(null);
+    }
+      //check if account exists
+    var existingAccount = accountService.findById(accountId);
+    if (existingAccount == null) {
+      return ResponseEntity.status(409).header("server-error", "Account does not exist").body(null);
+    }
+
+      //check the JWT and the user
+    var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
+    if (!tokenUsername.equals(existingAccount.getUsername())) {
+      return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
+    }
+      //the var changes are not Ayden's
+    Game testGame = gameService.findGameByDatabaseGameId(gameId);
+    gameCollectionService.removeOwnership(existingAccount, testGame);
+    return ResponseEntity.status(HttpStatus.OK)
+      .build();
+  
+  }
+
 
   @PostMapping("/persistAndCollectManyGames")
   public ResponseEntity<?> persistAndCollectManyGames(@RequestHeader("Authorization") String bearerToken,

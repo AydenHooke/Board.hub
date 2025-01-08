@@ -42,7 +42,7 @@ public class GameService {
   }
 
   public Game findGameByDatabaseGameId(int gameId) {
-    return gameRepository.findGameByBggId(gameId);
+    return gameRepository.findGameByGameId(gameId);
   }
 
   public Game findGameByTitle(String gameTitle) {
