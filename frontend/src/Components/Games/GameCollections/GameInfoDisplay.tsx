@@ -55,22 +55,26 @@ function GameInfoDisplay({ data }: gameProps) {
     */
   }
 
-  function escapeRegExp(string: String) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-  }
-  function replaceAll(str: String, find: any, replace: any) {
-    return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
-  }
-  var desc = data.description;
-  desc = replaceAll(desc, '&amp;', '&');
-  desc = replaceAll(desc, '&#10;&#10;', ' ');
-  desc = replaceAll(desc, '&#10;', '');
-  desc = replaceAll(desc, '&quot;', '"');
-  desc = replaceAll(desc, '&rsquo;', "'");
-  desc = replaceAll(desc, '&mdash;', '-');
-  desc = replaceAll(desc, '&hellip;', '…');
-  desc = replaceAll(desc, '&nbsp;', ' ');
-  desc = replaceAll(desc, '&bull;', '•');
+  var decodeEntities = (function () {
+    // this prevents any overhead from creating the object each time
+    var element = document.createElement('div');
+
+    function decodeHTMLEntities(str : any) {
+      if (str && typeof str === 'string') {
+        // strip script/html tags
+        str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+        str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+        element.innerHTML = str;
+        str = element.textContent;
+        element.textContent = '';
+      }
+
+      return str;
+    }
+
+    return decodeHTMLEntities;
+  })();
+  var desc = decodeEntities(data.description);
 
   return (
     <div className="game-info">
