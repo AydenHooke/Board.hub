@@ -116,7 +116,7 @@ class GameTest {
   }
 
   @Test
-  void persistOneGame() {
+  void persistOrCollectOneGame() {
 
     var game = new Game();
     game.setBggId(1);
@@ -139,7 +139,7 @@ class GameTest {
     when(gameRepository.save(any(Game.class))).thenReturn(game);
 
     //
-    var response = gameController.persistOneGame("", game, "BGG", account.getAccountId());
+    var response = gameController.persistOrCollectOneGame("", game, account.getAccountId());
 
     assertEquals(HttpStatus.CREATED, response.getStatusCode());
 

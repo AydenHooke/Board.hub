@@ -65,8 +65,7 @@ public class GameController {
   for(int i = 0; i<gameIds.size(); i++){
     Game gameToCollect = gameService.findGameByBggId(Integer.valueOf(gameIds.get(i)));
     if (gameToCollect != null){
-      gameCollectionService.linkAccountToGame(existingAccount, gameToCollect);
-      GameCollection currentCollection = gameCollectionService.linkAccountToGame(existingAccount, gameToCollect);
+      var currentCollection = gameCollectionService.linkAccountToGame(existingAccount, gameToCollect);
       if (currentCollection!=null)
         logger.info("Account #" + currentCollection.getAccountId() + " now owns game #" + currentCollection.getGameId());
   }}
@@ -109,7 +108,7 @@ public class GameController {
         gameCollectionService.linkAccountToGame(existingAccount, testGame);
         return ResponseEntity.status(HttpStatus.CREATED)
             .build();
-      } 
+      }
     }
     gameCollectionService.linkAccountToGame(existingAccount, testGame);
     return ResponseEntity.status(HttpStatus.OK)
@@ -133,7 +132,7 @@ public class GameController {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
   //the var changes are not Ayden's
-    
+
     GameCollection checkCollection = gameCollectionService.checkOwnership(existingAccount, game);
     if(checkCollection != null)
       return ResponseEntity.status(HttpStatus.OK)
