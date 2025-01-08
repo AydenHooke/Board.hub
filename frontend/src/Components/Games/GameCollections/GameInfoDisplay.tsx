@@ -28,7 +28,7 @@ function GameInfoDisplay({data}: gameProps) {
 
     function handleSubmitAdd(event: any) {
       event.preventDefault();
-      
+    
       axios
           .post(`http://localhost:8080/game/persistOrCollectOneGame?id=${contextId}`, {
               gameId: data.gameId,
@@ -48,16 +48,12 @@ function GameInfoDisplay({data}: gameProps) {
     function handleSubmitRemove(event: any) {
       event.preventDefault();
       
-      /*
       axios
-          .post(`http://localhost:8080/game/persistOrCollectOneGame`, {
-
-          }, {
+          .delete(`http://localhost:8080/game/removeGameOwnership?gameId=${data.gameId}&accountId=${contextId}`, {
               headers: {"Authorization" : `${contextJwt}`}
           })
-          .then((Response) => console.log(Response))
+          .then((Response) => {console.log(Response); setStatus(-1); setChange(!change);})
           .catch((error) => console.error(error));
-      */
     }
 
     return (
