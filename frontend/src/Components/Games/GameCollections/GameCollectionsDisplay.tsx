@@ -33,13 +33,21 @@ function GameCollectionsDisplay({data }: gameProps) {
                       if (!checkToggle) {setGameId(game.gameId); setCheckToggle(!checkToggle); setGameClass("game-blur");}
                   }}/>
 
-                  {(gameId == game.gameId) && <GameInfoDisplay data={game}/>}
+
                 </li>
               )
             })
           }
         </ul>
       </div>
+      
+      {data.map((game) => {
+        return (
+          <>
+            {(gameId == game.gameId) && <GameInfoDisplay data={game}/>}
+          </>
+        )
+      })}
     </>
   )
 }
