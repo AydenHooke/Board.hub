@@ -1,7 +1,5 @@
 package up.board.backend.Controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import up.board.backend.Entity.GameVote;
 import up.board.backend.Service.AccountService;
-import up.board.backend.Service.GameService;
 import up.board.backend.Service.GameVoteService;
 import up.board.backend.Utils.JwtUtil;
 
