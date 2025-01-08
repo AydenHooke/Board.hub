@@ -34,7 +34,8 @@ public class GameController {
   GameCollectionService gameCollectionService;
   JwtUtil jwtUtil;
 
-  public GameController(AccountService accountService, GameService gameService, GameCollectionService gameCollectionService, JwtUtil jwtUtil) {
+  public GameController(AccountService accountService, GameService gameService,
+      GameCollectionService gameCollectionService, JwtUtil jwtUtil) {
     this.accountService = accountService;
     this.gameService = gameService;
     this.gameCollectionService = gameCollectionService;
@@ -42,57 +43,64 @@ public class GameController {
   }
 
   @PostMapping("/validateGamePersistenceAndCollect")
-  public ResponseEntity<List<String>> validateGamePersistenceAndCollect(@RequestHeader("Authorization") String bearerToken, @RequestBody List<String> gameIds, @RequestParam int id) {
+  public ResponseEntity<List<String>> validateGamePersistenceAndCollect(
+      @RequestHeader("Authorization") String bearerToken, @RequestBody List<String> gameIds, @RequestParam int id) {
     logger.info("Validating persistance...");
-    
+
     if (bearerToken == null) {
       return ResponseEntity.status(409).header("server-error", "Missing JTW").body(null);
     }
-      //check if account exists
+    // check if account exists
     var existingAccount = accountService.findById(id);
     if (existingAccount == null) {
       return ResponseEntity.status(409).header("server-error", "Account does not exist").body(null);
     }
 
-      //check the JWT and the user
+    // check the JWT and the user
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
     if (!tokenUsername.equals(existingAccount.getUsername())) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
-  //the var changes are not Ayden's
-  for(int i = 0; i<gameIds.size(); i++){
-    Game gameToCollect = gameService.findGameByBggId(Integer.valueOf(gameIds.get(i)));
-    if (gameToCollect != null){
-      gameCollectionService.LinkAccountToGame(existingAccount, gameToCollect);
-      GameCollection currentCollection = gameCollectionService.LinkAccountToGame(existingAccount, gameToCollect);
-      if (currentCollection!=null)
-        logger.info("Account #" + currentCollection.getAccountId() + " now owns game #" + currentCollection.getGameId());
-  }}
 
-    var gameIdsNotPersisted = gameService.returnIfNotPersisted(gameIds); // this returns a list of every ID we don't have a game for
+    // the var changes are not Ayden's
+    for (var i = 0; i < gameIds.size(); i++) {
+      var gameToCollect = gameService.findGameByBggId(Integer.valueOf(gameIds.get(i)));
+      if (gameToCollect != null) {
+        var currentCollection = gameCollectionService.LinkAccountToGame(existingAccount, gameToCollect);
+        if (currentCollection != null)
+          logger.info(
+              "Account #" + currentCollection.getAccountId() + " now owns game #" + currentCollection.getGameId());
+      }
+    }
+
+    var gameIdsNotPersisted = gameService.returnIfNotPersisted(gameIds); // this returns a list of every ID we don't
+                                                                         // have a game for
     logger.info("Returning missing games");
     return ResponseEntity.status(HttpStatus.OK)
         .body(gameIdsNotPersisted);
   }
 
   @PostMapping("/persistOneGame")
-  public ResponseEntity<?> persistOneGame(@RequestHeader("Authorization") String bearerToken, @RequestBody Game game, @RequestParam String idType, @RequestParam int id) {
+  public ResponseEntity<?> persistOneGame(@RequestHeader("Authorization") String bearerToken, @RequestBody Game game,
+      @RequestParam String idType, @RequestParam int id) {
+
     if (bearerToken == null) {
       return ResponseEntity.status(409).header("server-error", "Missing JTW").body(null);
     }
-      //check if account exists
+    // check if account exists
     var existingAccount = accountService.findById(id);
     if (existingAccount == null) {
       return ResponseEntity.status(409).header("server-error", "Account does not exist").body(null);
     }
 
-      //check the JWT and the user
+    // check the JWT and the user
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
     if (!tokenUsername.equals(existingAccount.getUsername())) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
-  //the var changes are not Ayden's
-    if(idType == "BGG"){
+
+    // the var changes are not Ayden's
+    if (idType == "BGG") {
       var testGame = gameService.findGameByBggId(game.getBggId());
       if (testGame == null) {
         gameService.register(game);
@@ -105,8 +113,7 @@ public class GameController {
         return ResponseEntity.status(HttpStatus.CONFLICT)
             .build();
       }
-    }
-    else if(idType == "custom"){
+    } else if (idType == "custom") {
       var testGame = gameService.findGameByTitle(game.getTitle());
       if (testGame == null) {
         gameService.register(game);
@@ -119,30 +126,30 @@ public class GameController {
         return ResponseEntity.status(HttpStatus.CONFLICT)
             .build();
       }
-    }
-    else
+    } else
       logger.error("No game type was specified");
-      return ResponseEntity.status(HttpStatus.CONFLICT)
-          .build();
+    return ResponseEntity.status(HttpStatus.CONFLICT)
+        .build();
   }
 
   @PostMapping("/persistAndCollectManyGames")
-  public ResponseEntity<?> persistAndCollectManyGames(@RequestHeader("Authorization") String bearerToken, @RequestBody List<Game> games, @RequestParam int id) {
+  public ResponseEntity<?> persistAndCollectManyGames(@RequestHeader("Authorization") String bearerToken,
+      @RequestBody List<Game> games, @RequestParam int id) {
     if (bearerToken == null) {
       return ResponseEntity.status(409).header("server-error", "Missing JTW").body(null);
     }
-      //check if account exists
+    // check if account exists
     var existingAccount = accountService.findById(id);
     if (existingAccount == null) {
       return ResponseEntity.status(409).header("server-error", "Account does not exist").body(null);
     }
 
-      //check the JWT and the user
+    // check the JWT and the user
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
     if (!tokenUsername.equals(existingAccount.getUsername())) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
-  //the var changes are not Ayden's
+    // the var changes are not Ayden's
     for (int i = 0; i < games.size(); i++) {
       var testGame = gameService.findGameByBggId(games.get(i).getBggId());
       if (testGame == null) { // if a game does not exist, register it and make it exist
@@ -152,8 +159,8 @@ public class GameController {
       gameCollectionService.LinkAccountToGame(existingAccount, testGame);
 
     }
-      return ResponseEntity.status(HttpStatus.CREATED) //could later change status here instead of created
-          .build();
+    return ResponseEntity.status(HttpStatus.CREATED) // could later change status here instead of created
+        .build();
   }
 
   @GetMapping("/getGamesByAccount")
@@ -161,26 +168,26 @@ public class GameController {
     if (bearerToken == null) {
       return ResponseEntity.status(409).header("server-error", "Missing JTW").body(null);
     }
-      //check if account exists
+    // check if account exists
     var existingAccount = accountService.findById(accountId);
     if (existingAccount == null) {
       return ResponseEntity.status(409).header("server-error", "Account does not exist").body(null);
     }
 
-      //check the JWT and the user
+    // check the JWT and the user
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
     if (!tokenUsername.equals(existingAccount.getUsername())) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
-  
+
     List<Game> allOwnedGames = gameService.findWhoCollectedWhatGames(accountId);
     return ResponseEntity.status(HttpStatus.OK)
         .body(allOwnedGames);
   }
 
   @GetMapping("/getAllGames")
-  public ResponseEntity<?> getAllGames(){
+  public ResponseEntity<?> getAllGames() {
     return ResponseEntity.status(HttpStatus.OK)
-      .body(gameService.findAllGames());
+        .body(gameService.findAllGames());
   }
 }

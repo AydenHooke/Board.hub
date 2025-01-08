@@ -17,33 +17,29 @@ import up.board.backend.Repository.GameRepository;
 @Service
 @Transactional
 public class GameCollectionService {
-    private static final Logger logger = LoggerFactory.getLogger(GameCollectionService.class);
+  private static final Logger logger = LoggerFactory.getLogger(GameCollectionService.class);
 
-    GameRepository gameRepository;
-    GameCollectionRepository gameCollectionRepository;
+  GameRepository gameRepository;
+  GameCollectionRepository gameCollectionRepository;
 
-    public GameCollectionService(GameRepository gameRepository, GameCollectionRepository gameCollectionRepository) {
-        this.gameRepository = gameRepository;
-        this.gameCollectionRepository = gameCollectionRepository;
+  public GameCollectionService(GameRepository gameRepository, GameCollectionRepository gameCollectionRepository) {
+    this.gameRepository = gameRepository;
+    this.gameCollectionRepository = gameCollectionRepository;
+  }
+
+  public GameCollection LinkAccountToGame(Account account, Game game) {
+    if (account != null && game != null) { // the game collection class serves as a link to connect all the games a player owns to their account in an entity - a join table
+      var gameCollection = gameCollectionRepository.findGameCollectionByAccountIdAndGameId(account.getAccountId(), game.getGameId());
+      if (gameCollection == null) {
+        gameCollection = new GameCollection();
+        gameCollection.setAccountId(account.getAccountId());
+        gameCollection.setGameId(game.getGameId());
+        logger.info(account.getUsername() + "(Account #" + gameCollection.getAccountId() + ") now owns " + game.getTitle() + "(Internal ID #" + gameCollection.getGameId() + ")");
+        return gameCollectionRepository.save(gameCollection);
       }
-
-
-    public GameCollection LinkAccountToGame(Account account, Game game) {
-        if(account != null && game != null){ // the game collection class serves as a link to connect all the games a player owns to their account in an entity - a join table
-            GameCollection gameCollection = gameCollectionRepository.findGameCollectionByAccountIdAndGameId(account.getAccountId(), game.getGameId());
-            if(gameCollection == null){
-                gameCollection = new GameCollection();
-                gameCollection.setAccountId(account.getAccountId());
-                gameCollection.setGameId(game.getGameId());
-                logger.info(account.getUsername() + "(Account #" + gameCollection.getAccountId() + ") now owns " + game.getTitle() + "(Internal ID #" + gameCollection.getGameId() + ")");
-                return gameCollectionRepository.save(gameCollection);
-            }
-        }
-
-        return null;
     }
 
-
-
+    return null;
+  }
 
 }

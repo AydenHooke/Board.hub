@@ -17,10 +17,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
 import up.board.backend.Controller.GameController;
+import up.board.backend.Entity.Account;
 import up.board.backend.Entity.Game;
+import up.board.backend.Entity.GameCollection;
 import up.board.backend.Repository.AccountRepository;
+import up.board.backend.Repository.GameCollectionRepository;
 import up.board.backend.Repository.GameRepository;
 import up.board.backend.Service.AccountService;
+import up.board.backend.Service.GameCollectionService;
 import up.board.backend.Service.GameService;
 import up.board.backend.Utils.JwtUtil;
 
@@ -43,15 +47,21 @@ class GameTest {
   @InjectMocks
   private AccountService accountService;
 
+  @Mock
+  private GameCollectionRepository gameCollectionRepository;
+
+  @InjectMocks
+  private GameCollectionService gameCollectionService;
+
   private GameController gameController;
 
   @BeforeEach
   void setup() {
-    this.gameController = new GameController(gameService);
+    this.gameController = new GameController(accountService, gameService, gameCollectionService, jwtUtil);
   }
 
   @Test
-  void validateGamePersistance() {
+  void validateGamePersistenceAndCollect() {
 
     var game0 = new Game();
     game0.setGameId(1);
@@ -75,18 +85,34 @@ class GameTest {
     gameIds.add(games.get(0).getGameId() + "");
     gameIds.add(games.get(1).getGameId() + "");
 
+    var account = new Account();
+    account.setAccountId(1);
+    account.setUsername("test_user");
+
+    var gameCollection = new GameCollection();
+    gameCollection.setAccountId(account.getAccountId());
+    gameCollection.setGameId(game0.getGameId());
+
+    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(account);
+    when(jwtUtil.validateTokenAndGetUsername(any(String.class))).thenReturn(account.getUsername());
     when(gameRepository.findGameByBggId(games.get(0).getGameId())).thenReturn(games.get(0));
+    when(gameCollectionRepository.findGameCollectionByAccountIdAndGameId(any(Integer.class), any(Integer.class))).thenReturn(null);
+    when(gameCollectionRepository.save(any(GameCollection.class))).thenReturn(gameCollection);
     when(gameRepository.findGameByBggId(games.get(1).getGameId())).thenReturn(null);
 
     //
-    var response = gameController.validateGamePersistence(gameIds);
+    var response = gameController.validateGamePersistenceAndCollect("", gameIds, account.getAccountId());
     var responseGames = response.getBody();
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertEquals(1, responseGames.size());
     assertEquals(gameIds.get(1), responseGames.get(0));
 
-    verify(gameRepository, times(2)).findGameByBggId(any(Integer.class));
+    verify(accountRepository).findByAccountId(any(Integer.class));
+    verify(jwtUtil).validateTokenAndGetUsername(any(String.class));
+    verify(gameCollectionRepository).findGameCollectionByAccountIdAndGameId(any(Integer.class), any(Integer.class));
+    verify(gameCollectionRepository).save(any(GameCollection.class));
+    verify(gameRepository, times(4)).findGameByBggId(any(Integer.class));
   }
 
   @Test
@@ -98,20 +124,34 @@ class GameTest {
     game.setDescription("Test game desc");
     game.setPrice(13.5f);
 
+    var account = new Account();
+    account.setAccountId(1);
+    account.setUsername("test_user");
+
+    var gameCollection = new GameCollection();
+    gameCollection.setAccountId(account.getAccountId());
+    gameCollection.setGameId(game.getGameId());
+
+    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(account);
+    when(jwtUtil.validateTokenAndGetUsername(any(String.class))).thenReturn(account.getUsername());
     when(gameRepository.findGameByBggId(any(Integer.class))).thenReturn(null);
+    //when(gameCollectionRepository.findGameCollectionByAccountIdAndGameId(any(Integer.class), any(Integer.class))).thenReturn(gameCollection);
     when(gameRepository.save(any(Game.class))).thenReturn(game);
 
     //
-    var response = gameController.persistOneGame(game);
+    var response = gameController.persistOneGame("", game, "BGG", account.getAccountId());
 
     assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
+    verify(accountRepository).findByAccountId(any(Integer.class));
+    verify(jwtUtil).validateTokenAndGetUsername(any(String.class));
     verify(gameRepository).findGameByBggId(any(Integer.class));
+    //verify(gameCollectionRepository).findGameCollectionByAccountIdAndGameId(any(Integer.class), any(Integer.class));
     verify(gameRepository).save(any(Game.class));
   }
 
   @Test
-  void persistManyGames() {
+  void persistAndCollectManyGames() {
 
     var game0 = new Game();
     game0.setGameId(1);
@@ -131,14 +171,23 @@ class GameTest {
     games.add(game0);
     games.add(game1);
 
-    when(gameRepository.findGameByBggId(game0.getBggId())).thenReturn(null);
-    when(gameRepository.findGameByBggId(game1.getBggId())).thenReturn(null);
+    var account = new Account();
+    account.setAccountId(1);
+    account.setUsername("test_user");
+
+    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(account);
+    when(jwtUtil.validateTokenAndGetUsername(any(String.class))).thenReturn(account.getUsername());
+    when(gameRepository.findGameByBggId(any(Integer.class))).thenReturn(null);
+    when(gameRepository.save(game0)).thenReturn(game0);
+    when(gameRepository.save(game1)).thenReturn(game1);
 
     //
-    var response = gameController.persistManyGames(games);
+    var response = gameController.persistAndCollectManyGames("", games, account.getAccountId());
 
     assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
+    verify(accountRepository).findByAccountId(any(Integer.class));
+    verify(jwtUtil).validateTokenAndGetUsername(any(String.class));
     verify(gameRepository, times(2)).findGameByBggId(any(Integer.class));
     verify(gameRepository, times(2)).save(any(Game.class));
   }
