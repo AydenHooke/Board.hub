@@ -66,9 +66,11 @@ function GameInfoDisplay({ data }: gameProps) {
   desc = replaceAll(desc, '&#10;&#10;', ' ');
   desc = replaceAll(desc, '&#10;', '');
   desc = replaceAll(desc, '&quot;', '"');
+  desc = replaceAll(desc, '&rsquo;', "'");
   desc = replaceAll(desc, '&mdash;', '-');
   desc = replaceAll(desc, '&hellip;', '…');
   desc = replaceAll(desc, '&nbsp;', ' ');
+  desc = replaceAll(desc, '&bull;', '•');
 
   return (
     <div className="game-info">
