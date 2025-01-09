@@ -17,18 +17,21 @@ export type Thread = {
   forumId: number
 }
 
+type useStateProp = {
+  forum: Forum
+  threadId: number, setThreadId: React.Dispatch<React.SetStateAction<number>>
+}
+
 export const ReloadForumContext = createContext(function () { });
 
 function ForumPage({
-  forumId,
-  title,
-  description,
-  type }: Forum
+  forum,
+  threadId,
+  setThreadId }: useStateProp
 ) {
   const { id: contextId } = useAccount();
 
   const [data, setData] = useState<Thread[]>([]);
-  const [threadId, setThreadId] = useState(-1);
   const [reload, setReload] = useState(0);
   function reloadForum() {
     setReload(reload + 1);
@@ -36,17 +39,17 @@ function ForumPage({
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/thread/get/' + forumId)
+      .get('http://localhost:8080/thread/get/' + forum.forumId)
       .then((Response) => setData(Response.data))
       .catch((error) => console.error('Error getting data, ', error));
   }, [reload])
 
+
+  let currentThread = threadId == -1 ? null : data.filter(t => t.threadId == threadId)[0];
+
   return (
     <>
-      <div className="forum-header">
-        {(threadId == -1) && <h2>{title}</h2>}
-        {(threadId == -1) && <h3>{description}</h3>}
-      </div>
+      {(threadId == -1) && <p>{forum.description}</p>}
 
       {(threadId == -1) && (
         <button onClick={reloadForum} className="reload-button">
@@ -58,73 +61,68 @@ function ForumPage({
       <ReloadForumContext.Provider value={reloadForum}>
         {
           (contextId != '' && threadId == -1) && <CreateThreadLogic
-            forumId={forumId}
-            title={title}
-            description={description}
-            type={type}
+            forumId={forum.forumId}
+            title={forum.title}
+            description={forum.description}
+            type={forum.type}
           />
         }
 
         {(threadId == -1) && (<br />)}
         {(threadId == -1) && (<br />)}
 
-        {data.map((thread) => {
-          return (
-            <div key={thread.threadId}>
-              {
-                  (threadId == -1) && 
-                  <table className="forum-table">
-                  <thead>
-                    <tr>
-                      <th className="forum-icon-head">Icon</th>
-                      <th className="forum-title-head">Title</th>
-                      <th className="forum-op-head">Original Poster</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  <tr className="forum-row">
-                    <td className="forum-icon-cell">
-                      <FontAwesomeIcon icon={faComment} className="comment-icon" />
-                    </td>
-                    <td className="forum-title-cell">
-                      <button className="forum-button" onClick={
+        {threadId == -1 ?
+          <table style={{ width: '100%' }}>
+            {data.map((thread) => {
+              return (
+                <tr key={thread.threadId} style={{ border: 'solid black 2px' }}>
+
+                  <td>
+                    {
+                      (threadId == -1) &&
+                      <a href="#" onClick={
                         (e: any) => setThreadId(thread.threadId)
-                      }>{thread.title}
-                      </button>
-                    </td>
-                    <td className="forum-op-cell">
-                      {thread.username}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-             }
+                      }>{thread.title}</a>
+                    }
+                  </td>
 
-              {
-                ((contextId == `${thread.accountId}`) && (threadId == -1)) &&
-                <DeleteThread
-                  threadId={thread.threadId}
-                  title={""}
-                  content={""}
-                  accountId={0}
-                  username={""}
-                  forumId={0}
-                />
-              }
+                  <td>
+                    {(threadId == -1) &&
+                      `By: ${thread.username}`}
+                  </td>
 
-              {
-                (threadId == thread.threadId) && <ThreadPage
-                  threadId={thread.threadId}
-                  title={thread.title}
-                  content={thread.content}
-                  accountId={thread.accountId}
-                  username={thread.username}
-                  forumId={thread.forumId}
-                />
-              }
-            </div>
-          )
-        })}
+                  <td>
+                    {
+                      ((contextId == `${thread.accountId}`) && (threadId == -1)) &&
+                      <DeleteThread
+                        threadId={thread.threadId}
+                        title={""}
+                        content={""}
+                        accountId={0}
+                        username={""}
+                        forumId={0}
+                      />
+                    }
+                  </td>
+                </tr>
+              )
+            })}
+          </table>
+          :
+          <>{
+            // If selected, display current thread
+            threadId != -1 &&
+            <ThreadPage
+              threadId={Number(currentThread?.threadId)}
+              title={String(currentThread?.title)}
+              content={String(currentThread?.content)}
+              accountId={Number(currentThread?.accountId)}
+              username={String(currentThread?.username)}
+              forumId={Number(currentThread?.forumId)}
+            />
+          }
+          </>
+        }
       </ReloadForumContext.Provider>
     </>
   )

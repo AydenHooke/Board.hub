@@ -22,7 +22,7 @@ function EventInput({handleFindEvents, handleEventAdd, handleLeaveEvent, myMeeti
               <h2>My Meetups</h2>
               <div className='event-buttons'>
                 <button onClick={() => handleFindEvents("MEETING")}>Find Meetings</button>
-                
+
                 <button onClick={() => handleEventAdd("MEETING")}>Add Meeting</button>
               </div>
             </div>
@@ -42,7 +42,7 @@ function EventInput({handleFindEvents, handleEventAdd, handleLeaveEvent, myMeeti
                 </li>
                ))}
             </ul>
-            
+
             <ul className='meetup-list'>
             </ul>
         </section>
@@ -55,7 +55,7 @@ function EventInput({handleFindEvents, handleEventAdd, handleLeaveEvent, myMeeti
                 <button onClick={() => handleEventAdd("TOURNAMENT")}>Add Tournament</button>
                </div>
             </div>
-            
+
             <ul className='event-list'>
                 {myTournaments.map((tournament) => (
                   <li onClick={()=>navigate(`/event/${tournament.eventId}`)}  key={tournament.eventId} className='event-tile'>
@@ -67,12 +67,12 @@ function EventInput({handleFindEvents, handleEventAdd, handleLeaveEvent, myMeeti
                           <Link to={`/account/${tournament.accountId}`}>{tournament.username}</Link>
                         </p>
                         <p>Status: {tournament.status}</p>
-                        {contextId && (<button onClick={() => handleLeaveEvent(tournament, "TOURNAMENT")}>Leave Tournament</button>)}
+                        {contextId && (<button onClick={() => handleLeaveEvent(tournament, "TOURNAMENT")}>{tournament.accountId === Number(contextId) ?  "Delete Tournament" : "Leave Tournament"}</button>)}
                       </div>
                   </li>
                 ))}
             </ul>
-            
+
             <ul className='tournament-list'>
             </ul>
         </section>

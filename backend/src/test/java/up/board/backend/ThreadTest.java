@@ -2,11 +2,11 @@ package up.board.backend;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,10 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import up.board.backend.Controller.ThreadController;
 import up.board.backend.Entity.Account;
-import up.board.backend.Entity.Reply;
 import up.board.backend.Entity.Thread;
 import up.board.backend.Repository.AccountRepository;
-import up.board.backend.Repository.ReplyRepository;
 import up.board.backend.Repository.ThreadRepository;
 import up.board.backend.Service.AccountService;
 import up.board.backend.Service.ThreadService;
@@ -57,8 +55,6 @@ class ThreadTest {
   void getThreads() {
 
     var forumId = 1;
-
-    var nativeMap = new ArrayList<Map<String, Object>>();
 
     var thread0 = new Thread();
     thread0.setThreadId(1);
@@ -189,5 +185,82 @@ class ThreadTest {
     assertEquals(null, responseThread);
 
     verify(accountRepository).findByAccountId(any(Integer.class));
+  }
+
+  @Test
+  void deleteThread() {
+
+    var thread = new Thread();
+    thread.setForumId(1);
+    thread.setAccountId(1);
+    thread.setContent("Test thread content");
+    thread.setTitle("Test thread title");
+
+    var account = new Account();
+    account.setAccountId(1);
+    account.setUsername("test");
+
+    var jwt = "Bearer test.jwt.test";
+
+    when(threadRepository.getThreadByThreadId(any(Integer.class))).thenReturn(thread);
+    when(jwtUtil.validateTokenAndGetUsername(any(String.class))).thenReturn(account.getUsername());
+    when(accountRepository.findByUsername(any(String.class))).thenReturn(account);
+    when(threadRepository.save(any(Thread.class))).thenReturn(thread);
+
+    //
+    var response = threadController.deleteThread(jwt, thread.getThreadId());
+    var responseBody = response.getBody();
+
+    assertEquals(200, response.getStatusCode().value());
+    assertEquals(true, responseBody);
+
+    verify(threadRepository, times(2)).getThreadByThreadId(any(Integer.class));
+    verify(jwtUtil).validateTokenAndGetUsername(any(String.class));
+    verify(accountRepository).findByUsername(any(String.class));
+    verify(threadRepository).save(any(Thread.class));
+  }
+
+  @Test
+  void deleteThread_invalidThreadId() {
+
+    var account = new Account();
+    account.setAccountId(1);
+    account.setUsername("test");
+
+    var jwt = "Bearer test.jwt.test";
+
+    when(threadRepository.getThreadByThreadId(any(Integer.class))).thenReturn(null);
+    //
+    var response = threadController.deleteThread(jwt, -1);
+    var responseBody = response.getBody();
+
+    assertEquals(409, response.getStatusCode().value());
+    assertEquals(false, responseBody);
+
+    verify(threadRepository).getThreadByThreadId(any(Integer.class));
+  }
+
+  @Test
+  void deleteThread_missingJwt() {
+
+    var thread = new Thread();
+    thread.setForumId(1);
+    thread.setAccountId(1);
+    thread.setContent("Test thread content");
+    thread.setTitle("Test thread title");
+
+    var jwt = "Bearer test.jwt.test";
+
+    when(threadRepository.getThreadByThreadId(any(Integer.class))).thenReturn(thread);
+    when(jwtUtil.validateTokenAndGetUsername(any(String.class))).thenReturn(null);
+
+    var response = threadController.deleteThread(jwt, thread.getThreadId());
+    var responseBody = response.getBody();
+
+    assertEquals(409, response.getStatusCode().value());
+    assertEquals(false, responseBody);
+
+    verify(threadRepository).getThreadByThreadId(any(Integer.class));
+    verify(jwtUtil).validateTokenAndGetUsername(any(String.class));
   }
 }

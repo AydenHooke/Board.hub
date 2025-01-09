@@ -26,7 +26,7 @@ function NavBar() {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav right-links">
-              {username == '' && (
+              {username == '' ? (
                 <>
                   <li className="nav-item">
                     <Link className="nav-link" to="/SignIn">
@@ -39,12 +39,15 @@ function NavBar() {
                     </Link>
                   </li>
                 </>
+              ) : (
+                <>
+                  <li>
+                    <Link className="nav-link" to="/games">
+                      My Games
+                    </Link>
+                  </li>
+                </>
               )}
-              <li>
-                <Link className="nav-link" to="/games">
-                  My Games
-                </Link>
-              </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/events">
                   Events
@@ -56,11 +59,11 @@ function NavBar() {
                 </Link>
               </li>
               {username && (
-              <li>
-                <Link className="nav-link" to="/profile">
-                  Profile
-                </Link>
-              </li>
+                <li>
+                  <Link className="nav-link" to="/profile">
+                    Profile
+                  </Link>
+                </li>
               )}
             </ul>
           </div>

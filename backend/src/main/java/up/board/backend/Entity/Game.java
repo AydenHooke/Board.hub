@@ -9,7 +9,6 @@ import lombok.*;
 public class Game {
 
   // Field values
-  @Column(name = "game_id")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   int gameId;
@@ -32,7 +31,7 @@ public class Game {
   @Column
   int rating;
 
-  
+
 
   // Constructor
   public Game() {

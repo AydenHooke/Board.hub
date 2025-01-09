@@ -248,4 +248,26 @@ class AccountTest {
     verify(accountRepository).findByEmail(any(String.class));
   }
 
+  @Test
+  void getMethodName() {
+
+    var username = "test123";
+
+    var mock = new Account();
+    mock.setAccountId(1);
+    mock.setUsername(username);
+
+    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(mock);
+
+    //
+    var response = accountController.getMethodName(1);
+    var responseAccount = response.getBody();
+
+    assertEquals(200, response.getStatusCode().value());
+    assertEquals(mock.getAccountId(), responseAccount.getAccountId());
+    assertEquals(mock.getUsername(), responseAccount.getUsername());
+
+    verify(accountRepository).findByAccountId(any(Integer.class));
+  }
+
 }

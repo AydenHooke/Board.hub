@@ -17,11 +17,7 @@ function Home() {
         <>
             <h1>Welcome To Board.up</h1>
 
-            <div>
-                <GameCollectionsDisplay 
-                    data={data}
-                />
-            </div>
+            <GameCollectionsDisplay data={data}/>
         </>
     )
 }

@@ -15,7 +15,6 @@ import up.board.backend.Enum.Account.Role;
 public class Account {
 
   // Field values
-  @Column(name = "account_id")
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   int accountId;

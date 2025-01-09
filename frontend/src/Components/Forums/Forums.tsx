@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { createContext, useEffect, useState } from "react"
 import ForumPage from "./ForumPage";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
@@ -12,10 +12,16 @@ export type Forum = {
   type: string
 }
 
+export const ReloadForumsContext = createContext(function () { });
+
 function Forums() {
   const [data, setData] = useState<Forum[]>([]);
   const [forumId, setForumId] = useState(-1);
-  
+  const [threadId, setThreadId] = useState(-1);
+  const [reload, setReload] = useState(0);
+  function reloadForums() {
+    setReload(reload + 1);
+  }
 
   useEffect(() => {
     axios
@@ -24,45 +30,76 @@ function Forums() {
       .catch((error) => console.error('Error getting data, ', error));
   }, [])
 
+  var currentForum = forumId == -1 ? null : data.filter((f) => f.forumId == forumId)[0];
+
   return (
     <>
-      {(forumId == -1) && <h2>Main Forums</h2>}
 
-      {/* <ul className="starter-thread">
-        <li>Threads</li>
-        <li>OP</li>
-      </ul> */}
+      <div>
 
-     
+        <a href="#" onClick={() => {
 
-      {data.map((forum) => {
-        return (
-          <div key={forum.forumId}>
-            <ul>
-                {
-                  (forumId == -1) &&
-                  (<li className="forum">
-                  <FontAwesomeIcon icon={faComment} className="comment-icon"/>
-                  <div className="vertical-line forum-line"></div>
-                  <button className="forum-button" onClick={
-                    (e: any) => setForumId(forum.forumId)
-                  }>{forum.title}</button>
-                  </li>)
-                }
-            </ul> 
-                
+          // Return to forum selection
+          if (forumId >= -1) {
+            setForumId(-1);
+            setThreadId(-1);
+            reloadForums();
+          }
+        }}>
+          Forums
+        </a>
 
-                {
-                  (forumId == forum.forumId) && <ForumPage
-                    forumId={forum.forumId}
-                    title={forum.title}
-                    description={forum.description}
-                    type={forum.type}
-                  />
-                }
-          </div>
-        )
-      })}
+        {currentForum != null &&
+          <a href="#" onClick={() => {
+
+            // Return to thread selection
+            if (threadId >= -1) {
+              setThreadId(-1);
+              reloadForums();
+            }
+          }}>
+           &nbsp;-&gt; {(currentForum as Forum).title}
+          </a>
+        }
+
+      </div>
+
+      <ReloadForumsContext.Provider value={reloadForums}>
+        {
+          // If none selected, display list of forums to select
+          forumId == -1 && (
+            <table style={{ width: '100%' }}>
+              {data.map((forum) => {
+                return (
+                  <tr key={forum.forumId} style={{ border: 'solid black 2px' }}>
+                    <td>
+                      {
+                        (forumId == -1) &&
+                        <a href="#" onClick={
+                          (e: any) => setForumId(forum.forumId)
+                        }>{forum.title}</a>
+                      }
+                    </td>
+
+                    <td>
+                      {forum.description}
+                    </td>
+                  </tr>
+                )
+              })}
+            </table>
+          )
+        }
+
+        {
+          // If selected, display current forum
+          forumId != -1 && <ForumPage
+            forum={currentForum as Forum}
+            threadId={threadId}
+            setThreadId={setThreadId}
+          />
+        }
+      </ReloadForumsContext.Provider>
     </>
   )
 }

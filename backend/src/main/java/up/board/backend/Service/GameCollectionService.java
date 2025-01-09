@@ -17,18 +17,18 @@ import up.board.backend.Repository.GameRepository;
 @Service
 @Transactional
 public class GameCollectionService {
-    private static final Logger logger = LoggerFactory.getLogger(GameCollectionService.class);
+  private static final Logger logger = LoggerFactory.getLogger(GameCollectionService.class);
 
-    GameRepository gameRepository;
-    GameCollectionRepository gameCollectionRepository;
+  GameRepository gameRepository;
+  GameCollectionRepository gameCollectionRepository;
 
-    public GameCollectionService(GameRepository gameRepository, GameCollectionRepository gameCollectionRepository) {
-        this.gameRepository = gameRepository;
-        this.gameCollectionRepository = gameCollectionRepository;
-      }
+  public GameCollectionService(GameRepository gameRepository, GameCollectionRepository gameCollectionRepository) {
+    this.gameRepository = gameRepository;
+    this.gameCollectionRepository = gameCollectionRepository;
+  }
 
 
-    public GameCollection LinkAccountToGame(Account account, Game game) {
+    public GameCollection linkAccountToGame(Account account, Game game) {
         if(account != null && game != null){ // the game collection class serves as a link to connect all the games a player owns to their account in an entity - a join table
             GameCollection gameCollection = gameCollectionRepository.findGameCollectionByAccountIdAndGameId(account.getAccountId(), game.getGameId());
             if(gameCollection == null){
@@ -40,10 +40,15 @@ public class GameCollectionService {
             }
         }
 
-        return null;
+    return null;
+  }
+
+    public GameCollection checkOwnership(Account account, Game game){
+        GameCollection gameCollection = gameCollectionRepository.findGameCollectionByAccountIdAndGameId(account.getAccountId(), game.getGameId());
+        return gameCollection;
     }
 
-
-
-
+    public void removeOwnership(Account account, Game game){
+        gameCollectionRepository.delete(gameCollectionRepository.findGameCollectionByAccountIdAndGameId(account.getAccountId(), game.getGameId()));
+    }
 }

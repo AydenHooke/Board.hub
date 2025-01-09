@@ -19,9 +19,10 @@ import org.springframework.http.HttpStatus;
 import up.board.backend.Controller.EventController;
 import up.board.backend.Entity.Account;
 import up.board.backend.Entity.Event;
+import up.board.backend.Enum.Event.Type;
 import up.board.backend.Repository.AccountRepository;
 import up.board.backend.Repository.EventRepository;
-import up.board.backend.Repository.ThreadRepository;
+import up.board.backend.Repository.EventRepository.EventWithUsername;
 import up.board.backend.Service.AccountService;
 import up.board.backend.Service.EventService;
 import up.board.backend.Utils.JwtUtil;
@@ -126,6 +127,103 @@ class EventTest {
   }
 
   @Test
+  void getUnAddedEvents() {
+
+    var eventType = Type.MEETING;
+
+    var event0 = new Event();
+    event0.setAccountId(2);
+    event0.setTitle("Test event 1");
+    event0.setContent("Test description");
+    event0.setType(eventType);
+
+    var event1 = new Event();
+    event1.setAccountId(2);
+    event1.setTitle("Test event 2");
+    event1.setContent("Test description");
+    event1.setType(eventType);
+
+    var events = new ArrayList<Event>();
+    events.add(event0);
+    events.add(event1);
+
+    var eventsWithUsername = new ArrayList<EventRepository.EventWithUsername>();
+    eventsWithUsername.add(new EventWithUsername() {
+      @Override
+      public Event getEvent() {
+        return event0;
+      }
+
+      @Override
+      public String getUsername() {
+        return "";
+      }
+    });
+    eventsWithUsername.add(new EventWithUsername() {
+      @Override
+      public Event getEvent() {
+        return event1;
+      }
+
+      @Override
+      public String getUsername() {
+        return "";
+      }
+    });
+
+    var account = new Account();
+    account.setAccountId(1);
+    account.setUsername("test");
+    account.setEvents(new ArrayList<Event>());
+
+    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(account);
+    when(eventRepository.findAllPlusUsername()).thenReturn(eventsWithUsername);
+
+    //
+    var response = eventController.getUnAddedEvents(account.getAccountId(), eventType);
+    var responseEvents = response.getBody();
+
+    assertEquals(200, response.getStatusCode().value());
+    assertEquals(2, responseEvents.size());
+
+    verify(accountRepository).findByAccountId(any(Integer.class));
+    verify(eventRepository).findAllPlusUsername();
+  }
+
+  @Test
+  void getEventsType() {
+
+    var eventType = Type.MEETING;
+
+    var event0 = new Event();
+    event0.setAccountId(1);
+    event0.setTitle("Test event 1");
+    event0.setContent("Test description");
+    event0.setType(eventType);
+
+    var event1 = new Event();
+    event1.setAccountId(2);
+    event1.setTitle("Test event 2");
+    event1.setContent("Test description");
+    event1.setType(eventType);
+
+    var events = new ArrayList<Event>();
+    events.add(event0);
+    events.add(event1);
+
+    when(eventRepository.findAllByType(any(Type.class))).thenReturn(events);
+
+    //
+    var response = eventController.getEvents(eventType);
+    var responseEvents = response.getBody();
+
+    assertEquals(200, response.getStatusCode().value());
+    assertEquals(2, responseEvents.size());
+
+    verify(eventRepository).findAllByType(any(Type.class));
+  }
+
+  @Test
   void postEvent() {
 
     var event = new Event();
@@ -205,6 +303,222 @@ class EventTest {
     assertEquals(409, response.getStatusCode().value());
     assertEquals(null, responseEvent);
 
+    verify(accountRepository).findByAccountId(any(Integer.class));
+  }
+
+  @Test
+  void getEventsForAccount() {
+
+    var eventType = Type.MEETING;
+
+    var event0 = new Event();
+    event0.setAccountId(2);
+    event0.setTitle("Test event 1");
+    event0.setContent("Test description");
+    event0.setType(eventType);
+
+    var event1 = new Event();
+    event1.setAccountId(2);
+    event1.setTitle("Test event 2");
+    event1.setContent("Test description");
+    event1.setType(Type.TOURNAMENT);
+
+    var events = new ArrayList<Event>();
+    events.add(event0);
+    events.add(event1);
+
+    var eventsWithUsername = new ArrayList<EventRepository.EventWithUsername>();
+    eventsWithUsername.add(new EventWithUsername() {
+      @Override
+      public Event getEvent() {
+        return event0;
+      }
+
+      @Override
+      public String getUsername() {
+        return "";
+      }
+    });
+    eventsWithUsername.add(new EventWithUsername() {
+      @Override
+      public Event getEvent() {
+        return event1;
+      }
+
+      @Override
+      public String getUsername() {
+        return "";
+      }
+    });
+
+    var account = new Account();
+    account.setAccountId(1);
+    account.setUsername("test");
+    account.setEvents(new ArrayList<Event>());
+
+    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(account);
+    when(eventRepository.findAllJoinedEventsPlusUsername(any(Integer.class))).thenReturn(eventsWithUsername);
+
+    //
+    var response = eventController.getEventsForAccount(account.getAccountId(), eventType);
+    var responseEvents = response.getBody();
+
+    assertEquals(200, response.getStatusCode().value());
+    assertEquals(1, responseEvents.size());
+
+    verify(accountRepository).findByAccountId(any(Integer.class));
+    verify(eventRepository).findAllJoinedEventsPlusUsername(any(Integer.class));
+  }
+
+  @Test
+  void storeEventToAccount() {
+
+    var eventType = Type.MEETING;
+
+    var event = new Event();
+    event.setAccountId(2);
+    event.setTitle("Test event 1");
+    event.setContent("Test description");
+    event.setType(eventType);
+
+    var account = new Account();
+    account.setAccountId(1);
+    account.setUsername("test");
+    account.setEvents(new ArrayList<Event>());
+
+    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(event);
+    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(account);
+
+    //
+    var response = eventController.storeEventToAccount(account.getAccountId(), event);
+
+    assertEquals(200, response.getStatusCode().value());
+
+    verify(eventRepository).findByEventId(any(Integer.class));
+    verify(accountRepository).findByAccountId(any(Integer.class));
+    verify(accountRepository).save(any(Account.class));
+  }
+
+  @Test
+  void storeEventToAccount_eventDoesNotExist() {
+
+    var eventType = Type.MEETING;
+
+    var event = new Event();
+    event.setAccountId(2);
+    event.setTitle("Test event 1");
+    event.setContent("Test description");
+    event.setType(eventType);
+
+    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(null);
+
+    //
+    var response = eventController.storeEventToAccount(-1, event);
+
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+    verify(eventRepository).findByEventId(any(Integer.class));
+  }
+
+  @Test
+  void storeEventToAccount_accountNotExist() {
+
+    var eventType = Type.MEETING;
+
+    var event = new Event();
+    event.setAccountId(2);
+    event.setTitle("Test event 1");
+    event.setContent("Test description");
+    event.setType(eventType);
+
+    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(event);
+    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(null);
+
+    //
+    var response = eventController.storeEventToAccount(-1, event);
+
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+    verify(eventRepository).findByEventId(any(Integer.class));
+    verify(accountRepository).findByAccountId(any(Integer.class));
+  }
+
+  @Test
+  void deleteEventFromAccount() {
+
+    var eventType = Type.MEETING;
+
+    var event = new Event();
+    event.setAccountId(2);
+    event.setTitle("Test event 1");
+    event.setContent("Test description");
+    event.setType(eventType);
+
+    var account = new Account();
+    account.setAccountId(1);
+    account.setUsername("test");
+    var accountEvents = new ArrayList<Event>();
+    accountEvents.add(event);
+    account.setEvents(accountEvents);
+
+    var eventAccounts = new ArrayList<Account>();
+    eventAccounts.add(account);
+    event.setAccounts(eventAccounts);
+
+    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(event);
+    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(account);
+
+    //
+    var response = eventController.deleteEventFromAccount(account.getAccountId(), event.getEventId());
+
+    assertEquals(200, response.getStatusCode().value());
+
+    verify(eventRepository).findByEventId(any(Integer.class));
+    verify(accountRepository).findByAccountId(any(Integer.class));
+    verify(accountRepository).save(any(Account.class));
+  }
+
+  @Test
+  void deleteEventFromAccount_invalidEvent() {
+
+    var eventType = Type.MEETING;
+
+    var event = new Event();
+    event.setAccountId(2);
+    event.setTitle("Test event 1");
+    event.setContent("Test description");
+    event.setType(eventType);
+
+    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(null);
+
+    //
+    var response = eventController.deleteEventFromAccount(-1, event.getEventId());
+
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+    verify(eventRepository).findByEventId(any(Integer.class));
+  }
+
+  @Test
+  void deleteEventFromAccount_invalidAccount() {
+
+    var eventType = Type.MEETING;
+
+    var event = new Event();
+    event.setAccountId(2);
+    event.setTitle("Test event 1");
+    event.setContent("Test description");
+    event.setType(eventType);
+
+    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(event);
+    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(null);
+
+    //
+    var response = eventController.deleteEventFromAccount(-1, event.getEventId());
+
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+    verify(eventRepository).findByEventId(any(Integer.class));
     verify(accountRepository).findByAccountId(any(Integer.class));
   }
 
