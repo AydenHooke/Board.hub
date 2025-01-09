@@ -260,7 +260,7 @@ class AccountTest {
     when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(mock);
 
     //
-    var response = accountController.getMethodName(1);
+    var response = accountController.getAccountProfile(1);
     var responseAccount = response.getBody();
 
     assertEquals(200, response.getStatusCode().value());
