@@ -12,13 +12,27 @@ interface EventPageInputProps {
 }
 
 function EventPageInput({ event, participants }: EventPageInputProps) {
+
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        timeZoneName: 'short' 
+    };
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-US', options).format(date);
+  };
+
   return (
     <>
       <section className='event-page'>
           <h1 className='event-page-title'>{event?.title}</h1>
           <h3 className='event-page-username'>By: {event?.username}</h3>
           <h3 className='event-page-content'>Description: {event?.content}</h3>
-          <h3 className='event-page-date'>Date: {event?.dateMeet?.toString()}</h3>
+          <h3 className='event-page-date'>Date: {event?.dateMeet ? formatDate(event.dateMeet.toString()) : 'N/A'}</h3>
           <h3 className='event-page-status'>Status: {event?.status}</h3>
           <h3 className='event-page-type'>Type: {event?.type}</h3>
       </section>
