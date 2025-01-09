@@ -53,12 +53,12 @@ public class GameService {
     return gameRepository.findGamesByGameIdNotNull();
   }
 
-  public List<String> findAllGameBggIds() {
-    return gameRepository.findAllBggIds();
+  public List<Game> findAllBggGames() {
+    return gameRepository.findGamesByBggIdNotNull();
   }
 
-  public List<String> findAllBggIdsOfGamesOwnedByUser(int accountId){
-    return gameRepository.findAllBggGameIdsByCollection(accountId);
+  public List<Game> findAllBggGamesOwnedByUser(int accountId){
+    return gameRepository.findAllBggGamesByCollection(accountId);
   }
 
   public List<Game> findWhoCollectedWhatGames(int accountId) {
