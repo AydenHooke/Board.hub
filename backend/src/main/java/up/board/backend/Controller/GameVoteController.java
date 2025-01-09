@@ -68,7 +68,7 @@ public class GameVoteController {
     }
 
     var existingGameVote = gameVoteService.getGameVote(existingAccount.getAccountId(), gameVote.getGameVoteId());
-    var existingVote = gameVote == null ? 0 : gameVote.getValue();
+    var existingVote = existingGameVote == null ? 0 : existingGameVote.getValue();
     if (gameVote.getValue() == existingVote) {
       return ResponseEntity.ok().body(true);
     }
