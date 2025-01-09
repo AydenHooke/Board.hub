@@ -208,8 +208,6 @@ public class EventController {
     // Delete the event if it is associated with this account
     if (existingAccount.getAccountId() == existingEvent.getAccountId()) {
 
-      logger.info("Deleting event");
-
       for(var account : existingEvent.getAccounts()){
         account.getEvents().remove(existingEvent);
         accountService.save(account);
