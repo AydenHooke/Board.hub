@@ -21,9 +21,9 @@ function EventInput({ handleFindEvents, handleEventAdd, handleLeaveEvent, myMeet
         <div className='event-header'>
           <h2>My Meetups</h2>
           <div className='event-buttons'>
-            <button onClick={() => handleFindEvents("MEETING")}>Find Meetings</button>
+            <button onClick={() => handleFindEvents("MEETING")}><i className="fas fa-search"></i></button>
 
-            <button onClick={() => handleEventAdd("MEETING")}>Add Meeting</button>
+            <button onClick={() => handleEventAdd("MEETING")}><i className="fas fa-plus"></i></button>
           </div>
         </div>
         <ul className='event-list'>
@@ -56,8 +56,8 @@ function EventInput({ handleFindEvents, handleEventAdd, handleLeaveEvent, myMeet
         <div className='event-header'>
           <h2>My Tournaments</h2>
           <div className='event-buttons'>
-            <button onClick={() => handleFindEvents("TOURNAMENT")}>Find Tournaments</button>
-            <button onClick={() => handleEventAdd("TOURNAMENT")}>Add Tournament</button>
+            <button onClick={() => handleFindEvents("TOURNAMENT")}><i className="fas fa-search"></i></button>
+            <button onClick={() => handleEventAdd("TOURNAMENT")}><i className="fas fa-plus"></i></button>
           </div>
         </div>
 
