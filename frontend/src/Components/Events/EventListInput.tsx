@@ -14,7 +14,7 @@ function EventListInput({eventType, events, handleAddEvent}: EventListInputProps
 
   return (
     <>
-      <h1 className='heading-center'>All {`${eventType}`} Events</h1>
+      <h1 className='heading-center'>All {eventType == "MEETING" ? "meet-up" : "tournament"} events</h1>
       <ul className='event-list-grid'>
         {events.map((event) => (
           <li key={event.eventId} className='event-tile'>
@@ -32,7 +32,7 @@ function EventListInput({eventType, events, handleAddEvent}: EventListInputProps
           </li>
         ))}
       </ul>
-      {!events.length && <h2 className='heading-center'>No Events Found</h2>}
+      {!events.length && <p className='heading-center'>No {eventType == "MEETING" ? "meet-ups" : "tournaments"} found.</p>}
     </>
   )
 }
