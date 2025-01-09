@@ -5,6 +5,8 @@ type stateProp = {
     description: string, setDescription: React.Dispatch<React.SetStateAction<string>>,
     isChecked: boolean, setIsChecked: React.Dispatch<React.SetStateAction<boolean>>,
     pending: boolean,
+    success: boolean,
+    fail: boolean,
     handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void
 }
 
@@ -15,6 +17,8 @@ function AddGameInput({
     description, setDescription,
     isChecked, setIsChecked,
     pending,
+    success,
+    fail,
     handleSubmit}: stateProp
 ) {
  return (
@@ -64,7 +68,9 @@ function AddGameInput({
         }
 
         {(pending) && <button className="default-button" type="submit">Add</button>}
-        {(!pending) && <p>request is pending</p>}
+        {(!pending) && <p>Request is pending</p>}
+        {(success) && <p>Successfully added game</p>}
+        {(fail) && <p>Failed to add game</p>}
         <br/>
     </form>
  )
