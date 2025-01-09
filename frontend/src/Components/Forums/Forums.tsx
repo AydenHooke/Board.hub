@@ -30,7 +30,7 @@ function Forums() {
       .catch((error) => console.error('Error getting data, ', error));
   }, [])
 
-  var currentForum = forumId == -1 ? null : data.filter((f) => f.forumId == forumId)[0];
+  const currentForum = forumId == -1 ? null : data.filter((f) => f.forumId == forumId)[0];
 
   return (
     <>
