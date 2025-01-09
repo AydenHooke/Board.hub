@@ -31,10 +31,10 @@ function DeleteThread({
 
   return (
     <>
-      {((!isVisible) && (isVisible2)) && <button onClick={() => setIsVisible(true)}>Delete Thread?</button>}
-      {(isVisible) && <p>Are you sure you want to Delete:</p>}
-      {(isVisible) && <button onClick={DeleteSubmit}>Confirm</button>}
-      {(isVisible) && <button onClick={() => setIsVisible(false)}>Cancel</button>}
+      {((!isVisible) && (isVisible2)) && <a href="javascript:void(0)" onClick={() => setIsVisible(true)}>delete</a>}
+      {(isVisible) && <>Are you sure you want to delete: </>}
+      {(isVisible) && <button onClick={DeleteSubmit}><i className="fas fa-check"></i></button>}
+      {(isVisible) && <button onClick={() => setIsVisible(false)}><i className="fas fa-x"></i></button>}
     </>
   )
 }
