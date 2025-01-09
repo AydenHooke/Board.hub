@@ -16,6 +16,7 @@ function ProfileLogic() {
     const [username, setUsername] = useState(contextUsername);
     const [password, setPassword] = useState("");
     const [bggUsername, setBggUsername] = useState(contextBggUsername);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
         console.log(contextJwt);
@@ -46,6 +47,10 @@ function ProfileLogic() {
           setContextUsername(response.data.username);
           setContextId(response.data.accountId);
           setContextBggUsername(bggUsername);
+
+          // Show success message
+          setShowSuccessMessage(true);
+          setTimeout(() => setShowSuccessMessage(false), 3000);
       })
       .catch(error => {
         console.error('Error patching data, ', error)
@@ -60,7 +65,8 @@ function ProfileLogic() {
         username={username} setUsername={setUsername}
         password={password} setPassword={setPassword}
         bggUsername={bggUsername} setBggUsername={setBggUsername}
-        handleProfileEdit={handleProfileEdit}/>
+        handleProfileEdit={handleProfileEdit}
+        showSuccessMessage={showSuccessMessage}/>
     </div>
   )
 }

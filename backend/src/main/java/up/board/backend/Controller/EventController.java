@@ -78,7 +78,7 @@ public class EventController {
     return ResponseEntity.ok().body(events);
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/id/{id}")
   public ResponseEntity<Event> getEvent(@PathVariable Integer id) {
 
     // Return event
@@ -137,7 +137,7 @@ public class EventController {
   }
 
   @GetMapping("/{type}")
-  public ResponseEntity<List<Event>> getEvents(@RequestParam Type type) {
+  public ResponseEntity<List<Event>> getEventsByType(@RequestParam Type type) {
     if (type == null) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Type parameter is required").body(null);
     }

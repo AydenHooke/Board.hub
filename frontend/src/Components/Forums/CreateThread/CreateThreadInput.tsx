@@ -21,9 +21,12 @@ function CreateThreadInput({
                 <br/>
                 <label>
                     Enter content of thread:
-                    <input type="text" value={threadContent} onChange={
+                    {/* <input type="text" value={threadContent} onChange={
                         (e: any) => setThreadContent(e.target.value)
-                    }></input>
+                    }></input> */}
+                    <textarea name="thread-content" id="thread-content" value={threadContent} onChange={
+                        (e: any) => setThreadContent(e.target.value)
+                    }></textarea>
                 </label>
                 <br/>
                 <button type="submit">Create Thread</button>

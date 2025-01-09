@@ -5,6 +5,8 @@ import ThreadPage from "./Thread/ThreadPage";
 import CreateThreadLogic from "./CreateThread/CreateThreadLogic";
 import DeleteThread from "./Delete/DeleteThread";
 import { useAccount } from "../../Context/useAccount";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment } from '@fortawesome/free-regular-svg-icons';
 
 export type Thread = {
   threadId: number,
@@ -41,10 +43,17 @@ function ForumPage({
 
   return (
     <>
-      {(threadId == -1) && <h2>{title}</h2>}
-      {(threadId == -1) && <h3>{description}</h3>}
+      <div className="forum-header">
+        {(threadId == -1) && <h2>{title}</h2>}
+        {(threadId == -1) && <h3>{description}</h3>}
+      </div>
 
-      {(threadId == -1) && <button onClick={reloadForum}>Reload Forums</button>}
+      {(threadId == -1) && (
+        <button onClick={reloadForum} className="reload-button">
+          <b>Reload Threads</b>
+          <i className="fas fa-sync-alt"></i>
+        </button>
+        )}
 
       <ReloadForumContext.Provider value={reloadForum}>
         {
@@ -63,11 +72,33 @@ function ForumPage({
           return (
             <div key={thread.threadId}>
               {
-                (threadId == -1) &&
-                <button onClick={
-                  (e: any) => setThreadId(thread.threadId)
-                }>{thread.title}</button>
-              }
+                  (threadId == -1) && 
+                  <table className="forum-table">
+                  <thead>
+                    <tr>
+                      <th className="forum-icon-head">Icon</th>
+                      <th className="forum-title-head">Title</th>
+                      <th className="forum-op-head">Original Poster</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <tr className="forum-row">
+                    <td className="forum-icon-cell">
+                      <FontAwesomeIcon icon={faComment} className="comment-icon" />
+                    </td>
+                    <td className="forum-title-cell">
+                      <button className="forum-button" onClick={
+                        (e: any) => setThreadId(thread.threadId)
+                      }>{thread.title}
+                      </button>
+                    </td>
+                    <td className="forum-op-cell">
+                      {thread.username}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+             }
 
               {
                 ((contextId == `${thread.accountId}`) && (threadId == -1)) &&

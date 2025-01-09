@@ -42,11 +42,18 @@ function ThreadPage({
 
   return (
     <>
-      <h2>{title}</h2>
-      <h3>Posted by: {username}</h3>
-      <h4>{content}</h4>
+      <div className="forum-header">
+        <h2>{title}</h2>
+        <h4>Posted by: {username}</h4>
+        {<button onClick={reloadThread} className="reload-button">
+        <b>Reload Thread</b>
+        <i className="fas fa-sync-alt"></i>
+      </button>}
+      </div>
 
-      {<button onClick={reloadThread}>Reload Thread</button>}
+      <p>{content}</p>
+
+      
 
       <ReloadThreadContext.Provider value={reloadThread}>
         <div>

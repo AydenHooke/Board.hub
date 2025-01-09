@@ -16,7 +16,8 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     public String getUsername();
   }
 
-  public Event findByEventId(Integer eventId);
+  @Query(value = "SELECT e AS event, a.username AS username FROM Event e JOIN Account a ON (e.accountId = a.accountId) WHERE e.eventId = ?1")
+  public EventWithUsername findByEventId(Integer eventId);
 
   public List<Event> findAllByType(Type type);
 

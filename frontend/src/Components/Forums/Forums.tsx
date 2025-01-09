@@ -1,6 +1,9 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import ForumPage from "./ForumPage";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment } from '@fortawesome/free-regular-svg-icons';
+
 
 export type Forum = {
   forumId: number,
@@ -12,6 +15,7 @@ export type Forum = {
 function Forums() {
   const [data, setData] = useState<Forum[]>([]);
   const [forumId, setForumId] = useState(-1);
+  
 
   useEffect(() => {
     axios
@@ -24,30 +28,39 @@ function Forums() {
     <>
       {(forumId == -1) && <h2>Main Forums</h2>}
 
+      {/* <ul className="starter-thread">
+        <li>Threads</li>
+        <li>OP</li>
+      </ul> */}
+
+     
+
       {data.map((forum) => {
         return (
-          <ul key={forum.forumId}>
-            <li>
-            {
-              (forumId == -1) &&
-              <button onClick={
-                (e: any) => setForumId(forum.forumId)
-              }>{forum.title}</button>
-            }
-            </li>
+          <div key={forum.forumId}>
+            <ul>
+                {
+                  (forumId == -1) &&
+                  (<li className="forum">
+                  <FontAwesomeIcon icon={faComment} className="comment-icon"/>
+                  <div className="vertical-line forum-line"></div>
+                  <button className="forum-button" onClick={
+                    (e: any) => setForumId(forum.forumId)
+                  }>{forum.title}</button>
+                  </li>)
+                }
+            </ul> 
+                
 
-            <li>
-            {
-              (forumId == forum.forumId) && <ForumPage
-                forumId={forum.forumId}
-                title={forum.title}
-                description={forum.description}
-                type={forum.type}
-              />
-            }
-            </li>
-            
-          </ul>
+                {
+                  (forumId == forum.forumId) && <ForumPage
+                    forumId={forum.forumId}
+                    title={forum.title}
+                    description={forum.description}
+                    type={forum.type}
+                  />
+                }
+          </div>
         )
       })}
     </>

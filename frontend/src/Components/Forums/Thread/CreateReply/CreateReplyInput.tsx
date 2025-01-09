@@ -11,10 +11,9 @@ function CreateReplyInput({
         <div>
             <form onSubmit={handleSubmit}>
                 <label>
-                    Enter content of reply:
-                    <input type="text" value={replyContent} onChange={
+                    <textarea placeholder="Enter your reply here" value={replyContent} onChange={
                         (e: any) => setReplyContent(e.target.value)
-                    }></input>
+                    }></textarea>
                 </label>
                 <br/>
                 <button type="submit">Create Reply</button>

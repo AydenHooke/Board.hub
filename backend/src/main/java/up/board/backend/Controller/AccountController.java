@@ -181,7 +181,7 @@ public class AccountController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Account> getMethodName(@PathVariable Integer id) {
+  public ResponseEntity<Account> getAccountProfile(@PathVariable Integer id) {
     var account = accountService.findById(id);
 
     if (account == null) {
