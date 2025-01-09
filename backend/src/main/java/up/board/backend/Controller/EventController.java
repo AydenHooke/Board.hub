@@ -81,9 +81,27 @@ public class EventController {
   @GetMapping("/id/{id}")
   public ResponseEntity<Event> getEvent(@PathVariable Integer id) {
 
-    // Return event
+    // Check if event exists
     var event = eventService.findById(id);
+    if(event == null){
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Invalid event id").body(null);
+    }
+
     return ResponseEntity.ok().body(event);
+  }
+
+  @GetMapping("/id/{id}/participants")
+  public ResponseEntity<List<Account>> getAccountsById(@PathVariable Integer id) {
+
+    // Check if event exists
+    var event = eventService.findById(id);
+    if(event == null){
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Invalid event id").body(null);
+    }
+   
+    // Return event
+    List<Account> participants = eventService.findAccountsByEventId(id);
+    return ResponseEntity.ok().body(participants);
   }
 
   @PostMapping("/")

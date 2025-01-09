@@ -434,3 +434,37 @@ body {
     align-items: center;
     padding: 10px;
   }
+
+  .event-page{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .participant-list{
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    min-width: 80%;
+    grid-gap: 20px;
+    padding: 20px;
+  }
+
+  .event-participant{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 1rem;
+  }
+
+  /* .event-participant > *{
+    padding: 1rem;
+  } */
+
+  .participant-image{
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Ensure the image covers the entire area */
+  }
