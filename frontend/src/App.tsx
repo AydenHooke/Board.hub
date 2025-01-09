@@ -14,27 +14,31 @@ import EventListLogic from './Components/Events/EventListLogic';
 import PublicProfileLogic from './Components/Profile/PublicProfileLogic';
 import EventPageLogic from './Components/Events/EventPageLogic';
 import AddGameLogic from './Components/Games/AddGame/AddGameLogic';
+import AllGames from './Components/Home/AllGames';
 
 function App() {
   return (
     <>
       <AccountProvider>
         <BrowserRouter>
-          <NavBar/>
-          <Routes>
-            <Route path='/' element={<Home/>}></Route>
-            <Route path='/SignUp' element={<SignUpLogic/>}></Route>
-            <Route path='/SignIn' element={<SignInLogic/>}></Route>
-            <Route path='/Forums/*' element={<Forums/>}></Route>
-            <Route path='/games' element={<GameLogic/>}></Route>
-            <Route path='/events/*' element={<EventLogic/>}></Route>
-            <Route path='/profile' element={<ProfileLogic/>}></Route>
-            <Route path='/submit' element={<SubmitEventLogic/>}></Route>
-            <Route path='/list' element={<EventListLogic/>}></Route>
-            <Route path='/account/:userId' element={<PublicProfileLogic/>}></Route>
-            <Route path='/event/:eventId' element={<EventPageLogic/>}></Route>
-            <Route path='/addGame' element={<AddGameLogic/>}></Route>
-          </Routes>
+          <NavBar />
+          <div id="sub-root">
+            <Routes>
+              <Route path='/' element={<Home />}></Route>
+              <Route path='/SignUp' element={<SignUpLogic />}></Route>
+              <Route path='/SignIn' element={<SignInLogic />}></Route>
+              <Route path='/Forums/*' element={<Forums />}></Route>
+              <Route path='/allGames' element={<AllGames />}></Route>
+              <Route path='/games' element={<GameLogic />}></Route>
+              <Route path='/events/*' element={<EventLogic />}></Route>
+              <Route path='/profile' element={<ProfileLogic />}></Route>
+              <Route path='/submit' element={<SubmitEventLogic />}></Route>
+              <Route path='/list' element={<EventListLogic />}></Route>
+              <Route path='/account/:userId' element={<PublicProfileLogic />}></Route>
+              <Route path='/event/:eventId' element={<EventPageLogic />}></Route>
+              <Route path='/addGame' element={<AddGameLogic />}></Route>
+            </Routes>
+          </div>
         </BrowserRouter>
       </AccountProvider>
     </>

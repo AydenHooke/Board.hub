@@ -27,9 +27,14 @@ function NavBar() {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav right-links">
 
-              <li className="nav-item">
+            <li className="nav-item">
                 <Link className="nav-link" to="/">
                   Home
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/allGames">
+                  Games
                 </Link>
               </li>
               <li className="nav-item">
