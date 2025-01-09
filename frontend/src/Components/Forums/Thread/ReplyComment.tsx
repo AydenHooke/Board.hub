@@ -3,6 +3,7 @@ import { Reply } from "./ThreadPage";
 import { useAccount } from "../../../Context/useAccount";
 import CreateReplyLogic from "./CreateReply/CreateReplyLogic";
 import DeleteReply from "../Delete/DeleteReply";
+import { Link } from "react-router-dom";
 
 function ReplyComment({
   replyId,
@@ -71,7 +72,7 @@ function ReplyComment({
         <>
           <div className="replyToReply" id={`${replyId}`} style={{ border: 'solid #C9E3FF 2px', borderLeft: 'solid #C9E3FF 6px' }}>
             <div className="reply">
-              <h6>Posted by: {username}</h6>
+              <h6>Posted by: <Link to={`/account/${accountId}`}>{username}</Link></h6>
 
               {content}
               {(!deleted) && Delete()}
@@ -82,7 +83,7 @@ function ReplyComment({
       ) : (
         <div className="rootReply" id={`${replyId}`} style={{ border: 'solid #C9E3FF 2px' }}>
           <div className="reply">
-            <h6>Posted by: {username}</h6>
+            <h6>Posted by: <Link to={`/account/${accountId}`}>{username}</Link></h6>
 
             {content}
             {(!deleted) && Delete()}

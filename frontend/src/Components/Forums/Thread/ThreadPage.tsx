@@ -4,6 +4,7 @@ import axios from "axios";
 import ReplyComment from "./ReplyComment";
 import CreateReplyLogic from "./CreateReply/CreateReplyLogic";
 import { useAccount } from "../../../Context/useAccount";
+import { Link } from "react-router-dom";
 
 export type Reply = {
   replyId: number,
@@ -44,7 +45,7 @@ function ThreadPage({
     <>
       <div className="forum-header">
         <h2>{title}</h2>
-        <h4>Posted by: {username}</h4>
+        <h4>Posted by: <Link to={`/account/${accountId}`}>{username}</Link></h4>
         {<button onClick={reloadThread} className="reload-button">
         <b>Reload Thread</b>
         <i className="fas fa-sync-alt"></i>
@@ -53,7 +54,7 @@ function ThreadPage({
 
       <p>{content}</p>
 
-      
+
 
       <ReloadThreadContext.Provider value={reloadThread}>
         <div>

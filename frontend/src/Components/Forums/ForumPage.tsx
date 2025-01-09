@@ -7,6 +7,7 @@ import DeleteThread from "./Delete/DeleteThread";
 import { useAccount } from "../../Context/useAccount";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
+import { Link } from "react-router-dom";
 
 export type Thread = {
   threadId: number,
@@ -56,7 +57,7 @@ function ForumPage({
           <b>Reload Threads</b>
           <i className="fas fa-sync-alt"></i>
         </button>
-        )}
+      )}
 
       <ReloadForumContext.Provider value={reloadForum}>
         {
@@ -88,7 +89,10 @@ function ForumPage({
 
                   <td>
                     {(threadId == -1) &&
-                      `By: ${thread.username}`}
+                      <>
+                        By: <Link to={`/account/${thread.accountId}`}>{thread.username}</Link>
+                      </>
+                    }
                   </td>
 
                   <td>
