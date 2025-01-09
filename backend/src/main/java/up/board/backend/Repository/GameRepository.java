@@ -20,8 +20,8 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
     @Query(value = "SELECT Game.* FROM Game INNER JOIN Game_Collection ON Game_Collection.game_id = Game.game_Id WHERE Game_Collection.account_id = ?1", nativeQuery = true)
     public List<Game> findGamesByCollection(int account_id);
 
-    @Query(value = "SELECT Game.bgg_id FROM Game INNER JOIN Game_Collection ON Game_Collection.game_id = Game.game_Id WHERE Game_Collection.account_id = ?1", nativeQuery = true)
-    public List<String> findAllBggGameIdsByCollection(int account_id);
+    @Query(value = "SELECT Game.* FROM Game INNER JOIN Game_Collection ON Game_Collection.game_id = Game.game_Id WHERE Game_Collection.account_id = ?1", nativeQuery = true)
+    public List<Game> findAllBggGamesByCollection(int account_id);
 
     @Query(value = "SELECT Game.Bgg_Id FROM Game WHERE Bgg_id IS NOT NULL", nativeQuery = true)
     public List<String> findAllBggIds();

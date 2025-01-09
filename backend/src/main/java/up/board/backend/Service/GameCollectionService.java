@@ -28,27 +28,39 @@ public class GameCollectionService {
   }
 
 
-    public GameCollection linkAccountToGame(Account account, Game game) {
-        if(account != null && game != null){ // the game collection class serves as a link to connect all the games a player owns to their account in an entity - a join table
-            GameCollection gameCollection = gameCollectionRepository.findGameCollectionByAccountIdAndGameId(account.getAccountId(), game.getGameId());
-            if(gameCollection == null){
-                gameCollection = new GameCollection();
-                gameCollection.setAccountId(account.getAccountId());
-                gameCollection.setGameId(game.getGameId());
-                logger.info(account.getUsername() + "(Account #" + gameCollection.getAccountId() + ") now owns " + game.getTitle() + "(Internal ID #" + gameCollection.getGameId() + ")");
-                return gameCollectionRepository.save(gameCollection);
-            }
-        }
+  public GameCollection linkAccountToGame(Account account, Game game) {
+      if(account != null && game != null){ // the game collection class serves as a link to connect all the games a player owns to their account in an entity - a join table
+          GameCollection gameCollection = gameCollectionRepository.findGameCollectionByAccountIdAndGameId(account.getAccountId(), game.getGameId());
+          if(gameCollection == null){
+              gameCollection = new GameCollection();
+              gameCollection.setAccountId(account.getAccountId());
+              gameCollection.setGameId(game.getGameId());
+              logger.info(account.getUsername() + "(Account #" + gameCollection.getAccountId() + ") now owns " + game.getTitle() + "(Internal ID #" + gameCollection.getGameId() + ")");
+              return gameCollectionRepository.save(gameCollection);
+          }
+      }
 
     return null;
   }
 
-    public GameCollection checkOwnership(Account account, Game game){
-        GameCollection gameCollection = gameCollectionRepository.findGameCollectionByAccountIdAndGameId(account.getAccountId(), game.getGameId());
-        return gameCollection;
+  public void linkAccountToManyGames(Account account, List<String> gameIds){
+    if(account != null && gameIds != null){ // do not pass this function games that are potentially already owned by account!
+      for(String game : gameIds){
+        GameCollection gameCollection = new GameCollection();
+        gameCollection.setAccountId(account.getAccountId());
+        gameCollection.setGameId(Integer.valueOf(game));
+        logger.info(account.getUsername() + "(Account #" + gameCollection.getAccountId() + ") now owns game with internal ID #" + gameCollection.getGameId());
+        gameCollectionRepository.save(gameCollection);
+      }
     }
+  }
 
-    public void removeOwnership(Account account, Game game){
-        gameCollectionRepository.delete(gameCollectionRepository.findGameCollectionByAccountIdAndGameId(account.getAccountId(), game.getGameId()));
-    }
+  public GameCollection checkOwnership(Account account, Game game){
+      GameCollection gameCollection = gameCollectionRepository.findGameCollectionByAccountIdAndGameId(account.getAccountId(), game.getGameId());
+      return gameCollection;
+  }
+
+  public void removeOwnership(Account account, Game game){
+      gameCollectionRepository.delete(gameCollectionRepository.findGameCollectionByAccountIdAndGameId(account.getAccountId(), game.getGameId()));
+  }
 }
