@@ -38,7 +38,7 @@ public class Account {
   @Enumerated(EnumType.STRING)
   Role role;
 
-  @ManyToMany
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(
     name = "account_event",
     joinColumns = @JoinColumn(name = "account_id"),

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import up.board.backend.Entity.Account;
 import up.board.backend.Entity.Event;
 import up.board.backend.Repository.EventRepository;
 import up.board.backend.Enum.Event.Type;
@@ -29,6 +30,10 @@ public class EventService {
     var event = eventDTO.getEvent();
     event.setUsername(eventDTO.getUsername());
     return event;
+  }
+
+  public List<Account> findAccountsByEventId(Integer eventId) {
+    return eventRepository.findAccountsByEventId(eventId);
   }
 
   public List<Event> getAll() {

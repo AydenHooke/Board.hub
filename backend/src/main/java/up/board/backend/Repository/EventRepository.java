@@ -1,5 +1,6 @@
 package up.board.backend.Repository;
 
+import up.board.backend.Entity.Account;
 import up.board.backend.Entity.Event;
 import up.board.backend.Enum.Event.Type;
 
@@ -15,6 +16,9 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     public Event getEvent();
     public String getUsername();
   }
+
+  @Query("SELECT a FROM Account a JOIN a.events e WHERE e.eventId = :eventId")
+  public List<Account> findAccountsByEventId(Integer eventId);
 
   @Query(value = "SELECT e AS event, a.username AS username FROM Event e JOIN Account a ON (e.accountId = a.accountId) WHERE e.eventId = ?1")
   public EventWithUsername findByEventId(Integer eventId);
