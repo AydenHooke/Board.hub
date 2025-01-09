@@ -171,11 +171,6 @@ body {
     display: flex;
 }
 
-.event-buttons > *{
-    margin: 0 5%;
-}
-
-
 
 .event-list{
     display: flex;

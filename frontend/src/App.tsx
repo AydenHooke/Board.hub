@@ -14,6 +14,7 @@ import EventListLogic from './Components/Events/EventListLogic';
 import PublicProfileLogic from './Components/Profile/PublicProfileLogic';
 import EventPageLogic from './Components/Events/EventPageLogic';
 import AddGameLogic from './Components/Games/AddGame/AddGameLogic';
+import AllGames from './Components/Home/AllGames';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path='/SignUp' element={<SignUpLogic/>}></Route>
             <Route path='/SignIn' element={<SignInLogic/>}></Route>
             <Route path='/Forums/*' element={<Forums/>}></Route>
+            <Route path='/allGames' element={<AllGames/>}></Route>
             <Route path='/games' element={<GameLogic/>}></Route>
             <Route path='/events/*' element={<EventLogic/>}></Route>
             <Route path='/profile' element={<ProfileLogic/>}></Route>
