@@ -1,6 +1,9 @@
 import axios from "axios"
 import { createContext, useEffect, useState } from "react"
 import ForumPage from "./ForumPage";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment } from '@fortawesome/free-regular-svg-icons';
+
 
 export type Forum = {
   forumId: number,
@@ -27,7 +30,7 @@ function Forums() {
       .catch((error) => console.error('Error getting data, ', error));
   }, [])
 
-  var currentForum = forumId == -1 ? null : data.filter((f) => f.forumId == forumId)[0];
+  const currentForum = forumId == -1 ? null : data.filter((f) => f.forumId == forumId)[0];
 
   return (
     <>

@@ -12,6 +12,7 @@ import { AccountProvider } from './Context/AccountContext';
 import SubmitEventLogic from './Components/Events/SubmitEventLogic';
 import EventListLogic from './Components/Events/EventListLogic';
 import PublicProfileLogic from './Components/Profile/PublicProfileLogic';
+import EventPageLogic from './Components/Events/EventPageLogic';
 import AddGameLogic from './Components/Games/AddGame/AddGameLogic';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path='/submit' element={<SubmitEventLogic/>}></Route>
             <Route path='/list' element={<EventListLogic/>}></Route>
             <Route path='/account/:userId' element={<PublicProfileLogic/>}></Route>
+            <Route path='/event/:eventId' element={<EventPageLogic/>}></Route>
             <Route path='/addGame' element={<AddGameLogic/>}></Route>
           </Routes>
         </BrowserRouter>

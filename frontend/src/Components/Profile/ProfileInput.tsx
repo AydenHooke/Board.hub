@@ -6,6 +6,7 @@ type ProfileInputProps = {
     password: string, setPassword: React.Dispatch<React.SetStateAction<string>>,
     bggUsername: string, setBggUsername: React.Dispatch<React.SetStateAction<string>>,
     handleProfileEdit: (e: React.FormEvent<HTMLFormElement>) => void
+    showSuccessMessage: boolean
 };
 
 function ProfileInput({
@@ -13,15 +14,14 @@ function ProfileInput({
   username, setUsername,
   password, setPassword,
   bggUsername, setBggUsername,
-  handleProfileEdit}: ProfileInputProps
+  handleProfileEdit,
+  showSuccessMessage}: ProfileInputProps,
 ) {
   return (
     <>
-     
-        <h1 id='profile-heading'>Edit Profile</h1>
-
         <section className='profile-section'>
           <form id="profile-form" onSubmit={handleProfileEdit}>
+                  <h1 id='profile-heading'>Edit Profile</h1>
                   <label className='profile-field'>
                       <b>Email:</b>
                       <input required type="email" className="profile-field-input" placeholder="Change Email" value={email} onChange={
@@ -29,7 +29,7 @@ function ProfileInput({
                       }></input>
                   </label>
                   <br/>
-                  <label className="profile-field">
+                  <label id="profile-label-username" className="profile-field">
                       <b>Username:</b>
                       <input required type="text" className="profile-field-input" placeholder="Enter Username" value={username} onChange={
                           (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)
@@ -51,6 +51,7 @@ function ProfileInput({
                   </label>
                   <br />
                   <button className="default-button" id="profile-button" type="submit">Save Changes</button>
+                  {showSuccessMessage && <p className="success-message">Profile Updated Successfully!</p>}
           </form>
         </section>
     </>

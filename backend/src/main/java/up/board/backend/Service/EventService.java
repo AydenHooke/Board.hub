@@ -23,7 +23,10 @@ public class EventService {
   }
 
   public Event findById(int eventId) {
-    return eventRepository.findByEventId(eventId);
+    var eventDTO =  eventRepository.findByEventId(eventId);
+    var event = eventDTO.getEvent();
+    event.setUsername(eventDTO.getUsername());
+    return event;
   }
 
   public List<Event> getAll() {

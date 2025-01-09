@@ -11,6 +11,7 @@ function SubmitEventLogic() {
   const [name, setName] = useState('');
   const [content, setContent] = useState('');
   const [time, setTime] = useState('');
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const { id, jwt : contextJwt } = useAccount();
   const navigate = useNavigate();
 
@@ -40,6 +41,8 @@ function SubmitEventLogic() {
       navigate('/events');
     }).catch((error) => {
       console.log(error);
+      setShowErrorMessage(true);
+      setTimeout(() => setShowErrorMessage(false), 3000);
     });
 
     
@@ -52,14 +55,17 @@ function SubmitEventLogic() {
       name={name} setName={setName}
       content={content} setContent={setContent}
       time={time} setTime={setTime}
-      handleSubmit={handleSubmit}/>}
+      handleSubmit={handleSubmit}
+      showErrorMessage={showErrorMessage}/>}
+      
 
       {eventType === 'TOURNAMENT' && <SubmitEventInput 
       eventType="TOURNAMENT" 
       name={name} setName={setName}
       content={content} setContent={setContent}
       time={time} setTime={setTime}
-      handleSubmit={handleSubmit}/>}
+      handleSubmit={handleSubmit}
+      showErrorMessage={showErrorMessage}/>}
     </>
   );
 }

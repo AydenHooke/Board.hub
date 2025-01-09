@@ -1,5 +1,7 @@
 :root{
     --primary-color: #C9E3FF;
+
+    --forum-background-color: #add5ff;
 }
 
 
@@ -100,7 +102,7 @@ body {
     cursor: pointer;
 }
 
-#profile-form{
+#profile-form, #submit-event-form{
     display: flex;
     flex-direction: column;
     width: 50%;
@@ -110,17 +112,38 @@ body {
     transform: translate(-50%, -50%);
 }
 
-#profile-heading{
-    position: absolute;
-    left: 43%;
-    top: 15%;
+.submit-event-field{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2vh;
+}
+
+#profile-heading, #submit-event-heading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     /* transform: translate(-50%, -50%); */
 }
 
-.profile-field{
+.profile-field, .success-message{
     display: flex;
     justify-content: center;
+}
 
+.success-message, .error-message{
+    display: flex;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.success-message{
+    color: green;
+}
+
+.error-message{
+    color: red;
 }
 
 .profile-field-input{
@@ -129,7 +152,7 @@ body {
 
 
 
-#profile-button{
+#profile-button, #submit-event-button{
     position: relative;
     margin-top: 5%;
     width: 50%;
@@ -200,6 +223,18 @@ body {
     padding: 0%;
 }
 
+.vertical-line {
+   
+      max-width: 1px; /* Line width */
+      background-color: black; /* Line color */
+      height: 100%; /* Override in-line if you want specific height. */
+
+     
+    
+}
+
+
+
 .event-img{
     width: 75%;
     height: 50%;
@@ -235,11 +270,10 @@ body {
     display: flex;
     flex-direction: column;
     list-style: none;
-    border: 2px solid black;
+    /* border: 2px solid black; */
     border-radius: 6px;
     width: fit-content;
     margin: 2%;
-    background-color: var(--primary-color);
 }
 .game-tile:hover{
   cursor: pointer
@@ -276,5 +310,127 @@ body {
     margin: 0 auto 1em;
     box-shadow: 0px 0px 15px 0px;
     overflow: hidden;
+}
+
+
+
+.forum, .thread{
+    display: flex;
+    width: 90vw;
+    height: 5vh;
+    border: 2px solid black;
+}
+
+.forum-button, .thread-button{
+    border-style: none;
+    background-color: var(--forum-background-color);
+}
+
+.comment-icon{
+    height: 100%;
+    max-width: 4vw;
+    object-fit: contain;
+    background-color: var(--forum-background-color);
+}
+
+.forum-line{
+    /* margin-right: .5vw; */
+    
+}
+
+.forum > *, .thread > *{
+    width: 100%;
+}
+
+
+.forum-table {
+    width: 100%;
+    border-collapse: collapse;
+    /* margin: 20px 0; */
+    font-size: 18px;
+    text-align: left;
+  }
+  
+  .forum-table th, .forum-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+
   }
 
+  .forum-title-cell, .forum-title-head{
+    width: 50%;
+  }
+
+  .forum-op-cell, .forum-op-head{
+    width: 30%;
+  }
+
+  .forum-icon-cell, .forum-icon-head{
+    width: 20%;
+  }
+
+  .forum-icon-cell {
+    text-align: center;
+  }
+  
+  .forum-table th {
+    background-color: #f4f4f4;
+  }
+  
+  .forum-row:hover {
+    background-color: #f1f1f1;
+  }
+  
+  
+  
+  .forum-title-cell {
+    width: auto;
+  }
+  
+  .forum-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 18px;
+    text-align: left;
+  }
+  
+  .forum-button:hover {
+    text-decoration: underline;
+  }
+  
+  .comment-icon {
+    font-size: 24px;
+    color: #007bff;
+  }
+
+
+
+  .reload-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    justify-self: center;
+    align-items: center;
+    font-size: 16px;
+    color: #007bff;
+    transition: color 0.3s ease;
+  }
+  
+  .reload-button:hover {
+    color: #0056b3;
+  }
+  
+  .reload-button i {
+    margin-left: 5px;
+  }
+
+  .forum-header{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
