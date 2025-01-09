@@ -53,8 +53,7 @@ function ThreadPage({
       </div>
 
       <p>{content}</p>
-
-
+      <hr/>
 
       <ReloadThreadContext.Provider value={reloadThread}>
         <div>

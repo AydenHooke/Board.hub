@@ -14,7 +14,7 @@ function CreateThreadInput({
             <form onSubmit={handleSubmit}>
                 <label>
                     Enter title of thread:
-                    <input type="text" value={threadTitle} onChange={
+                    <input id="thread-title-input" type="text" value={threadTitle} onChange={
                         (e: any) => setThreadTitle(e.target.value)
                     }></input>
                 </label>
@@ -24,7 +24,7 @@ function CreateThreadInput({
                     {/* <input type="text" value={threadContent} onChange={
                         (e: any) => setThreadContent(e.target.value)
                     }></input> */}
-                    <textarea name="thread-content" id="thread-content" value={threadContent} onChange={
+                    <textarea name="thread-content" id="thread-content-input" value={threadContent} onChange={
                         (e: any) => setThreadContent(e.target.value)
                     }></textarea>
                 </label>
