@@ -114,7 +114,19 @@ class EventTest {
     event.setTitle("Test event 1");
     event.setContent("Test description");
 
-    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(event);
+    var eventWithUsername = new EventWithUsername() {
+      @Override
+      public Event getEvent() {
+        return event;
+      }
+
+      @Override
+      public String getUsername() {
+        return "";
+      }
+    };
+
+    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(eventWithUsername);
 
     //
     var response = eventController.getEvent(1);
@@ -211,16 +223,40 @@ class EventTest {
     events.add(event0);
     events.add(event1);
 
-    when(eventRepository.findAllByType(any(Type.class))).thenReturn(events);
+    var eventsWithUsername = new ArrayList<EventRepository.EventWithUsername>();
+    eventsWithUsername.add(new EventWithUsername() {
+      @Override
+      public Event getEvent() {
+        return event0;
+      }
+
+      @Override
+      public String getUsername() {
+        return "";
+      }
+    });
+    eventsWithUsername.add(new EventWithUsername() {
+      @Override
+      public Event getEvent() {
+        return event1;
+      }
+
+      @Override
+      public String getUsername() {
+        return "";
+      }
+    });
+
+    when(eventRepository.findAllPlusUsername()).thenReturn(eventsWithUsername);
 
     //
-    var response = eventController.getEvents(eventType);
+    var response = eventController.getEvents();
     var responseEvents = response.getBody();
 
     assertEquals(200, response.getStatusCode().value());
     assertEquals(2, responseEvents.size());
 
-    verify(eventRepository).findAllByType(any(Type.class));
+    verify(eventRepository).findAllPlusUsername();
   }
 
   @Test
@@ -381,12 +417,24 @@ class EventTest {
     event.setContent("Test description");
     event.setType(eventType);
 
+    var eventWithUsername = new EventWithUsername() {
+      @Override
+      public Event getEvent() {
+        return event;
+      }
+
+      @Override
+      public String getUsername() {
+        return "";
+      }
+    };
+
     var account = new Account();
     account.setAccountId(1);
     account.setUsername("test");
     account.setEvents(new ArrayList<Event>());
 
-    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(event);
+    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(eventWithUsername);
     when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(account);
 
     //
@@ -431,7 +479,19 @@ class EventTest {
     event.setContent("Test description");
     event.setType(eventType);
 
-    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(event);
+    var eventWithUsername = new EventWithUsername() {
+      @Override
+      public Event getEvent() {
+        return event;
+      }
+
+      @Override
+      public String getUsername() {
+        return "";
+      }
+    };
+
+    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(eventWithUsername);
     when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(null);
 
     //
@@ -454,6 +514,18 @@ class EventTest {
     event.setContent("Test description");
     event.setType(eventType);
 
+    var eventWithUsername = new EventWithUsername() {
+      @Override
+      public Event getEvent() {
+        return event;
+      }
+
+      @Override
+      public String getUsername() {
+        return "";
+      }
+    };
+
     var account = new Account();
     account.setAccountId(1);
     account.setUsername("test");
@@ -465,7 +537,7 @@ class EventTest {
     eventAccounts.add(account);
     event.setAccounts(eventAccounts);
 
-    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(event);
+    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(eventWithUsername);
     when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(account);
 
     //
@@ -476,6 +548,55 @@ class EventTest {
     verify(eventRepository).findByEventId(any(Integer.class));
     verify(accountRepository).findByAccountId(any(Integer.class));
     verify(accountRepository).save(any(Account.class));
+    verify(eventRepository).save(any(Event.class));
+  }
+
+  @Test
+  void deleteEventFromAccount_deleteEvent() {
+
+    var eventType = Type.MEETING;
+
+    var event = new Event();
+    event.setAccountId(1);
+    event.setTitle("Test event 1");
+    event.setContent("Test description");
+    event.setType(eventType);
+
+    var eventWithUsername = new EventWithUsername() {
+      @Override
+      public Event getEvent() {
+        return event;
+      }
+
+      @Override
+      public String getUsername() {
+        return "";
+      }
+    };
+
+    var account = new Account();
+    account.setAccountId(1);
+    account.setUsername("test");
+    var accountEvents = new ArrayList<Event>();
+    accountEvents.add(event);
+    account.setEvents(accountEvents);
+
+    var eventAccounts = new ArrayList<Account>();
+    eventAccounts.add(account);
+    event.setAccounts(eventAccounts);
+
+    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(eventWithUsername);
+    when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(account);
+
+    //
+    var response = eventController.deleteEventFromAccount(account.getAccountId(), event.getEventId());
+
+    assertEquals(200, response.getStatusCode().value());
+
+    verify(eventRepository).findByEventId(any(Integer.class));
+    verify(accountRepository).findByAccountId(any(Integer.class));
+    verify(accountRepository).save(any(Account.class));
+    verify(eventRepository).delete(any(Event.class));
   }
 
   @Test
@@ -510,7 +631,19 @@ class EventTest {
     event.setContent("Test description");
     event.setType(eventType);
 
-    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(event);
+    var eventWithUsername = new EventWithUsername() {
+      @Override
+      public Event getEvent() {
+        return event;
+      }
+
+      @Override
+      public String getUsername() {
+        return "";
+      }
+    };
+
+    when(eventRepository.findByEventId(any(Integer.class))).thenReturn(eventWithUsername);
     when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(null);
 
     //

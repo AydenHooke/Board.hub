@@ -24,7 +24,9 @@ public class EventService {
   }
 
   public Event findById(int eventId) {
-    var eventDTO =  eventRepository.findByEventId(eventId);
+    var eventDTO = eventRepository.findByEventId(eventId);
+    if (eventDTO == null)
+      return null;
     var event = eventDTO.getEvent();
     event.setUsername(eventDTO.getUsername());
     return event;

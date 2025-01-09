@@ -224,13 +224,13 @@ body {
 }
 
 .vertical-line {
-   
+
       max-width: 1px; /* Line width */
       background-color: black; /* Line color */
       height: 100%; /* Override in-line if you want specific height. */
 
-     
-    
+
+
 }
 
 
@@ -335,7 +335,7 @@ body {
 
 .forum-line{
     /* margin-right: .5vw; */
-    
+
 }
 
 .forum > *, .thread > *{
@@ -350,7 +350,7 @@ body {
     font-size: 18px;
     text-align: left;
   }
-  
+
   .forum-table th, .forum-table td {
     padding: 12px 15px;
     border: 1px solid #ddd;
@@ -372,21 +372,21 @@ body {
   .forum-icon-cell {
     text-align: center;
   }
-  
+
   .forum-table th {
     background-color: #f4f4f4;
   }
-  
+
   .forum-row:hover {
     background-color: #f1f1f1;
   }
-  
-  
-  
+
+
+
   .forum-title-cell {
     width: auto;
   }
-  
+
   .forum-button {
     background: none;
     border: none;
@@ -395,11 +395,11 @@ body {
     font-size: 18px;
     text-align: left;
   }
-  
+
   .forum-button:hover {
     text-decoration: underline;
   }
-  
+
   .comment-icon {
     font-size: 24px;
     color: #007bff;
@@ -418,11 +418,11 @@ body {
     color: #007bff;
     transition: color 0.3s ease;
   }
-  
+
   .reload-button:hover {
     color: #0056b3;
   }
-  
+
   .reload-button i {
     margin-left: 5px;
   }

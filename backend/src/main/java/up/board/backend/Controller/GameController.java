@@ -1,5 +1,8 @@
 package up.board.backend.Controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -45,7 +48,7 @@ public class GameController {
 
   @PostMapping("/validateGamePersistenceAndCollect")
   public ResponseEntity<List<String>> validateGamePersistenceAndCollect(
-      @RequestHeader("Authorization") String bearerToken, @RequestBody List<String> gameIds, @RequestParam int id) {
+      @RequestHeader("Authorization") String bearerToken, @RequestBody List<String> bggIds, @RequestParam int id) {
     logger.info("Validating persistance...");
 
     if (bearerToken == null) {
@@ -62,20 +65,45 @@ public class GameController {
     if (!tokenUsername.equals(existingAccount.getUsername())) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
-  //the var changes are not Ayden's
-  for(int i = 0; i<gameIds.size(); i++){
-    Game gameToCollect = gameService.findGameByBggId(Integer.valueOf(gameIds.get(i)));
-    if (gameToCollect != null){
-      var currentCollection = gameCollectionService.linkAccountToGame(existingAccount, gameToCollect);
-      if (currentCollection!=null)
-        logger.info("Account #" + currentCollection.getAccountId() + " now owns game #" + currentCollection.getGameId());
-  }}
 
-    var gameIdsNotPersisted = gameService.returnIfNotPersisted(gameIds); // this returns a list of every ID we don't
+    List<Game> allBggGames = gameService.findAllBggGames(); // this servers the same function as gameService.returnIfNotPersisted(gameIds) below that is commented out
+    List<String> bggGameIdsNotPersisted = new ArrayList<>(bggIds); // when combined with this in the .removeall below
+    List<Game> allOwnedBggGames = gameService.findAllBggGamesOwnedByUser(id);
+    List<String> allOwnedBggGameIds = new ArrayList<>();
+    List<String> internalIds = new ArrayList<>();
+    List<String> allBggGameIds = new ArrayList<>();
+
+    for(Game bggGame: allBggGames)
+      allBggGameIds.add(String.valueOf(bggGame.getBggId()));
+
+    for(Game bggGame: allOwnedBggGames)
+      allOwnedBggGameIds.add(String.valueOf(bggGame.getBggId()));
+
+    bggGameIdsNotPersisted.removeAll(allBggGameIds); // finds all the BggGameIds of games that are not persisted
+    bggIds.removeAll(bggGameIdsNotPersisted); // this makes gameIds be all games that are NOT already persisted so that they aren't looped through since this function doesn't persist those games
+    bggIds.removeAll(allOwnedBggGameIds); // this removes all games that you already own
+
+    for(Game bggGame : allBggGames){
+      if(bggIds.contains(String.valueOf(bggGame.getBggId())))
+        internalIds.add(String.valueOf(bggGame.getGameId()));
+    }
+    
+    gameCollectionService.linkAccountToManyGames(existingAccount, internalIds);
+    //the var changes are not Ayden's
+    /*for(int i = 0; i<gameIds.size(); i++){
+      Game gameToCollect = gameService.findGameByBggId(Integer.valueOf(gameIds.get(i)));
+      if (gameToCollect != null){
+        var currentCollection = gameCollectionService.linkAccountToGame(existingAccount, gameToCollect);
+        if (currentCollection!=null)
+          logger.info("Account #" + currentCollection.getAccountId() + " now owns game #" + currentCollection.getGameId());
+    }}*/
+
+
+    //var bggGameIdsNotPersisted = gameService.returnIfNotPersisted(gameIds); // this returns a list of every ID we don't
                                                                          // have a game for
     logger.info("Returning missing games");
     return ResponseEntity.status(HttpStatus.OK)
-        .body(gameIdsNotPersisted);
+        .body(bggGameIdsNotPersisted);
   }
 
   @PostMapping("/persistOrCollectOneGame")

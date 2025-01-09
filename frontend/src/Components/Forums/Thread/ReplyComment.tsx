@@ -3,6 +3,7 @@ import { Reply } from "./ThreadPage";
 import { useAccount } from "../../../Context/useAccount";
 import CreateReplyLogic from "./CreateReply/CreateReplyLogic";
 import DeleteReply from "../Delete/DeleteReply";
+import { Link } from "react-router-dom";
 
 function ReplyComment({
   replyId,
@@ -21,7 +22,7 @@ function ReplyComment({
     return (
       <>
         <br />
-        {!isVisible && <button onClick={() => setIsVisible(true)}>Reply to comment</button>}
+        {!isVisible && <a href="javascript:void(0)" onClick={() => setIsVisible(true)}>reply</a>}
         {isVisible &&
           <div>
             <CreateReplyLogic
@@ -38,10 +39,10 @@ function ReplyComment({
     )
   }
 
-  function Delete() {
+  function createDelete() {
     return (
       <>
-        <br />
+      &nbsp;
         {
           (contextId == `${accountId}`) &&
           <DeleteReply
@@ -71,22 +72,22 @@ function ReplyComment({
         <>
           <div className="replyToReply" id={`${replyId}`} style={{ border: 'solid #C9E3FF 2px', borderLeft: 'solid #C9E3FF 6px' }}>
             <div className="reply">
-              <h6>Posted by: {username}</h6>
+              <h6>Posted by: <Link to={`/account/${accountId}`}>{username}</Link></h6>
 
               {content}
-              {(!deleted) && Delete()}
               {(contextId != '') && createReply()}
+              {(!deleted) && createDelete()}
             </div>
           </div>
         </>
       ) : (
         <div className="rootReply" id={`${replyId}`} style={{ border: 'solid #C9E3FF 2px' }}>
           <div className="reply">
-            <h6>Posted by: {username}</h6>
+            <h6>Posted by: <Link to={`/account/${accountId}`}>{username}</Link></h6>
 
             {content}
-            {(!deleted) && Delete()}
             {(contextId != '') && createReply()}
+            {(!deleted) && createDelete()}
           </div>
         </div>
       )}

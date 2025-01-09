@@ -1,5 +1,7 @@
 package up.board.backend.Controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +22,7 @@ import up.board.backend.Utils.JwtUtil;
 @CrossOrigin(origins = "http://localhost:5174")
 public class GameVoteController {
 
-  //private static final Logger logger = LoggerFactory.getLogger(GameVoteController.class);
+  private static final Logger logger = LoggerFactory.getLogger(GameVoteController.class);
 
   GameVoteService gameVoteService;
   AccountService accountService;
@@ -67,8 +69,8 @@ public class GameVoteController {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
 
-    var existingGameVote = gameVoteService.getGameVote(existingAccount.getAccountId(), gameVote.getGameVoteId());
-    var existingVote = gameVote == null ? 0 : gameVote.getValue();
+    var existingGameVote = gameVoteService.getGameVote(gameVote.getAccount().getAccountId(), gameVote.getGame().getGameId());
+    var existingVote = existingGameVote == null ? 0 : existingGameVote.getValue();
     if (gameVote.getValue() == existingVote) {
       return ResponseEntity.ok().body(true);
     }

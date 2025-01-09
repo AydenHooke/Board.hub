@@ -5,51 +5,56 @@ import { useAccount } from "../../../../Context/useAccount";
 import { ReloadThreadContext } from "../ThreadPage";
 
 type threadReply = {
-    threadId: number,
-    title: string,
-    content: string,
-    accountId: number,
-    forumId: number,
-    replyToId: number | null
+  threadId: number,
+  title: string,
+  content: string,
+  accountId: number,
+  forumId: number,
+  replyToId: number | null
 }
 
 function CreateReplyLogic({
-    threadId,
-    title,
-    content,
-    accountId,
-    forumId,
-    replyToId}: threadReply
+  threadId,
+  title,
+  content,
+  accountId,
+  forumId,
+  replyToId }: threadReply
 ) {
-    const { id: contextId, jwt: contextJwt } = useAccount();
+  const { id: contextId, jwt: contextJwt } = useAccount();
 
-    const [replyContent, setReplyContent] = useState("");
+  const [replyContent, setReplyContent] = useState("");
 
-    const reloadThreadContext = useContext(ReloadThreadContext);
+  const reloadThreadContext = useContext(ReloadThreadContext);
 
-    function handleSubmit(event: FormEvent) {
-        event.preventDefault();
-        axios
-            .post('http://localhost:8080/reply/post', {
-                threadId: threadId,
-                replyToId: replyToId,
-                accountId: contextId,
-                content: replyContent
-            }, {
-                headers: {"authorization" : `${contextJwt}`}
-            })
-            .then((Response) => {console.log(Response.data); reloadThreadContext(); })
-            .catch((error) => console.error(error));
-    }
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    axios
+      .post('http://localhost:8080/reply/post', {
+        threadId: threadId,
+        replyToId: replyToId,
+        accountId: contextId,
+        content: replyContent
+      }, {
+        headers: { "authorization": `${contextJwt}` }
+      })
+      .then((Response) => { console.log(Response.data); reloadThreadContext(); })
+      .catch((error) => console.error(error));
 
-    return (
-        <>
-            <CreateReplyInput
-                replyContent={replyContent} setReplyContent={setReplyContent}
-                handleSubmit={handleSubmit}
-            />
-        </>
-    )
+    setReplyContent('');
+
+    var content = document.getElementById(`reply-content-input-${replyToId}`) as HTMLInputElement;
+    content.value = "";
+  }
+
+  return (
+    <>
+      <CreateReplyInput
+        replyContent={replyContent} setReplyContent={setReplyContent}
+        handleSubmit={handleSubmit} reply_id={Number(replyToId)}
+      />
+    </>
+  )
 }
 
 export default CreateReplyLogic

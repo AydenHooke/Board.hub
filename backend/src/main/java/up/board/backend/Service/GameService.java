@@ -53,6 +53,14 @@ public class GameService {
     return gameRepository.findGamesByGameIdNotNull();
   }
 
+  public List<Game> findAllBggGames() {
+    return gameRepository.findGamesByBggIdNotNull();
+  }
+
+  public List<Game> findAllBggGamesOwnedByUser(int accountId){
+    return gameRepository.findAllBggGamesByCollection(accountId);
+  }
+
   public List<Game> findWhoCollectedWhatGames(int accountId) {
     /*var accountGameCollections = gameCollectionRepository.findGameCollectionsByAccountId(accountId);
     var collectedGames = new ArrayList<Game>();
