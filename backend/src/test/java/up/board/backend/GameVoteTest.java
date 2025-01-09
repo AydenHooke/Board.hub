@@ -2,11 +2,8 @@ package up.board.backend;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,20 +13,13 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 
 import up.board.backend.Controller.GameVoteController;
-import up.board.backend.Controller.ReplyController;
 import up.board.backend.Entity.Account;
 import up.board.backend.Entity.Game;
 import up.board.backend.Entity.GameVote;
-import up.board.backend.Entity.Reply;
-import up.board.backend.Entity.Thread;
 import up.board.backend.Repository.AccountRepository;
 import up.board.backend.Repository.GameVoteRepository;
-import up.board.backend.Repository.ReplyRepository;
-import up.board.backend.Repository.ThreadRepository;
 import up.board.backend.Service.AccountService;
 import up.board.backend.Service.GameVoteService;
-import up.board.backend.Service.ReplyService;
-import up.board.backend.Service.ThreadService;
 import up.board.backend.Utils.JwtUtil;
 
 @SpringBootTest
