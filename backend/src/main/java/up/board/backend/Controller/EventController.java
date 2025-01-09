@@ -204,12 +204,12 @@ public class EventController {
       return ResponseEntity.status(HttpStatus.CONFLICT).header("error", "Event not associated with account").body(null);
     }
 
-    // Remove the association
-    existingAccount.getEvents().remove(existingEvent);
-    existingEvent.getAccounts().remove(existingAccount);
+    // // Remove the association
+    // existingAccount.getEvents().remove(existingEvent);
+    // existingEvent.getAccounts().remove(existingAccount);
 
-    // Save both entities to update the join table
-    accountService.save(existingAccount);
+    // // Save both entities to update the join table
+    // accountService.save(existingAccount);
 
     // Delete the event if it is associated with this account
     if (existingAccount.getAccountId() == existingEvent.getAccountId()) {

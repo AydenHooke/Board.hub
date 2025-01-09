@@ -51,7 +51,7 @@ public class Event {
   @JoinColumn(name = "game_id", nullable = true)
   Integer gameId;
 
-  @ManyToMany(mappedBy = "events")
+  @ManyToMany(mappedBy = "events", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
   @JsonBackReference
   List<Account> accounts;
 
