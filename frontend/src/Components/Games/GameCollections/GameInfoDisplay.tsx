@@ -10,12 +10,12 @@ type gameProps = {
 function GameInfoDisplay({ data }: gameProps) {
   const { id: contextId, jwt: contextJwt } = useAccount();
 
+  const [vote, setVote] = useState(0);
+  const [voteStatus, setVoteStatus] = useState(-2);
   const [status, setStatus] = useState(-1);
   const [change, setChange] = useState(true);
 
   useEffect(() => {
-    console.log(data.gameId);
-    console.log(contextId);
     if (contextId != '') {
       axios
         .get(`http://localhost:8080/game/checkGameOwnership?gameId=${data.gameId}&accountId=${contextId}`, {
@@ -23,7 +23,17 @@ function GameInfoDisplay({ data }: gameProps) {
         })
         .then((Response) => setStatus(Response.status))
         .catch((error) => console.error(error));
+
+      axios
+        .get(`http://localhost:8080/gameVote/account/${contextId}/${data.gameId}`)
+        .then((Response) => setVoteStatus(Response.data))
+        .catch((error) => console.error(error));
     }
+
+    axios
+      .get(`http://localhost:8080/gameVote/game/${data.gameId}`)
+      .then((Response) => setVote(Response.data))
+      .catch((error) => console.error(error));
   }, [change])
 
   function handleSubmitAdd(event: any) {
@@ -56,6 +66,24 @@ function GameInfoDisplay({ data }: gameProps) {
       .catch((error) => console.error(error));
   }
 
+  function GameVoteSubmit(sentVote: number) {
+
+    if (voteStatus == 1 && sentVote == 1) sentVote = 0;
+    if (voteStatus == -1 && sentVote == -1) sentVote = 0;
+
+    console.log(sentVote);
+
+    axios
+      .post(`http://localhost:8080/gameVote/vote`, {
+        game: {gameId: data.gameId},
+        account: {accountId: contextId},
+        value: sentVote
+      }, {
+        headers: { "Authorization": `${contextJwt}` }
+      })
+      .then((Response) => { console.log(Response); setVoteStatus(-2); setChange(!change);})
+      .catch((error) => console.error(error));
+  }
 
   var decodeEntities = (function () {
     // this prevents any overhead from creating the object each time
@@ -87,7 +115,12 @@ function GameInfoDisplay({ data }: gameProps) {
       <br />
 
       <img src={data.gameImageUrl} alt={data.title} />
-      <p>Rating:{data.rating} Price:{data.price}</p>
+
+      <p>Votes:{vote}</p>
+      {((contextId != '') && (voteStatus != -2)) && <button onClick={() => GameVoteSubmit(1)}>Like Game</button>}
+      {((contextId != '') && (voteStatus != -2)) && <button onClick={() => GameVoteSubmit(-1)}>Dislike Game</button>}
+
+      <p>Price:{data.price}</p>
       <p>{desc}</p>
     </div>
   )
