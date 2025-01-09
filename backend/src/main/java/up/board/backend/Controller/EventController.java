@@ -2,6 +2,7 @@ package up.board.backend.Controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -131,7 +132,7 @@ public class EventController {
     }
 
     // Return threads for forum
-    var createdEvent = eventService.create(event);
+    var createdEvent = eventService.save(event);
     return ResponseEntity.ok().body(createdEvent);
   }
 
@@ -204,21 +205,27 @@ public class EventController {
       return ResponseEntity.status(HttpStatus.CONFLICT).header("error", "Event not associated with account").body(null);
     }
 
-    // // Remove the association
-    // existingAccount.getEvents().remove(existingEvent);
-    // existingEvent.getAccounts().remove(existingAccount);
-
-    // // Save both entities to update the join table
-    // accountService.save(existingAccount);
-
     // Delete the event if it is associated with this account
     if (existingAccount.getAccountId() == existingEvent.getAccountId()) {
-      Event deletedEvent = eventService.delete(existingEvent);
+
+      for(var account : existingEvent.getAccounts()){
+        account.getEvents().remove(existingEvent);
+        accountService.save(account);
+      }
+      existingEvent.setAccounts(new ArrayList<Account>());
+
+      eventService.save(existingEvent);
+
+      var deletedEvent = eventService.delete(existingEvent);
       return ResponseEntity.ok().body(deletedEvent);
     }
 
-    // Otherise, just save the event
-    eventService.create(existingEvent);
+    // Remove the association
+    existingAccount.getEvents().remove(existingEvent);
+    existingEvent.getAccounts().remove(existingAccount);
+
+    accountService.save(existingAccount);
+    eventService.save(existingEvent);
 
     return ResponseEntity.ok().body(existingEvent);
   }
