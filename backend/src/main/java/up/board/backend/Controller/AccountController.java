@@ -1,6 +1,5 @@
 package up.board.backend.Controller;
 
-import org.apache.catalina.connector.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,6 @@ import up.board.backend.Utils.JwtUtil;
 import up.board.backend.Enum.Account.Role;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/account")
@@ -47,7 +45,6 @@ public class AccountController {
     if (username == null || username.length() == 0) {
       return ResponseEntity.status(409).header("server-error", "Invalid username").body(null);
     }
-    username = username.trim().toLowerCase();
 
     // Check valid Email
     var email = account.getEmail();
@@ -91,7 +88,6 @@ public class AccountController {
     if (username == null || password == null) {
       return ResponseEntity.status(409).header("server-error", "Missing credentials").body(null);
     }
-    username = username.trim().toLowerCase();
 
     // Check user exists
     var existingAccount = accountService.findByUsername(username);
@@ -124,7 +120,6 @@ public class AccountController {
     if (newUsername == null || newPassword == null || newEmail == null) {
       return ResponseEntity.status(409).body(null);
     }
-    newUsername = newUsername.trim().toLowerCase();
 
     // Check if account exists
     var existingAccount = accountService.findById(id);
