@@ -43,9 +43,9 @@ function GameCollectionsDisplay({data }: gameProps) {
 
       {data.map((game) => {
         return (
-          <>
+          <div key={game.gameId}>
             {(gameId == game.gameId) && <GameInfoDisplay data={game}/>}
-          </>
+          </div>
         )
       })}
     </>

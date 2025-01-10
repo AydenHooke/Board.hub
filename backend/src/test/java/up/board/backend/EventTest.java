@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import up.board.backend.Controller.EventController;
 import up.board.backend.Entity.Account;
 import up.board.backend.Entity.Event;
+import up.board.backend.Enum.Event.Status;
 import up.board.backend.Enum.Event.Type;
 import up.board.backend.Repository.AccountRepository;
 import up.board.backend.Repository.EventRepository;
@@ -148,12 +149,14 @@ class EventTest {
     event0.setTitle("Test event 1");
     event0.setContent("Test description");
     event0.setType(eventType);
+    event0.setStatus(Status.SCHEDULED);
 
     var event1 = new Event();
     event1.setAccountId(2);
     event1.setTitle("Test event 2");
     event1.setContent("Test description");
     event1.setType(eventType);
+    event1.setStatus(Status.SCHEDULED);
 
     var events = new ArrayList<Event>();
     events.add(event0);

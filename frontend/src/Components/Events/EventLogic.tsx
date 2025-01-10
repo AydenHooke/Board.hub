@@ -5,6 +5,7 @@ import {useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import { useAccount } from '../../Context/useAccount';
 import { Event } from '../../Types/Event';
+import { authorizationHander } from '../Home/Logout';
 
 function EventLogic() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ function EventLogic() {
         const data1 = response1.data;
         setMyMeetings(data1);
         console.log(data1);
-    
+
         const response2 = await axios.get(`http://localhost:8080/event/account/${contextId}`, {
             params: {
               type: "TOURNAMENT"
@@ -40,9 +41,10 @@ function EventLogic() {
         console.log(data2);
       } catch (error) {
         console.error(error);
+        authorizationHander(error);
       }
     }
-    
+
     fetchData();
   }, [contextId]);
 
@@ -68,6 +70,7 @@ function EventLogic() {
         }
       } catch (error) {
         console.error(error);
+        authorizationHander(error);
       }
   }
 

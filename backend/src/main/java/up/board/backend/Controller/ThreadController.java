@@ -64,7 +64,7 @@ public class ThreadController {
       return ResponseEntity.status(409).header("server-error", "Missing JTW").body(null);
     }
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
-    if (!tokenUsername.equals(existingAccount.getUsername())) {
+    if (tokenUsername == null || !tokenUsername.equals(existingAccount.getUsername())) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
 
@@ -88,6 +88,9 @@ public class ThreadController {
       return ResponseEntity.status(409).header("server-error", "Missing JTW").body(false);
     }
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
+    if (tokenUsername == null) {
+      return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(false);
+    }
 
     // Check user exists
     var existingAccount = accountService.findByUsername(tokenUsername);

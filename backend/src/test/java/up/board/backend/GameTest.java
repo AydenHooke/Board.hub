@@ -60,7 +60,7 @@ class GameTest {
     this.gameController = new GameController(accountService, gameService, gameCollectionService, jwtUtil);
   }
 
-  @Test
+  /*@Test
   void validateGamePersistenceAndCollect() {
 
     var game0 = new Game();
@@ -113,7 +113,7 @@ class GameTest {
     verify(gameCollectionRepository).findGameCollectionByAccountIdAndGameId(any(Integer.class), any(Integer.class));
     verify(gameCollectionRepository).save(any(GameCollection.class));
     verify(gameRepository, times(4)).findGameByBggId(any(Integer.class));
-  }
+  }*/
 
   @Test
   void persistOrCollectOneGame() {

@@ -65,7 +65,7 @@ public class GameVoteController {
     }
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
     var existingAccount = accountService.findByUsername(tokenUsername);
-    if (existingAccount == null || existingAccount.getAccountId() != gameVote.getAccount().getAccountId()) {
+    if (tokenUsername == null || existingAccount == null || existingAccount.getAccountId() != gameVote.getAccount().getAccountId()) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
 

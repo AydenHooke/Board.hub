@@ -54,11 +54,6 @@ function NavBar() {
                       Sign In
                     </Link>
                   </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/SignUp">
-                      Sign Up
-                    </Link>
-                  </li>
                 </>
               ) : (
                 <>
@@ -70,6 +65,11 @@ function NavBar() {
                   <li>
                     <Link className="nav-link" to="/profile">
                       Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="nav-link" to="/logout">
+                      Logout
                     </Link>
                   </li>
                 </>

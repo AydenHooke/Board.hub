@@ -14,7 +14,8 @@ import EventListLogic from './Components/Events/EventListLogic';
 import PublicProfileLogic from './Components/Profile/PublicProfileLogic';
 import EventPageLogic from './Components/Events/EventPageLogic';
 import AddGameLogic from './Components/Games/AddGame/AddGameLogic';
-import AllGames from './Components/Home/AllGames';
+import AllGames from './Components/Games/AllGames';
+import Logout from './Components/Home/Logout';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
               <Route path='/account/:userId' element={<PublicProfileLogic />}></Route>
               <Route path='/event/:eventId' element={<EventPageLogic />}></Route>
               <Route path='/addGame' element={<AddGameLogic />}></Route>
+              <Route path='/logout' element={<Logout />}></Route>
             </Routes>
           </div>
         </BrowserRouter>

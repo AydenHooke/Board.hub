@@ -117,8 +117,8 @@ function GameInfoDisplay({ data }: gameProps) {
       <img src={data.gameImageUrl} alt={data.title} />
 
       <p>Votes:{vote}</p>
-      {((contextId != '') && (voteStatus != -2)) && <button onClick={() => GameVoteSubmit(1)}>Like Game</button>}
-      {((contextId != '') && (voteStatus != -2)) && <button onClick={() => GameVoteSubmit(-1)}>Dislike Game</button>}
+      {(contextId != '') && <button onClick={() => {if (voteStatus != -2) GameVoteSubmit(1);}}>Like Game</button>}
+      {(contextId != '') && <button onClick={() => {if (voteStatus != -2) GameVoteSubmit(-1);}}>Dislike Game</button>}
 
       <p>Price:{data.price}</p>
       <p>{desc}</p>

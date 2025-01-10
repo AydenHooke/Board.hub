@@ -52,7 +52,8 @@ public class JwtUtil {
           .getBody();
       return claims.getSubject();
     } catch (JwtException | IllegalArgumentException e) {
-      throw new RuntimeException("Invalid JWT Token");
+      //throw new RuntimeException("Invalid JWT Token");
+      return null;
     }
   }
 

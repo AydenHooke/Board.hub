@@ -98,7 +98,7 @@ public class EventController {
     if(event == null){
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("error", "Invalid event id").body(null);
     }
-   
+
     // Return event
     List<Account> participants = eventService.findAccountsByEventId(id);
     return ResponseEntity.ok().body(participants);
@@ -145,7 +145,7 @@ public class EventController {
       return ResponseEntity.status(409).header("server-error", "Missing JTW").body(null);
     }
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
-    if (!tokenUsername.equals(existingAccount.getUsername())) {
+    if (tokenUsername == null || !tokenUsername.equals(existingAccount.getUsername())) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
 
