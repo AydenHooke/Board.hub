@@ -18,7 +18,7 @@ function SubmitEventLogic() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    axios.post(`http://localhost:8080/event/`, {
+    axios.post(`http://18.224.45.201:8080/event/`, {
       title: name,
       content: content,
       type: eventType,
@@ -31,7 +31,7 @@ function SubmitEventLogic() {
     }).then((response) => {
       console.log(response.data);
       // Call the second request after the first one is successful
-      return axios.post(`http://localhost:8080/event/account/${id}`, response.data, {
+      return axios.post(`http://18.224.45.201:8080/event/account/${id}`, response.data, {
         headers: {
           Authorization: `${contextJwt}`
         }

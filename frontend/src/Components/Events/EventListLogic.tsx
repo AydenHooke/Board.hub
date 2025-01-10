@@ -15,7 +15,7 @@ function EventListLogic() {
 
         // Call filetered events when logged in
         if(contextId){
-            axios.get(`http://localhost:8080/event/unadded/${contextId}`, {
+            axios.get(`http://18.224.45.201:8080/event/unadded/${contextId}`, {
                 params: {
                     type: eventType
                 }
@@ -32,7 +32,7 @@ function EventListLogic() {
 
         // Call all events when not logged in
         else{
-            axios.get(`http://localhost:8080/event/`, {
+            axios.get(`http://18.224.45.201:8080/event/`, {
                 params: {
                     type: eventType
                 }
@@ -49,7 +49,7 @@ function EventListLogic() {
 
 
     const handleAddEvent = (event: Event) => {
-        axios.post(`http://localhost:8080/event/account/${contextId}`, event)
+        axios.post(`http://18.224.45.201:8080/event/account/${contextId}`, event)
         .then(response => {
             console.log(response.data);
             console.log("Event Added");

@@ -21,7 +21,7 @@ function GameCollectionsLogic() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/game/getGamesByAccount?accountId=${contextId}`, {
+      .get(`http://18.224.45.201:8080/game/getGamesByAccount?accountId=${contextId}`, {
         headers: { "Authorization": `${contextJwt}` }
       })
       .then((Response) => setData(Response.data))

@@ -8,7 +8,7 @@ import { useAccount } from "../../Context/useAccount";
 function SignInLogic() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const { setUsername: setContextUsername, 
+    const { setUsername: setContextUsername,
             setEmail: setContextEmail,
             setId: setContextId,
             setJwt: setContextJwt,
@@ -19,7 +19,7 @@ function SignInLogic() {
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
 
-        axios.post('http://localhost:8080/account/login', {
+        axios.post('http://18.224.45.201:8080/account/login', {
                 username: username,
                 passwordHash: password
             })
