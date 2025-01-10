@@ -2,7 +2,9 @@ package up.board.backend.Controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import up.board.backend.Entity.Account;
+import up.board.backend.Kafka.KafkaProducerService;
 import up.board.backend.Service.AccountService;
 import up.board.backend.Utils.EmailValidator;
 import up.board.backend.Utils.JwtUtil;
@@ -79,6 +82,9 @@ public class AccountController {
     return ResponseEntity.ok().header("Authorization", token).body(accountNew);
   }
 
+  @Autowired
+  private KafkaProducerService producerService;
+
   @PostMapping("/login")
   public ResponseEntity<Account> login(@RequestBody Account account) {
 
@@ -101,6 +107,8 @@ public class AccountController {
     if (!accountService.passwordMatches(passwordPlain, passwordHash)) {
       return ResponseEntity.status(401).header("server-error", "Invalid credentials").body(null);
     }
+
+    producerService.sendMessage("test", "testLogin");
 
     // Return token + stripped account
     var token = jwtUtil.generateToken(existingAccount);
