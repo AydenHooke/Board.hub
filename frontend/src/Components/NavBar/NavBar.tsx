@@ -72,6 +72,11 @@ function NavBar() {
                       Profile
                     </Link>
                   </li>
+                  <li>
+                    <Link className="nav-link" to="/logout">
+                      Logout
+                    </Link>
+                  </li>
                 </>
               )}
             </ul>

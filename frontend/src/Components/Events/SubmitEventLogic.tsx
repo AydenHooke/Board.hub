@@ -3,6 +3,7 @@ import SubmitEventInput from './SubmitEventInput';
 import axios from 'axios';
 import { FormEvent, useState } from 'react';
 import { useAccount } from '../../Context/useAccount';
+import { authorizationHander } from '../Home/Logout';
 
 function SubmitEventLogic() {
   const location = useLocation();
@@ -43,24 +44,26 @@ function SubmitEventLogic() {
       console.log(error);
       setShowErrorMessage(true);
       setTimeout(() => setShowErrorMessage(false), 3000);
+
+      authorizationHander(error);
     });
 
-    
+
   }
 
   return (
     <>
-      {eventType === 'MEETING' && <SubmitEventInput 
-      eventType="MEETING" 
+      {eventType === 'MEETING' && <SubmitEventInput
+      eventType="MEETING"
       name={name} setName={setName}
       content={content} setContent={setContent}
       time={time} setTime={setTime}
       handleSubmit={handleSubmit}
       showErrorMessage={showErrorMessage}/>}
-      
 
-      {eventType === 'TOURNAMENT' && <SubmitEventInput 
-      eventType="TOURNAMENT" 
+
+      {eventType === 'TOURNAMENT' && <SubmitEventInput
+      eventType="TOURNAMENT"
       name={name} setName={setName}
       content={content} setContent={setContent}
       time={time} setTime={setTime}

@@ -62,7 +62,7 @@ public class GameController {
 
     // check the JWT and the user
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
-    if (!tokenUsername.equals(existingAccount.getUsername())) {
+    if (tokenUsername == null || !tokenUsername.equals(existingAccount.getUsername())) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
 
@@ -87,7 +87,7 @@ public class GameController {
       if(bggIds.contains(String.valueOf(bggGame.getBggId())))
         internalIds.add(String.valueOf(bggGame.getGameId()));
     }
-    
+
     gameCollectionService.linkAccountToManyGames(existingAccount, internalIds);
     //the var changes are not Ayden's
     /*for(int i = 0; i<gameIds.size(); i++){
@@ -119,7 +119,7 @@ public class GameController {
 
     // check the JWT and the user
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
-    if (!tokenUsername.equals(existingAccount.getUsername())) {
+    if (tokenUsername == null || !tokenUsername.equals(existingAccount.getUsername())) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
   //the var changes are not Ayden's
@@ -157,7 +157,7 @@ public class GameController {
 
       //check the JWT and the user
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
-    if (!tokenUsername.equals(existingAccount.getUsername())) {
+    if (tokenUsername == null || !tokenUsername.equals(existingAccount.getUsername())) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
       //the var changes are not Ayden's
@@ -184,7 +184,7 @@ public class GameController {
 
       //check the JWT and the user
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
-    if (!tokenUsername.equals(existingAccount.getUsername())) {
+    if (tokenUsername == null || !tokenUsername.equals(existingAccount.getUsername())) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
       //the var changes are not Ayden's
@@ -210,7 +210,7 @@ public class GameController {
 
     // check the JWT and the user
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
-    if (!tokenUsername.equals(existingAccount.getUsername())) {
+    if (tokenUsername == null || !tokenUsername.equals(existingAccount.getUsername())) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
     // the var changes are not Ayden's
@@ -240,7 +240,7 @@ public class GameController {
 
     // check the JWT and the user
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
-    if (!tokenUsername.equals(existingAccount.getUsername())) {
+    if (tokenUsername == null || !tokenUsername.equals(existingAccount.getUsername())) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
 

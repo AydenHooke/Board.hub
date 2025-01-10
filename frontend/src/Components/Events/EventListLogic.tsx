@@ -3,6 +3,7 @@ import EventListInput from './EventListInput';
 import axios from 'axios';
 import { useAccount } from '../../Context/useAccount';
 import { Event } from '../../Types/Event';
+import { authorizationHander } from '../Home/Logout';
 
 function EventListLogic() {
     const queryParams = new URLSearchParams(location.search);
@@ -25,6 +26,7 @@ function EventListLogic() {
             })
             .catch(error => {
                 console.log(error);
+                authorizationHander(error);
             });
         }
 
@@ -55,6 +57,7 @@ function EventListLogic() {
         })
         .catch(error => {
             console.log(error);
+            authorizationHander(error);
         });
     }
 

@@ -2,10 +2,11 @@ import { FormEvent, useEffect, useState } from 'react'
 import ProfileInput from './ProfileInput'
 import axios from 'axios'
 import { useAccount } from '../../Context/useAccount';
+import { authorizationHander } from '../Home/Logout';
 
 function ProfileLogic() {
 
-    const { username: contextUsername, setUsername: setContextUsername, 
+    const { username: contextUsername, setUsername: setContextUsername,
             email: contextEmail, setEmail: setContextEmail,
             id: contextId, setId: setContextId,
             bggUsername: contextBggUsername, setBggUsername: setContextBggUsername,
@@ -53,14 +54,15 @@ function ProfileLogic() {
           setTimeout(() => setShowSuccessMessage(false), 3000);
       })
       .catch(error => {
-        console.error('Error patching data, ', error)
+        console.error('Error patching data, ', error);
+        authorizationHander(error);
       });
-    
+
     };
 
   return (
     <div>
-       <ProfileInput 
+       <ProfileInput
         email={email} setEmail={setEmail}
         username={username} setUsername={setUsername}
         password={password} setPassword={setPassword}

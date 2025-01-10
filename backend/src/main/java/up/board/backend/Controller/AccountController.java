@@ -19,10 +19,8 @@ import up.board.backend.Utils.EmailValidator;
 import up.board.backend.Utils.JwtUtil;
 import up.board.backend.Enum.Account.Role;
 
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("/account")
@@ -45,13 +43,13 @@ public class AccountController {
   public ResponseEntity<Account> register(@RequestBody Account account) {
 
     // Check valid username
-    var username = account.getUsername();
+    var username = account.getUsername().trim().toLowerCase();
     if (username == null || username.length() == 0) {
       return ResponseEntity.status(409).header("server-error", "Invalid username").body(null);
     }
 
     // Check valid Email
-    var email = account.getEmail();
+    var email = account.getEmail().trim();
     if (email == null || email.length() == 0 || !EmailValidator.isValid(email)) {
       return ResponseEntity.status(409).header("server-error", "Invalid email").body(null);
     }
@@ -63,7 +61,7 @@ public class AccountController {
     }
 
     // Make sure username is not in use
-    var existingAccount = accountService.findByUsername(account.getUsername());
+    var existingAccount = accountService.findByUsername(username);
     if (existingAccount != null) {
       return ResponseEntity.status(409).header("server-error", "Username taken").body(null);
     }
@@ -87,7 +85,7 @@ public class AccountController {
   public ResponseEntity<Account> login(@RequestBody Account account) {
 
     // Input sanitize
-    var username = account.getUsername();
+    var username = account.getUsername().trim().toLowerCase();
     var password = account.getPasswordHash();
     if (username == null || password == null) {
       return ResponseEntity.status(409).header("server-error", "Missing credentials").body(null);
@@ -116,10 +114,10 @@ public class AccountController {
   public ResponseEntity<Account> updateAccount(@RequestHeader("Authorization") String bearerToken,
       @RequestBody Account account) {
     var id = account.getAccountId();
-    var newUsername = account.getUsername();
+    var newUsername = account.getUsername().trim().toLowerCase();
     var newPassword = account.getPasswordHash();
-    var newEmail = account.getEmail();
-    var bggAccount = account.getBggAccount();
+    var newEmail = account.getEmail().trim();
+    var bggAccount = account.getBggAccount().trim();
 
     if (newUsername == null || newPassword == null || newEmail == null) {
       return ResponseEntity.status(409).body(null);
@@ -136,14 +134,16 @@ public class AccountController {
       return ResponseEntity.status(409).header("server-error", "Missing JTW").body(null);
     }
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
-    if (!tokenUsername.equals(existingAccount.getUsername())) {
+    if (tokenUsername == null || !tokenUsername.equals(existingAccount.getUsername())) {
       return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
     }
 
-    /*/ Check if bggAccount is valid
-    if (bggAccount == null || bggAccount.length() == 0) {
-      return ResponseEntity.status(409).body(null);
-    }*/
+    /*
+     * / Check if bggAccount is valid
+     * if (bggAccount == null || bggAccount.length() == 0) {
+     * return ResponseEntity.status(409).body(null);
+     * }
+     */
 
     // Check if email is valid
     if (!EmailValidator.isValid(newEmail)) {
@@ -193,32 +193,34 @@ public class AccountController {
     account.setEmail(null);
     account.setAddress(null);
 
-    
     return ResponseEntity.ok().body(account);
   }
-  
 
-  /*@PostMapping("/authTest")
-  public ResponseEntity<String> authTest(@RequestHeader("Authorization") String bearerToken,
-      @RequestBody Account account) {
-
-    // Input sanitize
-    var username = account.getUsername();
-    if (username == null) {
-      return ResponseEntity.status(409).body("Missing username");
-    }
-    if (bearerToken == null) {
-      return ResponseEntity.status(409).body("Missing JWT");
-    }
-
-    // Validate JWT
-    var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
-    if (!tokenUsername.equals(username)) {
-      return ResponseEntity.status(401).body("Invalid JWT");
-    }
-
-    // Return ok
-    return ResponseEntity.ok().body("Yup");
-  }*/
+  /*
+   * @PostMapping("/authTest")
+   * public ResponseEntity<String> authTest(@RequestHeader("Authorization") String
+   * bearerToken,
+   *
+   * @RequestBody Account account) {
+   *
+   * // Input sanitize
+   * var username = account.getUsername();
+   * if (username == null) {
+   * return ResponseEntity.status(409).body("Missing username");
+   * }
+   * if (bearerToken == null) {
+   * return ResponseEntity.status(409).body("Missing JWT");
+   * }
+   *
+   * // Validate JWT
+   * var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
+   * if (!tokenUsername.equals(username)) {
+   * return ResponseEntity.status(401).body("Invalid JWT");
+   * }
+   *
+   * // Return ok
+   * return ResponseEntity.ok().body("Yup");
+   * }
+   */
 
 }
