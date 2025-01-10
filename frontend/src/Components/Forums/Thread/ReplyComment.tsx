@@ -70,7 +70,7 @@ function ReplyComment({
     <>
       {(replyToId != null) ? (
         <>
-          <div className="replyToReply" id={`${replyId}`} style={{ border: 'solid #C9E3FF 2px', borderLeft: 'solid #C9E3FF 6px' }}>
+          <div className="replyToReply" id={`${replyId}`} style={{ border: 'solid transparent 2px', borderLeft: 'solid transparent 6px' }}>
             <div className="reply">
               <h6>Posted by: <Link to={`/account/${accountId}`}>{username}</Link></h6>
 
@@ -81,7 +81,7 @@ function ReplyComment({
           </div>
         </>
       ) : (
-        <div className="rootReply" id={`${replyId}`} style={{ border: 'solid #C9E3FF 2px' }}>
+        <div className="rootReply" id={`${replyId}`} >
           <div className="reply">
             <h6>Posted by: <Link to={`/account/${accountId}`}>{username}</Link></h6>
 

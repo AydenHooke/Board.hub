@@ -52,10 +52,13 @@ function ThreadPage({
       </button>}
       </div>
 
-      <p>{content}</p>
-      <hr/>
+      <div className="thread-page-container">
+       <div className="thread-content">
+        <b>{username} says: </b><span>{content}</span>
+        <hr/>
+       </div>
 
-      <ReloadThreadContext.Provider value={reloadThread}>
+       <ReloadThreadContext.Provider value={reloadThread}>
         <div>
           {(contextId != '') &&
             <CreateReplyLogic
@@ -69,9 +72,10 @@ function ThreadPage({
           }
         </div>
 
+
         {data.map((reply) => {
           return (
-            <div key={reply.replyId}>
+            <div className="replies" key={reply.replyId}>
               <ReplyComment
                 replyId={reply.replyId}
                 threadId={reply.threadId}
@@ -84,7 +88,8 @@ function ThreadPage({
             </div>
           )
         })}
-      </ReloadThreadContext.Provider>
+       </ReloadThreadContext.Provider>
+      </div>
     </>
   )
 }
