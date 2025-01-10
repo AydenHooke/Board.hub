@@ -68,17 +68,20 @@ function Forums() {
         {
           // If none selected, display list of forums to select
           forumId == -1 && (
-            <table style={{ width: '100%' }}>
+           <div className="forums-container">
+            <table className="forums-table" >
               <tbody>
                 {data.map((forum) => {
                   return (
-                    <tr key={forum.forumId} style={{ border: 'solid black 2px' }}>
+                    <tr key={forum.forumId} style={{ border: 'solid black 2px' }} className="forum-row">
                       <td>
                         {
                           (forumId == -1) &&
                           <a href="#" onClick={
                             (e: any) => setForumId(forum.forumId)
-                          }>{forum.title}</a>
+                          }
+                          className="forum-link"
+                          >{forum.title}</a>
                         }
                       </td>
 
@@ -90,6 +93,7 @@ function Forums() {
                 })}
               </tbody>
             </table>
+           </div>
           )
         }
 

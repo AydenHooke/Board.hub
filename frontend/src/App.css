@@ -261,6 +261,7 @@ body {
     grid-gap: 20px;
     padding: 20px;
     justify-items: center;
+    align-items: center;
 }
 
 .game-tile{
@@ -464,4 +465,96 @@ body {
     width: 100%;
     height: auto; /* Maintain aspect ratio */
     object-fit: cover; /* Ensure the image covers the entire area */
+  }
+
+
+  .forum-header{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+
+
+
+
+
+
+  .forums-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .forums-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  
+  .forums-table th,
+  .forums-table td {
+    padding: 12px 15px;
+    text-align: left;
+  }
+  
+  .forums-table th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+  }
+
+  .forums-table tr {
+    border-bottom: 1px solid #dddddd;
+  }
+
+  .forum-row{
+     border: 'solid black 2px';
+  }
+  
+  .forums-table tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+  }
+  
+  .forum-link {
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .forum-link:hover {
+    text-decoration: underline;
+  }
+
+
+
+
+
+  .thread-page-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .thread-content {
+    margin-bottom: 20px;
+  }
+  
+  .replies {
+    margin-top: 20px;
+  }
+  
+  .reply {
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .nested-replies {
+    margin-left: 20px;
+    margin-top: 10px;
   }

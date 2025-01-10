@@ -50,7 +50,14 @@ function ForumPage({
 
   return (
     <>
-      {(threadId == -1) && <p>{forum.description}</p>}
+      <div className="forum-header">
+        {(threadId == -1) && 
+        <>
+          <h1>{forum.title}</h1>
+          <p>{forum.description}</p>
+        </>
+        }
+      </div>
 
       {(threadId == -1) && (
         <button onClick={reloadForum} className="reload-button">
@@ -73,17 +80,20 @@ function ForumPage({
         {(threadId == -1) && (<br />)}
 
         {threadId == -1 ?
-          <table style={{ width: '100%' }}>
+         <div className="forums-container">
+          <table className="forums-table">
             {data.map((thread) => {
               return (
-                <tr key={thread.threadId} style={{ border: 'solid black 2px' }}>
+                <tr key={thread.threadId} style={{ border: 'solid black 2px' }} className="forum-row">
 
                   <td>
                     {
                       (threadId == -1) &&
                       <a href="#" onClick={
                         (e: any) => setThreadId(thread.threadId)
-                      }>{thread.title}</a>
+                      }
+                      className="forum-link"
+                      >{thread.title}</a>
                     }
                   </td>
 
@@ -112,6 +122,7 @@ function ForumPage({
               )
             })}
           </table>
+          </div>
           :
           <>{
             // If selected, display current thread
