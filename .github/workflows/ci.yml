@@ -36,6 +36,10 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
+          distribution: 'temurin' # or 'adopt', 'zulu', etc.
+
+      - name: Grant execute permission for Maven wrapper
+        run: chmod +x ./backend/mvnw
 
       - name: Cache Maven packages
         uses: actions/cache@v3
@@ -45,10 +49,16 @@ jobs:
           restore-keys: ${{ runner.os }}-maven
 
       - name: Install dependencies
-        run: ./backend/mvnw install -DskipTests
+        run: ./mvnw install -DskipTests
+        working-directory: ./backend
 
       - name: Run tests
-        run: ./backend/mvnw test
+        run: ./mvnw test
+        working-directory: ./backend
+
+      - name: Run Spring Boot application
+        run: ./mvnw spring-boot:run
+        working-directory: ./backend
 
   frontend:
     name: Frontend CI
@@ -74,6 +84,6 @@ jobs:
         run: npm install
         working-directory: frontend
 
-      - name: Run tests
+      - name: Run Jest tests
         run: npm test
         working-directory: frontend

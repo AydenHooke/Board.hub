@@ -260,6 +260,7 @@ body {
     min-width: 80%;
     grid-gap: 20px;
     padding: 20px;
+    justify-items: center;
 }
 
 .game-tile{
