@@ -59,7 +59,7 @@ describe('ProfileLogic', () => {
     });
 
     expect(axios.patch).toHaveBeenCalledWith(
-      'http://localhost:8080/account/',
+      'http://18.224.45.201:8080/account/',
       {
         accountId: '',
         email: 'newemail@example.com',

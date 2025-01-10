@@ -27,7 +27,7 @@ function ProfileLogic() {
     function handleProfileEdit(e: FormEvent){
       e.preventDefault();
 
-      axios.patch(`http://localhost:8080/account/`, {
+      axios.patch(`http://18.224.45.201:8080/account/`, {
           accountId: contextId,
           email: email,
           username: username,

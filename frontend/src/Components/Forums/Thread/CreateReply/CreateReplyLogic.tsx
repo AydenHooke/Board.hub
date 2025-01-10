@@ -30,7 +30,7 @@ function CreateReplyLogic({
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
     axios
-      .post('http://localhost:8080/reply/post', {
+      .post('http://18.224.45.201:8080/reply/post', {
         threadId: threadId,
         replyToId: replyToId,
         accountId: contextId,

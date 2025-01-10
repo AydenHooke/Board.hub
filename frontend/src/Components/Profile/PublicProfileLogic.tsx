@@ -13,7 +13,7 @@ function PublicProfileLogic() {
   useEffect(() => {
     async function getUser(userId: string) {
       console.log(userId);
-      axios.get(`http://localhost:8080/account/${userId}`)
+      axios.get(`http://18.224.45.201:8080/account/${userId}`)
       .then(response => {
         console.log(response.data);
         setAccount(response.data);

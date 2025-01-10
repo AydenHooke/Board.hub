@@ -19,7 +19,7 @@ function AddGameLogic() {
 
     function addCustomGame() {
         axios
-            .post(`http://localhost:8080/game/persistOrCollectOneGame?id=${contextId}`, {
+            .post(`http://18.224.45.201:8080/game/persistOrCollectOneGame?id=${contextId}`, {
                 bggId: -1,
                 gameImageUrl: gameImageUrl,
                 title: title,
@@ -32,7 +32,7 @@ function AddGameLogic() {
     }
 
     function addBGGgame() {
-        
+
     }
 
     function handleSubmit(event: FormEvent) {
@@ -52,7 +52,7 @@ function AddGameLogic() {
     return (
         <>
             <button onClick={() => navigate("/games")}>Back</button>
-            <AddGameInput 
+            <AddGameInput
                 bggId={bggId} setBggId={setBggId}
                 gameImageUrl={gameImageUrl} setGameImageUrl={setGameImageUrl}
                 title={title} setTitle={setTitle}
