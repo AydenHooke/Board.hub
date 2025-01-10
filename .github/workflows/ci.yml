@@ -50,6 +50,9 @@ jobs:
       - name: Run tests
         run: ./backend/mvnw test
 
+      - name: Run Spring Boot application
+        run: ./backend/mvnw spring-boot:run
+
   frontend:
     name: Frontend CI
     runs-on: ubuntu-latest
@@ -74,6 +77,6 @@ jobs:
         run: npm install
         working-directory: frontend
 
-      - name: Run tests
+      - name: Run Jest tests
         run: npm test
         working-directory: frontend
