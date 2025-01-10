@@ -43,13 +43,14 @@ public class AccountController {
   public ResponseEntity<Account> register(@RequestBody Account account) {
 
     // Check valid username
-    var username = account.getUsername().trim().toLowerCase();
+    var username = account.getUsername();
     if (username == null || username.length() == 0) {
       return ResponseEntity.status(409).header("server-error", "Invalid username").body(null);
     }
+    username = username.trim().toLowerCase();
 
     // Check valid Email
-    var email = account.getEmail().trim();
+    var email = account.getEmail();
     if (email == null || email.length() == 0 || !EmailValidator.isValid(email)) {
       return ResponseEntity.status(409).header("server-error", "Invalid email").body(null);
     }
@@ -85,11 +86,12 @@ public class AccountController {
   public ResponseEntity<Account> login(@RequestBody Account account) {
 
     // Input sanitize
-    var username = account.getUsername().trim().toLowerCase();
+    var username = account.getUsername();
     var password = account.getPasswordHash();
     if (username == null || password == null) {
       return ResponseEntity.status(409).header("server-error", "Missing credentials").body(null);
     }
+    username = username.trim().toLowerCase();
 
     // Check user exists
     var existingAccount = accountService.findByUsername(username);
@@ -114,14 +116,15 @@ public class AccountController {
   public ResponseEntity<Account> updateAccount(@RequestHeader("Authorization") String bearerToken,
       @RequestBody Account account) {
     var id = account.getAccountId();
-    var newUsername = account.getUsername().trim().toLowerCase();
+    var newUsername = account.getUsername();
     var newPassword = account.getPasswordHash();
-    var newEmail = account.getEmail().trim();
-    var bggAccount = account.getBggAccount().trim();
+    var newEmail = account.getEmail();
+    var bggAccount = account.getBggAccount();
 
     if (newUsername == null || newPassword == null || newEmail == null) {
       return ResponseEntity.status(409).body(null);
     }
+    newUsername = newUsername.trim().toLowerCase();
 
     // Check if account exists
     var existingAccount = accountService.findById(id);

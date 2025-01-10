@@ -257,7 +257,7 @@ class ThreadTest {
     var response = threadController.deleteThread(jwt, thread.getThreadId());
     var responseBody = response.getBody();
 
-    assertEquals(409, response.getStatusCode().value());
+    assertEquals(401, response.getStatusCode().value());
     assertEquals(false, responseBody);
 
     verify(threadRepository).getThreadByThreadId(any(Integer.class));

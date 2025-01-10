@@ -89,7 +89,7 @@ public class ThreadController {
     }
     var tokenUsername = jwtUtil.validateTokenAndGetUsername(bearerToken);
     if (tokenUsername == null) {
-      return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(null);
+      return ResponseEntity.status(401).header("server-error", "Invalid JTW").body(false);
     }
 
     // Check user exists
