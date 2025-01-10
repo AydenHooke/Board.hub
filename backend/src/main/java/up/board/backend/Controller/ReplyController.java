@@ -23,7 +23,7 @@ import up.board.backend.Utils.JwtUtil;
 
 @RestController
 @RequestMapping("/reply")
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = "*")
 public class ReplyController {
 
   private static final Logger logger = LoggerFactory.getLogger(ReplyController.class);

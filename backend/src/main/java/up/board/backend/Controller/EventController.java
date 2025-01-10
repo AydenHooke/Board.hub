@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/event")
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = "*")
 public class EventController {
 
   private static final Logger logger = LoggerFactory.getLogger(EventController.class);

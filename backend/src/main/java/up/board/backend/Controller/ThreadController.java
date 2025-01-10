@@ -22,7 +22,7 @@ import up.board.backend.Utils.JwtUtil;
 
 @RestController
 @RequestMapping("/thread")
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = "*")
 public class ThreadController {
 
   private static final Logger logger = LoggerFactory.getLogger(ThreadController.class);
