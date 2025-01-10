@@ -36,7 +36,10 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: 'temurin'
+          distribution: 'temurin' # or 'adopt', 'zulu', etc.
+
+      - name: Grant execute permission for Maven wrapper
+        run: chmod +x ./backend/mvnw
 
       - name: Cache Maven packages
         uses: actions/cache@v3
