@@ -40,7 +40,7 @@ function ForumPage({
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/thread/get/' + forum.forumId)
+      .get('http://18.224.45.201:8080/thread/get/' + forum.forumId)
       .then((Response) => setData(Response.data))
       .catch((error) => console.error('Error getting data, ', error));
   }, [reload])
@@ -51,7 +51,7 @@ function ForumPage({
   return (
     <>
       <div className="forum-header">
-        {(threadId == -1) && 
+        {(threadId == -1) &&
         <>
           <h1>{forum.title}</h1>
           <p>{forum.description}</p>

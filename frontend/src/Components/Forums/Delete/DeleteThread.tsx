@@ -20,7 +20,7 @@ function DeleteThread({
 
   function DeleteSubmit() {
     axios
-      .delete(`http://localhost:8080/thread/${threadId}`, {
+      .delete(`http://18.224.45.201:8080/thread/${threadId}`, {
         headers: { "Authorization": `${contextJwt}` }
       })
       .then((Response) => { console.log(Response.data); reloadForumContext(); })

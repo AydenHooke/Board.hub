@@ -18,20 +18,20 @@ function GameInfoDisplay({ data }: gameProps) {
   useEffect(() => {
     if (contextId != '') {
       axios
-        .get(`http://localhost:8080/game/checkGameOwnership?gameId=${data.gameId}&accountId=${contextId}`, {
+        .get(`http://18.224.45.201:8080/game/checkGameOwnership?gameId=${data.gameId}&accountId=${contextId}`, {
           headers: { "Authorization": `${contextJwt}` }
         })
         .then((Response) => setStatus(Response.status))
         .catch((error) => console.error(error));
 
       axios
-        .get(`http://localhost:8080/gameVote/account/${contextId}/${data.gameId}`)
+        .get(`http://18.224.45.201:8080/gameVote/account/${contextId}/${data.gameId}`)
         .then((Response) => setVoteStatus(Response.data))
         .catch((error) => console.error(error));
     }
 
     axios
-      .get(`http://localhost:8080/gameVote/game/${data.gameId}`)
+      .get(`http://18.224.45.201:8080/gameVote/game/${data.gameId}`)
       .then((Response) => setVote(Response.data))
       .catch((error) => console.error(error));
   }, [change])
@@ -40,7 +40,7 @@ function GameInfoDisplay({ data }: gameProps) {
     event.preventDefault();
 
     axios
-      .post(`http://localhost:8080/game/persistOrCollectOneGame?id=${contextId}`, {
+      .post(`http://18.224.45.201:8080/game/persistOrCollectOneGame?id=${contextId}`, {
         gameId: data.gameId,
         bggId: data.bggId,
         gameImageUrl: data.gameImageUrl,
@@ -59,7 +59,7 @@ function GameInfoDisplay({ data }: gameProps) {
     event.preventDefault();
 
     axios
-      .delete(`http://localhost:8080/game/removeGameOwnership?gameId=${data.gameId}&accountId=${contextId}`, {
+      .delete(`http://18.224.45.201:8080/game/removeGameOwnership?gameId=${data.gameId}&accountId=${contextId}`, {
         headers: { "Authorization": `${contextJwt}` }
       })
       .then((Response) => { console.log(Response); setStatus(-1); setChange(!change); })
@@ -74,7 +74,7 @@ function GameInfoDisplay({ data }: gameProps) {
     console.log(sentVote);
 
     axios
-      .post(`http://localhost:8080/gameVote/vote`, {
+      .post(`http://18.224.45.201:8080/gameVote/vote`, {
         game: {gameId: data.gameId},
         account: {accountId: contextId},
         value: sentVote
@@ -116,11 +116,10 @@ function GameInfoDisplay({ data }: gameProps) {
 
       <img src={data.gameImageUrl} alt={data.title} />
 
-      <p>Votes:{vote}</p>
+      <p>Votes: {vote}</p>
       {(contextId != '') && <button onClick={() => {if (voteStatus != -2) GameVoteSubmit(1);}}>Like Game</button>}
       {(contextId != '') && <button onClick={() => {if (voteStatus != -2) GameVoteSubmit(-1);}}>Dislike Game</button>}
 
-      <p>Price:{data.price}</p>
       <p>{desc}</p>
     </div>
   )

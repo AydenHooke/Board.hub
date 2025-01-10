@@ -15,11 +15,11 @@ function EventPageLogic() {
         console.log('EventPageLogic');
         async function getEventAndParticipants(eventId: string) {
             try{
-                let response = await axios.get(`http://localhost:8080/event/id/${eventId}`);
+                let response = await axios.get(`http://18.224.45.201:8080/event/id/${eventId}`);
                 let data = response.data;
                 setEvent(data);
 
-                response = await axios.get(`http://localhost:8080/event/id/${eventId}/participants`);
+                response = await axios.get(`http://18.224.45.201:8080/event/id/${eventId}/participants`);
                 data = response.data;
                 setParticipants(data)
             }

@@ -8,7 +8,7 @@ function AllGames() {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/game/getAllGames`)
+            .get(`http://18.224.45.201:8080/game/getAllGames`)
             .then((Response) => setData(Response.data))
             .catch((error) => console.error(error));
     }, [])

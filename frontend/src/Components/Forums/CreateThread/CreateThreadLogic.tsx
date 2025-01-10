@@ -22,7 +22,7 @@ function CreateThreadLogic({
     event.preventDefault();
 
     axios
-      .post('http://localhost:8080/thread/post', {
+      .post('http://18.224.45.201:8080/thread/post', {
         title: threadTitle,
         content: threadContent,
         accountId: contextId,

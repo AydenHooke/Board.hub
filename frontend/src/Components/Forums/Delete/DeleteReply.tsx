@@ -21,7 +21,7 @@ function DeleteReply({
 
   function DeleteSubmit() {
     axios
-      .delete(`http://localhost:8080/reply/${replyId}`, {
+      .delete(`http://18.224.45.201:8080/reply/${replyId}`, {
         headers: { "Authorization": `${contextJwt}` }
       })
       .then((Response) => {console.log(Response.data); reloadThreadContext();})

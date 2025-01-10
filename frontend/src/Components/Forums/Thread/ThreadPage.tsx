@@ -36,7 +36,7 @@ function ThreadPage({
 
   useEffect(() => {
     axios
-      .get('http://localhost:8080/reply/get/' + threadId)
+      .get('http://18.224.45.201:8080/reply/get/' + threadId)
       .then((Response) => setData(Response.data))
       .catch((error) => console.error('Error getting data, ', error));
   }, [reload])

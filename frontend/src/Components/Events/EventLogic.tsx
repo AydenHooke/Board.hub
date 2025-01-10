@@ -22,7 +22,7 @@ function EventLogic() {
 
     async function fetchData() {
       try {
-        const response1 = await axios.get(`http://localhost:8080/event/account/${contextId}`, {
+        const response1 = await axios.get(`http://18.224.45.201:8080/event/account/${contextId}`, {
             params: {
                 type: "MEETING"
             }
@@ -31,7 +31,7 @@ function EventLogic() {
         setMyMeetings(data1);
         console.log(data1);
 
-        const response2 = await axios.get(`http://localhost:8080/event/account/${contextId}`, {
+        const response2 = await axios.get(`http://18.224.45.201:8080/event/account/${contextId}`, {
             params: {
               type: "TOURNAMENT"
            }
@@ -60,7 +60,7 @@ function EventLogic() {
 
   const handleLeaveEvent = async (event: Event, type: string) => {
       try {
-        await axios.delete(`http://localhost:8080/event/account/${contextId}/event/${event.eventId}`);
+        await axios.delete(`http://18.224.45.201:8080/event/account/${contextId}/event/${event.eventId}`);
         console.log("Event deleted");
         if(type === "MEETING"){
           setMyMeetings(myMeetings.filter((meeting: Event) => meeting.eventId !== event.eventId));

@@ -10,7 +10,7 @@ function SignUpLogic() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     const {
-        setEmail: setContextEmail, 
+        setEmail: setContextEmail,
         setUsername: setContextUsername,
         setId: setContextId,
         setJwt: setContextJwt,
@@ -18,7 +18,7 @@ function SignUpLogic() {
 
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
-        axios.post('http://localhost:8080/account/register', {
+        axios.post('http://18.224.45.201:8080/account/register', {
                 email: email,
                 username: username,
                 passwordHash: password

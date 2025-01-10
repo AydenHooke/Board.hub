@@ -31,7 +31,7 @@ describe('SubmitEventLogic', () => {
 
     await waitFor(() => {
       expect(axios.post).toHaveBeenCalledTimes(2);
-      expect(axios.post).toHaveBeenCalledWith('http://localhost:8080/event/', {
+      expect(axios.post).toHaveBeenCalledWith('http://18.224.45.201:8080/event/', {
         title: 'Event 1',
         content: 'Event content',
         type: 'MEETING',
@@ -42,7 +42,7 @@ describe('SubmitEventLogic', () => {
           Authorization: '',
         },
       });
-      expect(axios.post).toHaveBeenCalledWith('http://localhost:8080/event/account/', mockResponse.data, {
+      expect(axios.post).toHaveBeenCalledWith('http://18.224.45.201:8080/event/account/', mockResponse.data, {
         headers: {
           Authorization: '',
         },
