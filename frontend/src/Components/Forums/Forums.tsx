@@ -1,8 +1,7 @@
 import axios from "axios"
 import { createContext, useEffect, useState } from "react"
 import ForumPage from "./ForumPage";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-regular-svg-icons';
+
 
 
 export type Forum = {
@@ -12,6 +11,7 @@ export type Forum = {
   type: string
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const ReloadForumsContext = createContext(function () { });
 
 function Forums() {
@@ -78,7 +78,7 @@ function Forums() {
                         {
                           (forumId == -1) &&
                           <a href="#" onClick={
-                            (e: any) => setForumId(forum.forumId)
+                            () => setForumId(forum.forumId)
                           }
                           className="forum-link"
                           >{forum.title}</a>

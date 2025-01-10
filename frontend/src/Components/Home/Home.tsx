@@ -3,7 +3,8 @@ import { game } from "../Games/GameCollections/GameCollectionsLogic"
 import axios from "axios";
 
 function Home() {
-  const [data, setData] = useState<game[]>([]);
+  
+  const [, setData] = useState<game[]>([]);
 
   useEffect(() => {
     axios
