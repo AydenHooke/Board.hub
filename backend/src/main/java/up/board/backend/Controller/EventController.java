@@ -73,7 +73,7 @@ public class EventController {
     var events = eventService.getAll();
 
     // Filter out events that are already added
-    events.removeIf(event -> existingAccount.getEvents().contains(event) || event.getType() != type);
+    events.removeIf(event -> existingAccount.getEvents().contains(event) || event.getType() != type || event.getStatus().equals(Status.COMPLETED));
 
     return ResponseEntity.ok().body(events);
   }
