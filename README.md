@@ -1,3 +1,4 @@
+[![CI](https://github.com/AydenHooke/Board.hub/actions/workflows/ci.yml/badge.svg)](https://github.com/AydenHooke/Board.hub/actions/workflows/ci.yml)
 # board.hub
 This is a web application that allows users to rate, talk about, and schedule meet-ups for their favorite board games
 
