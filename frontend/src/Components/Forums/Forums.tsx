@@ -58,7 +58,7 @@ function Forums() {
               reloadForums();
             }
           }}>
-           &nbsp;-&gt; {(currentForum as Forum).title}
+            &nbsp;-&gt; {(currentForum as Forum).title}
           </a>
         }
 
@@ -69,24 +69,26 @@ function Forums() {
           // If none selected, display list of forums to select
           forumId == -1 && (
             <table style={{ width: '100%' }}>
-              {data.map((forum) => {
-                return (
-                  <tr key={forum.forumId} style={{ border: 'solid black 2px' }}>
-                    <td>
-                      {
-                        (forumId == -1) &&
-                        <a href="#" onClick={
-                          (e: any) => setForumId(forum.forumId)
-                        }>{forum.title}</a>
-                      }
-                    </td>
+              <tbody>
+                {data.map((forum) => {
+                  return (
+                    <tr key={forum.forumId} style={{ border: 'solid black 2px' }}>
+                      <td>
+                        {
+                          (forumId == -1) &&
+                          <a href="#" onClick={
+                            (e: any) => setForumId(forum.forumId)
+                          }>{forum.title}</a>
+                        }
+                      </td>
 
-                    <td>
-                      {forum.description}
-                    </td>
-                  </tr>
-                )
-              })}
+                      <td>
+                        {forum.description}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
             </table>
           )
         }
