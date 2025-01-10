@@ -49,13 +49,16 @@ jobs:
           restore-keys: ${{ runner.os }}-maven
 
       - name: Install dependencies
-        run: ./backend/mvnw install -DskipTests
+        run: ./mvnw install -DskipTests
+        working-directory: ./backend
 
       - name: Run tests
-        run: ./backend/mvnw test
+        run: ./mvnw test
+        working-directory: ./backend
 
       - name: Run Spring Boot application
-        run: ./backend/mvnw spring-boot:run
+        run: ./mvnw spring-boot:run
+        working-directory: ./backend
 
   frontend:
     name: Frontend CI
