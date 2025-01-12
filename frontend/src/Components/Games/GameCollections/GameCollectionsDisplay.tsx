@@ -12,6 +12,9 @@ function GameCollectionsDisplay({ data }: gameProps) {
   const [checkToggle, setCheckToggle] = useState(false);
   const [gameId, setGameId] = useState(-1);
 
+   
+  // Unused and unfinished pagination code.
+  /*
   const totalGames: number = data.length;
   const [gameArray, setGameArray] = useState<game[]>(data);
   const [pageNumber, setPageNumber] = useState(1);
@@ -57,7 +60,7 @@ function GameCollectionsDisplay({ data }: gameProps) {
         {<button onClick={() => { setPageNumber(totalPages); }}>Last</button>}
       </>
     )
-  }
+  }*/
 
   return (
     <>
@@ -68,7 +71,7 @@ function GameCollectionsDisplay({ data }: gameProps) {
           setFilterString(e.currentTarget.value);
         }} type="text"></input>
 
-        <select value={amount} onChange={
+        {/*<select value={amount} onChange={
           (e: any) => { changeState(e.target.value); }
         }>
           <option value={totalGames}>Show All</option>
@@ -78,15 +81,13 @@ function GameCollectionsDisplay({ data }: gameProps) {
           <option value={10}>Show 10</option>
         </select>
         <br />
-        <br />
-
-        {pageButton()}
+        <br />*/}
 
         <br />
         <ul className="games-list-grid">
-          {gameArray
-            /*.sort((game0, game1) => {return game0.title.localeCompare(game1.title); })
-            .filter((game) => {return game.title.toLowerCase().includes(filterString); })*/
+          {data
+            .sort((game0, game1) => {return game0.title.localeCompare(game1.title); })
+            .filter((game) => {return game.title.toLowerCase().includes(filterString); })
             .map((game) => {
               return (
                 <li key={game.gameId} className="game-tile">
@@ -99,9 +100,7 @@ function GameCollectionsDisplay({ data }: gameProps) {
         </ul>
       </div>
 
-      {pageButton()}
-
-      {gameArray.map((game) => {
+      {data.map((game) => {
         return (
           <div key={game.gameId}>
             {(gameId == game.gameId) && <GameInfoDisplay data={game} />}
