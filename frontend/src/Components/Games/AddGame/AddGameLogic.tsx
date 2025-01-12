@@ -32,7 +32,7 @@ function AddGameLogic() {
     }
 
     function addBGGgame() {
-
+        
     }
 
     function handleSubmit(event: FormEvent) {

@@ -21,14 +21,25 @@ function GameCollectionsLogic() {
 
   useEffect(() => {
     axios
-      .get(`http://18.224.45.201:8080/game/getGamesByAccount?accountId=${contextId}`, {
-        headers: { "Authorization": `${contextJwt}` }
-      })
-      .then((Response) => setData(Response.data))
-      .catch((error) => {
-        console.log(error);
-        authorizationHander(error);
-      });
+    .get(`http://18.224.45.201:8080/game/getGamesByAccount?accountId=${contextId}`, {
+      headers: { "Authorization": `${contextJwt}` }
+    })
+    .then((Response) => setData(Response.data))
+    .catch((error) => {
+      console.log(error);
+      authorizationHander(error);
+    })
+
+    const interval = setInterval(()=> {
+      axios
+        .get(`http://18.224.45.201:8080/game/getGamesByAccount?accountId=${contextId}`, {
+          headers: { "Authorization": `${contextJwt}` }
+        })
+        .then((Response) => setData(Response.data))
+        .catch((error) => {
+          console.log(error);
+          authorizationHander(error);
+        })},  1000) 
   }, [])
 
   return (
