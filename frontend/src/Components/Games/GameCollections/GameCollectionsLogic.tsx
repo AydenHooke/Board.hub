@@ -15,7 +15,7 @@ export type game = {
 }
 
 function GameCollectionsLogic() {
-  const { id: contextId, jwt: contextJwt } = useAccount();
+  const { id: contextId, jwt: contextJwt, refreshState: checkRefresh, setRefresh: setRefresh } = useAccount();
 
   const [data, setData] = useState<game[]>([]);
 
@@ -29,18 +29,19 @@ function GameCollectionsLogic() {
       console.log(error);
       authorizationHander(error);
     })
-
-    const interval = setInterval(()=> {
-      axios
-        .get(`http://18.224.45.201:8080/game/getGamesByAccount?accountId=${contextId}`, {
-          headers: { "Authorization": `${contextJwt}` }
-        })
-        .then((Response) => setData(Response.data))
-        .catch((error) => {
-          console.log(error);
-          authorizationHander(error);
-        })},  1000) 
-  }, [])
+    if(checkRefresh == false){
+      setRefresh(true);
+      const interval = setInterval(()=> {
+        axios
+          .get(`http://18.224.45.201:8080/game/getGamesByAccount?accountId=${contextId}`, {
+            headers: { "Authorization": `${contextJwt}` }
+          })
+          .then((Response) => setData(Response.data))
+          .catch((error) => {
+            console.log(error);
+            authorizationHander(error);
+          })},  1000) 
+  }}, [])
 
   return (
     <>
