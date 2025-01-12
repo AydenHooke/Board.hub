@@ -4,10 +4,11 @@ import { game } from "./GameCollectionsLogic";
 import { useEffect, useState } from "react";
 
 type gameProps = {
-  data: game;
+  data: game,
+  setGameClass: React.Dispatch<React.SetStateAction<string>>
 }
 
-function GameInfoDisplay({ data }: gameProps) {
+  function GameInfoDisplay({ data, setGameClass }: gameProps) {
   const { id: contextId, jwt: contextJwt } = useAccount();
 
   const [vote, setVote] = useState(0);
@@ -57,6 +58,8 @@ function GameInfoDisplay({ data }: gameProps) {
 
   function handleSubmitRemove(event: any) {
     event.preventDefault();
+
+    setGameClass("");
 
     axios
       .delete(`http://18.224.45.201:8080/game/removeGameOwnership?gameId=${data.gameId}&accountId=${contextId}`, {
