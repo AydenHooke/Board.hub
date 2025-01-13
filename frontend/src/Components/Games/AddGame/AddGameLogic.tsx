@@ -58,8 +58,12 @@ function AddGameLogic() {
                         gameImageUrl: games[i].getElementsByTagName("thumbnail")[0].childNodes[0].nodeValue,
                         title: games[i].getElementsByTagName("name")[0].attributes[2].nodeValue,
                         description: games[i].getElementsByTagName("description")[0].childNodes[0].nodeValue
+          }
         }
-      }
+
+        if (allGames.length == 0) {setFail(true); setPending(true);}
+        else {setSuccess(true); setPending(true);}
+
       console.log("Serving these games to the server:")
       console.log(allGames);
       //console.log(allGames)
