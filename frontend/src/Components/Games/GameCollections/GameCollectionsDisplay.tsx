@@ -6,69 +6,73 @@ type gameProps = {
   data: game[];
 }
 
-function GameCollectionsDisplay({data}: gameProps) {
+function GameCollectionsDisplay({ data }: gameProps) {
   const [filterString, setFilterString] = useState("");
   const [gameClass, setGameClass] = useState("");
   const [checkToggle, setCheckToggle] = useState(false);
   const [gameId, setGameId] = useState(-1);
 
+   
+  // Unused and unfinished pagination code.
+  /*
   const totalGames: number = data.length;
   const [gameArray, setGameArray] = useState<game[]>(data);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [amount, setAmount] = useState(totalGames);
-
-  console.log(data);
-
-  useEffect(() => {
-    
-  }, [])
+  const [amount, setAmount] = useState(10);
 
   function changeState(amount: number) {
-    console.log(amount);
     setAmount(amount);
     setTotalPages(Math.ceil(totalGames / amount));
     setPageNumber(1);
-
-    showGames();
   }
 
   function showGames() {
     let begin: number;
     let end: number;
 
-    if (pageNumber == 1) begin = 0;
-    else begin = ((pageNumber - 1) * amount);
+    if (pageNumber == 1)
+      begin = 0;
+    else
+      begin = ((pageNumber - 1) * amount);
 
-    if (pageNumber == totalPages) end = (totalGames - 1);
-    else end = (begin + (amount - 1));
+    if (pageNumber == totalPages)
+      end = (totalGames - 1);
+    else
+      end = Number(begin) + Number(amount);
 
     setGameArray(data.slice(begin, end));
   }
+  useEffect(() => {
+    showGames();
+  }, [amount]);
+  useEffect(() => {
+    showGames();
+  }, [pageNumber]);
 
   function pageButton() {
     return (
       <>
-        {<button onClick={() => {setPageNumber(1); showGames();}}>First</button>}
-        {<button onClick={() => {if (pageNumber != 1) {setPageNumber(pageNumber - 1); showGames();}}}>Prev</button>}
+        {<button onClick={() => { setPageNumber(1); }}>First</button>}
+        {<button onClick={() => { if (pageNumber != 1) { setPageNumber(pageNumber - 1); } }}>Prev</button>}
         <span> {pageNumber} of {totalPages} </span>
-        {<button onClick={() => {if (pageNumber != totalPages) {setPageNumber(pageNumber + 1); showGames();}}}>Next</button>}
-        {<button onClick={() => {setPageNumber(totalPages); showGames();}}>Last</button>}
+        {<button onClick={() => { if (pageNumber != totalPages) { setPageNumber(pageNumber + 1); } }}>Next</button>}
+        {<button onClick={() => { setPageNumber(totalPages); }}>Last</button>}
       </>
     )
-  }
+  }*/
 
   return (
     <>
       <div className={gameClass} onClick={() => {
-        if (checkToggle) {setGameId(-1); setCheckToggle(!checkToggle); setGameClass("");}
+        if (checkToggle) { setGameId(-1); setCheckToggle(!checkToggle); setGameClass(""); }
       }}>
-        <span>Game filter: </span><input onInput={(e)=>{
+        <span>Game filter: </span><input onInput={(e) => {
           setFilterString(e.currentTarget.value);
         }} type="text"></input>
 
-        <select value={amount} onChange={
-          (e: any) => {changeState(e.target.value);}
+        {/*<select value={amount} onChange={
+          (e: any) => { changeState(e.target.value); }
         }>
           <option value={totalGames}>Show All</option>
           <option value={100}>Show 100</option>
@@ -76,34 +80,30 @@ function GameCollectionsDisplay({data}: gameProps) {
           <option value={25}>Show 25</option>
           <option value={10}>Show 10</option>
         </select>
-        <br/>
-        <br/>
+        <br />
+        <br />*/}
 
-        {pageButton()}
-
-        <br/>
+        <br />
         <ul className="games-list-grid">
-          {gameArray
-            /*.sort((game0, game1) => {return game0.title.localeCompare(game1.title); })
-            .filter((game) => {return game.title.toLowerCase().includes(filterString); })*/
+          {data
+            .sort((game0, game1) => {return game0.title.localeCompare(game1.title); })
+            .filter((game) => {return game.title.toLowerCase().includes(filterString); })
             .map((game) => {
               return (
                 <li key={game.gameId} className="game-tile">
                   <img src={game.gameImageUrl} alt={game.title} onClick={() => {
-                      if (!checkToggle) {setGameId(game.gameId); setCheckToggle(!checkToggle); setGameClass("game-blur");}
-                  }}/>
+                    if (!checkToggle) { setGameId(game.gameId); setCheckToggle(!checkToggle); setGameClass("game-blur"); }
+                  }} />
                 </li>
               )
-          })}
+            })}
         </ul>
       </div>
 
-      {pageButton()}
-
-      {gameArray.map((game) => {
+      {data.map((game) => {
         return (
           <div key={game.gameId}>
-            {(gameId == game.gameId) && <GameInfoDisplay data={game}/>}
+            {(gameId == game.gameId) && <GameInfoDisplay data={game} setGameClass={setGameClass}/>}
           </div>
         )
       })}

@@ -15,7 +15,7 @@ import up.board.backend.Service.ForumService;
 
 @RestController
 @RequestMapping("/forum")
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = "*")
 public class ForumController {
 
   private static final Logger logger = LoggerFactory.getLogger(ForumController.class);

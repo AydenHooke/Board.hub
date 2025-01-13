@@ -26,7 +26,7 @@ import up.board.backend.Utils.JwtUtil;
 
 @RestController
 @RequestMapping("/game")
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = "*")
 public class GameController {
 
   private static final Logger logger = LoggerFactory.getLogger(GameController.class);

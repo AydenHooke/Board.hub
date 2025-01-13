@@ -32,7 +32,46 @@ function AddGameLogic() {
     }
 
     function addBGGgame() {
+        try {
+            grabBggInfo(bggId as unknown as string);
+        } catch (error) {
+            console.log("An invalid BGG game was attempted to be added")
+        }
+        
+    }
 
+    async function grabBggInfo(gamesToAdd: string) {
+        let newGameEntries = await axios.get(`https://www.boardgamegeek.com/xmlapi2/thing?id=${gamesToAdd}`);
+  
+        let parser, xmlDoc;
+  
+        parser = new DOMParser();
+        xmlDoc = parser.parseFromString(newGameEntries.data as string, "text/html")
+  
+        let games = xmlDoc.getElementsByTagName('item');
+        let numberOfGames = xmlDoc.getElementsByTagName('item').length;
+  
+        let allGames: any[] | undefined = [];
+        //console.log(games);
+        for(let i=0;i<numberOfGames;i++){
+          allGames[i] ={bggId: games[i].attributes[1].nodeValue, // gathers the bggId
+                        gameImageUrl: games[i].getElementsByTagName("thumbnail")[0].childNodes[0].nodeValue,
+                        title: games[i].getElementsByTagName("name")[0].attributes[2].nodeValue,
+                        description: games[i].getElementsByTagName("description")[0].childNodes[0].nodeValue
+          }
+        }
+
+        if (allGames.length == 0) {setFail(true); setPending(true);}
+        else {setSuccess(true); setPending(true);}
+
+      console.log("Serving these games to the server:")
+      console.log(allGames);
+      //console.log(allGames)
+        async function logTheGames() {
+          await axios.post(`http://18.224.45.201:8080/game/persistAndCollectManyGames?id=${contextId}`,allGames, {headers: {Authorization: `${contextJwt}`}})
+        }
+        logTheGames();
+      console.log("All games have been created (hopefully)")
     }
 
     function handleSubmit(event: FormEvent) {

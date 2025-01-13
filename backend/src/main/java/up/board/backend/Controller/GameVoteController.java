@@ -19,7 +19,7 @@ import up.board.backend.Utils.JwtUtil;
 
 @RestController
 @RequestMapping("/gameVote")
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = "*")
 public class GameVoteController {
 
   private static final Logger logger = LoggerFactory.getLogger(GameVoteController.class);

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/account")
-@CrossOrigin(origins = "http://localhost:5174", exposedHeaders = "Authorization")
+@CrossOrigin(origins = "*", exposedHeaders = "Authorization")
 public class AccountController {
 
   private static final Logger logger = LoggerFactory.getLogger(AccountController.class);

@@ -151,7 +151,7 @@ function GameLogic() {
         </button>
 
         <button onClick={() => navigate("/addGame")}>Add Game</button>
-
+        
         <GameCollectionsLogic/>
     </>
   )

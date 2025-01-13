@@ -9,7 +9,7 @@ import up.board.backend.Service.RsvpService;
 
 @RestController
 @RequestMapping("/rsvp")
-@CrossOrigin(origins = "http://localhost:5174", exposedHeaders = "Authorization")
+@CrossOrigin(origins = "*", exposedHeaders = "Authorization")
 public class RsvpController {
 
     @Autowired
