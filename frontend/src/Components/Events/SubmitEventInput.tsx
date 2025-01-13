@@ -1,4 +1,4 @@
-import { FormEvent } from "react";
+import { FormEvent} from "react";
 
 interface SubmitEventInputProps {
     eventType: string;
@@ -10,6 +10,7 @@ interface SubmitEventInputProps {
   }
   
   function SubmitEventInput({ eventType, name, setName, content, setContent, time, setTime, handleSubmit, showErrorMessage }: SubmitEventInputProps) {
+
     const formatLocalDateTime = (date: Date) => {
       const offset = date.getTimezoneOffset();
       const localDate = new Date(date.getTime() - offset * 60 * 1000);
