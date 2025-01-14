@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Image from "../../Images//logo.png";
 
 type SignInInputProps = {
     username: string, setUsername: React.Dispatch<React.SetStateAction<string>>,
@@ -13,9 +14,9 @@ function SignInInput({
 ) {
     return (
         <>
-            <h2 className="greeting">Rate and Talk About Board Games Today!</h2>
+            <h2 className="heading-center">Rate and Talk About Board Games Today!</h2>
             <div className={"sign-up-img-form"}>
-            <img id="signup-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQi45fo3as8o56D64P3dES6enhP_M2OwKF0IKybc6f29OFVSqGnwH7qGUI&s" alt="Chess Board Icon" />
+            <img style={{width:"30vw"}} src={Image} alt="Chess Board Icon" />
                 <form className="sign-form" onSubmit={handleSubmit}>
                     <h2>Sign In</h2>
                     <label>

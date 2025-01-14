@@ -203,6 +203,7 @@ body {
   background-color: var(--primary-color);
   max-width: 30vw; /* Maximum width relative to the viewport width */
   max-height: 80vh; /* Maximum height relative to the viewport height */
+  overflow: hidden; /* Ensure content does not overflow */
 }
 .event-title{
     margin: 0;
@@ -566,4 +567,41 @@ body {
   .nested-replies {
     margin-left: 15px;
     margin-top: 10px;
+  }
+
+  .thread-form {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    align-items: center;
+    border: 1px solid black;
+    padding: 20px;
+    width: fit-content;
+  }
+
+  .home{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .home-contents{
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Fine-tune font size for smaller screens */
+  @media (max-width: 768px) {
+    .home {
+        font-size: 2vw; /* Increase font size for smaller screens */
+    }
+  }
+
+  /* Fine-tune font size for larger screens */
+  @media (min-width: 1200px) {
+    .home {
+        font-size: 1.5vw; /* Decrease font size for larger screens */
+    }
   }
