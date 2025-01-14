@@ -128,7 +128,7 @@ public class EventController {
 
     // Set default values
     event.setDateMeet(dateTime);
-    event.setDateCreated(LocalDateTime.now(ZoneId.of("EST")));
+    event.setDateCreated(LocalDateTime.now(ZoneId.of("America/New_York")));
     event.setStatus(Status.SCHEDULED);
 
     // Check user exists

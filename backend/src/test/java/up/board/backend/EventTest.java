@@ -270,7 +270,7 @@ class EventTest {
     event.setAccountId(1);
     event.setTitle("Test event 1");
     event.setContent("Test description");
-    event.setDateMeet(LocalDateTime.now(ZoneId.of("EST")));
+    event.setDateMeet(LocalDateTime.now(ZoneId.of("America/New_York")));
 
     var account = new Account();
     account.setAccountId(1);
@@ -315,7 +315,7 @@ class EventTest {
     var event = new Event();
     event.setAccountId(1);
     event.setContent("Test description");
-    event.setDateMeet(LocalDateTime.now(ZoneId.of("EST")));
+    event.setDateMeet(LocalDateTime.now(ZoneId.of("America/New_York")));
 
     //
     var response = eventController.postEvent("", event);
@@ -332,7 +332,7 @@ class EventTest {
     event.setAccountId(1);
     event.setTitle("Test event 1");
     event.setContent("Test description");
-    event.setDateMeet(LocalDateTime.now(ZoneId.of("EST")));
+    event.setDateMeet(LocalDateTime.now(ZoneId.of("America/New_York")));
 
     when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(null);
 

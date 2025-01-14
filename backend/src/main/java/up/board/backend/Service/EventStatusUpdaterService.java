@@ -20,7 +20,7 @@ public class EventStatusUpdaterService {
   @Scheduled(fixedRate = 60000) // Run every minute
   public void updateEventStatuses() {
     List<Event> events = eventRepository.findAll();
-    LocalDateTime now = LocalDateTime.now(ZoneId.of("EST"));
+    LocalDateTime now = LocalDateTime.now(ZoneId.of("America/New_York"));
 
     for (Event event : events) {
       if (event.getDateMeet().isBefore(now) && event.getStatus() != Status.COMPLETED) {
