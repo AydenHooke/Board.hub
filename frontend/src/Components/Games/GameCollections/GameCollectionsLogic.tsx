@@ -34,6 +34,7 @@ function GameCollectionsLogic() {
   useEffect(() => {
     if (checkRefresh == true) {
       setRefresh(false);
+      console.log("check");
       axios
         .get(`http://18.224.45.201:8080/game/getGamesByAccount?accountId=${contextId}`, {
           headers: { "Authorization": `${contextJwt}` }

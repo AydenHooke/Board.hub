@@ -9,7 +9,7 @@ type gameProps = {
 }
 
   function GameInfoDisplay({ data, setGameClass }: gameProps) {
-  const { id: contextId, jwt: contextJwt } = useAccount();
+  const { id: contextId, jwt: contextJwt, refreshState: checkRefresh, setRefresh: setRefresh } = useAccount();
 
   const [vote, setVote] = useState(0);
   const [voteStatus, setVoteStatus] = useState(-2);
@@ -65,7 +65,13 @@ type gameProps = {
       .delete(`http://18.224.45.201:8080/game/removeGameOwnership?gameId=${data.gameId}&accountId=${contextId}`, {
         headers: { "Authorization": `${contextJwt}` }
       })
-      .then((Response) => { console.log(Response); setStatus(-1); setChange(!change); })
+      .then((Response) => {
+        console.log(Response);
+        setStatus(-1);
+        setChange(!change);
+
+        setRefresh(true);
+      })
       .catch((error) => console.error(error));
   }
 
