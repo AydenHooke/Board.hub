@@ -111,19 +111,25 @@ type gameProps = {
 
   return (
     <div className="game-info">
-      <h1 style={{ display: "inline" }}>{data.title}</h1>
+      
+      <section className="game-info-section">
+        <h1 style={{ display: "inline" }}>{data.title}</h1>
 
-      {((contextId != '') && (status == 204)) && <button style={{ float: "right" }} onClick={handleSubmitAdd}>Add Game to your Collection</button>}
-      {((contextId != '') && (status == 200)) && <button style={{ float: "right" }} onClick={handleSubmitRemove}>Remove Game from your Collection</button>}
-      <br />
 
-      <img src={data.gameImageUrl} alt={data.title} />
+        <img src={data.gameImageUrl} alt={data.title} />
+        <br />
+          {((contextId != '') && (status == 204)) && <button style={{ float: "right" }} onClick={handleSubmitAdd}>Add Game to your Collection</button>}
+          {((contextId != '') && (status == 200)) && <button style={{ float: "right" }} onClick={handleSubmitRemove}>Remove Game from your Collection</button>}
+        <br />
 
-      <p>Votes: {vote}</p>
-      {(contextId != '') && <button onClick={() => {if (voteStatus != -2) GameVoteSubmit(1);}}>Like Game</button>}
-      {(contextId != '') && <button onClick={() => {if (voteStatus != -2) GameVoteSubmit(-1);}}>Dislike Game</button>}
+        <p>Votes: {vote}</p>
+        <div className="rating-buttons" >
+          {(contextId != '') && <button style={{margin: "4px"}} onClick={() => {if (voteStatus != -2) GameVoteSubmit(1);}}>Like Game</button>}
+          {(contextId != '') && <button style={{margin: "4px"}} onClick={() => {if (voteStatus != -2) GameVoteSubmit(-1);}}>Dislike Game</button>}
+        </div>
 
-      <p>{desc}</p>
+        <p>{desc}</p>
+      </section>
     </div>
   )
 }
