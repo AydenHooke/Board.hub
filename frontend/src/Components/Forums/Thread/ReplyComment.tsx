@@ -70,7 +70,7 @@ function ReplyComment({
     <>
       {(replyToId != null) ? (
         <>
-          <div className="replyToReply" id={`${replyId}`} style={{ border: 'solid transparent 2px', borderLeft: 'solid transparent 6px' }}>
+          <div className="replyToReply nested-replies" id={`${replyId}`} style={{ border: 'solid transparent 2px', borderLeft: 'solid transparent 6px' }}>
             <div className="reply">
               <h6>Posted by: <Link to={`/account/${accountId}`}>{username}</Link></h6>
 
