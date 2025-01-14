@@ -306,6 +306,19 @@ body {
     overflow-y:auto;
 }
 
+.game-info-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.rating-buttons{
+    display: flex;
+    flex-direction: row;
+}
+
 .game-info > p {
   display: flex;
   align-self: center;
@@ -618,4 +631,14 @@ body {
     .home {
         font-size: 1.5vw; /* Decrease font size for larger screens */
     }
+  }
+
+  .add-game-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    position: relative;
+    top: 15%;
   }

@@ -22,7 +22,7 @@ function AddGameInput({
     handleSubmit}: stateProp
 ) {
  return (
-    <form onSubmit={handleSubmit}>
+    <form className="add-game-form" onSubmit={handleSubmit}>
         {(!isChecked) && <h2>Add a Custom Game</h2>}
         {(isChecked) && <h2>Add a Game from BGG</h2>}
 
