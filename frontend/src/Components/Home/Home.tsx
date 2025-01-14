@@ -3,7 +3,7 @@ import { game } from "../Games/GameCollections/GameCollectionsLogic"
 import axios from "axios";
 
 function Home() {
-  
+
   const [, setData] = useState<game[]>([]);
 
   useEffect(() => {
@@ -16,6 +16,10 @@ function Home() {
   return (
     <>
       <h1>Welcome To Board.up</h1>
+
+      <img alt='Board.up logo' src='src/Images/logo.png' style={{ width: '20%' }} />
+      <br />
+      <br />
 
       <p>Board.up is your ultimate hub for board game enthusiasts!</p>
 
