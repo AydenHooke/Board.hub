@@ -1,6 +1,7 @@
 package up.board.backend.Controller;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,7 +128,7 @@ public class EventController {
 
     // Set default values
     event.setDateMeet(dateTime);
-    event.setDateCreated(LocalDateTime.now());
+    event.setDateCreated(LocalDateTime.now(ZoneId.of("EST")));
     event.setStatus(Status.SCHEDULED);
 
     // Check user exists

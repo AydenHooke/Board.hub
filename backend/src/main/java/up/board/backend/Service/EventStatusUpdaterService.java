@@ -8,24 +8,25 @@ import up.board.backend.Enum.Event.Status;
 import up.board.backend.Repository.EventRepository;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
 public class EventStatusUpdaterService {
 
-    @Autowired
-    private EventRepository eventRepository;
+  @Autowired
+  private EventRepository eventRepository;
 
-    @Scheduled(fixedRate = 60000) // Run every minute
-    public void updateEventStatuses() {
-        List<Event> events = eventRepository.findAll();
-        LocalDateTime now = LocalDateTime.now();
+  @Scheduled(fixedRate = 60000) // Run every minute
+  public void updateEventStatuses() {
+    List<Event> events = eventRepository.findAll();
+    LocalDateTime now = LocalDateTime.now(ZoneId.of("EST"));
 
-        for (Event event : events) {
-            if (event.getDateMeet().isBefore(now) && event.getStatus() != Status.COMPLETED) {
-                event.setStatus(Status.COMPLETED);
-                eventRepository.save(event);
-            }
-        }
+    for (Event event : events) {
+      if (event.getDateMeet().isBefore(now) && event.getStatus() != Status.COMPLETED) {
+        event.setStatus(Status.COMPLETED);
+        eventRepository.save(event);
+      }
     }
+  }
 }

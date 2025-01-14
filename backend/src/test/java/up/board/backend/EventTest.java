@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -269,7 +270,7 @@ class EventTest {
     event.setAccountId(1);
     event.setTitle("Test event 1");
     event.setContent("Test description");
-    event.setDateMeet(LocalDateTime.now());
+    event.setDateMeet(LocalDateTime.now(ZoneId.of("EST")));
 
     var account = new Account();
     account.setAccountId(1);
@@ -314,7 +315,7 @@ class EventTest {
     var event = new Event();
     event.setAccountId(1);
     event.setContent("Test description");
-    event.setDateMeet(LocalDateTime.now());
+    event.setDateMeet(LocalDateTime.now(ZoneId.of("EST")));
 
     //
     var response = eventController.postEvent("", event);
@@ -331,7 +332,7 @@ class EventTest {
     event.setAccountId(1);
     event.setTitle("Test event 1");
     event.setContent("Test description");
-    event.setDateMeet(LocalDateTime.now());
+    event.setDateMeet(LocalDateTime.now(ZoneId.of("EST")));
 
     when(accountRepository.findByAccountId(any(Integer.class))).thenReturn(null);
 
