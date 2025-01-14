@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { game } from "../Games/GameCollections/GameCollectionsLogic"
+import  Image  from '../../Images/logo.png';
 import axios from "axios";
 
 function Home() {
@@ -17,7 +18,7 @@ function Home() {
     <>
       <h1>Welcome To Board.up</h1>
 
-      <img alt='Board.up logo' src='src/Images/logo.png' style={{ width: '20%' }} />
+      <img alt='Board.up logo' src={Image} style={{ width: '20%' }} />
       <br />
       <br />
 
