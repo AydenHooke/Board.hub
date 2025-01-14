@@ -306,6 +306,11 @@ body {
     overflow-y:auto;
 }
 
+.game-info > p {
+  display: flex;
+  align-self: center;
+}
+
 .game-blur{
     filter: blur(8px);
     -webkit-filter: blur(8px);
@@ -496,6 +501,7 @@ body {
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
   }
 
   .forums-table {
@@ -590,6 +596,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .home h1 {
+    font-size: 2vw; /* Responsive font size for h1 */
+  }
+
+  .home h3 {
+    font-size: 1.5vw; /* Responsive font size for h3 */
   }
 
   /* Fine-tune font size for smaller screens */

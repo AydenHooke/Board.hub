@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Image from "../../Images//logo.png";
+import Image from "../../Images/logo.png";
 
 type SignInInputProps = {
     username: string, setUsername: React.Dispatch<React.SetStateAction<string>>,
