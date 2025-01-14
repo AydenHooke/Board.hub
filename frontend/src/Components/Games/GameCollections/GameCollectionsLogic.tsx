@@ -21,27 +21,30 @@ function GameCollectionsLogic() {
 
   useEffect(() => {
     axios
-    .get(`http://18.224.45.201:8080/game/getGamesByAccount?accountId=${contextId}`, {
-      headers: { "Authorization": `${contextJwt}` }
-    })
-    .then((Response) => setData(Response.data))
-    .catch((error) => {
-      console.log(error);
-      authorizationHander(error);
-    })
-    if(checkRefresh == false){
-      setRefresh(true);
-      const interval = setInterval(()=> {
-        axios
-          .get(`http://18.224.45.201:8080/game/getGamesByAccount?accountId=${contextId}`, {
-            headers: { "Authorization": `${contextJwt}` }
-          })
-          .then((Response) => setData(Response.data))
-          .catch((error) => {
-            console.log(error);
-            authorizationHander(error);
-          })},  1000) 
-  }}, [])
+      .get(`http://18.224.45.201:8080/game/getGamesByAccount?accountId=${contextId}`, {
+        headers: { "Authorization": `${contextJwt}` }
+      })
+      .then((Response) => setData(Response.data))
+      .catch((error) => {
+        console.log(error);
+        authorizationHander(error);
+      })
+  }, [])
+
+  useEffect(() => {
+    if (checkRefresh == true) {
+      setRefresh(false);
+      axios
+        .get(`http://18.224.45.201:8080/game/getGamesByAccount?accountId=${contextId}`, {
+          headers: { "Authorization": `${contextJwt}` }
+        })
+        .then((Response) => setData(Response.data))
+        .catch((error) => {
+          console.log(error);
+          authorizationHander(error);
+        });
+    }
+  }, [checkRefresh])
 
   return (
     <>
