@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Image from "../../Images//logo.png";
+import Image from "../../Images/logo.png";
 
 type SignUpInputProps = {
     email: string, setEmail: React.Dispatch<React.SetStateAction<string>>,
