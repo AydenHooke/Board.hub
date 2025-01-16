@@ -19,7 +19,7 @@ npm run dev
 
 You will need to go through the source files to replace the IP of the backend the frontend will be reaching out to, as we have hardcoded our backend ip address in the frontend.
 
-To run the backend, open the backend project in your desired dev environment, and make sure to install all maven dependencies using the incliuded pom.xml file.
+To run the backend, open the backend project in your desired dev environment and install all Maven dependencies using the included pom.xml file.
 
 You then need to define the following environment variables for the backend:
 
@@ -31,8 +31,8 @@ SPRING_DATASOURCE_PASSWORD -> This is the postgresql password
 KAFKA_URL -> Set this to kafka:9092
 ```
 
-Running the backend with proper postgresql connection information in the environment variables will have the backend automatically generate and create the database schema.
+Running the backend with proper Postgresql connection information in the environment variables will have the backend automatically generate and create the database schema.
 
-You can then use Java JDK to run the backend in developmer mode. To run the application in production, package the project and the outputted jar may be used.
+You can then use Java JDK to run the backend in development mode. To run the application in production, package the project and the outputted jar may be used.
 
 Optionally, a dockerfile is included in the project files that you may use to build a docker image from.
