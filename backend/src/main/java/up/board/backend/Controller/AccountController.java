@@ -1,7 +1,5 @@
 package up.board.backend.Controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,7 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @CrossOrigin(origins = "*", exposedHeaders = "Authorization")
 public class AccountController {
 
-  private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
+  //private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
 
   AccountService accountService;
   JwtUtil jwtUtil;

@@ -70,12 +70,12 @@ class ReplyTest {
     reply0.setContent("Test description");
     var replyWithUsername0 = new ReplyRepository.ReplyWithUsername() {
       @Override
-      public Reply getReply(){
+      public Reply getReply() {
         return reply0;
       }
 
       @Override
-      public String getUsername(){
+      public String getUsername() {
         return "test_user_0";
       }
     };
@@ -86,12 +86,12 @@ class ReplyTest {
     reply1.setContent("Test description");
     var replyWithUsername1 = new ReplyRepository.ReplyWithUsername() {
       @Override
-      public Reply getReply(){
+      public Reply getReply() {
         return reply1;
       }
 
       @Override
-      public String getUsername(){
+      public String getUsername() {
         return "test_user_1";
       }
     };
